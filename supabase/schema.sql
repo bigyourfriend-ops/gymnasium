@@ -100,6 +100,88 @@ create policy "media admin insert" on storage.objects for insert to authenticate
 create policy "media admin update" on storage.objects for update to authenticated using (bucket_id = 'media' and public.is_admin());
 create policy "media admin delete" on storage.objects for delete to authenticated using (bucket_id = 'media' and public.is_admin());
 
+
+-- ============================================================
+-- 6. Профиль өрістері, аватар, әкімшілерді басқару (v2)
+-- ============================================================
+alter table public.profiles add column if not exists grade      text;
+alter table public.profiles add column if not exists phone      text;
+alter table public.profiles add column if not exists avatar_url text;
+
+-- Пайдаланушы өз профилін жасай алады (upsert үшін)
+drop policy if exists "profiles insert" on public.profiles;
+create policy "profiles insert" on public.profiles for insert to authenticated with check (id = auth.uid());
+
+-- Бұрын тіркелгендерге профиль жасау
+insert into public.profiles (id, email, full_name, role)
+select u.id, u.email, u.raw_user_meta_data ->> 'full_name',
+       case when u.raw_user_meta_data ->> 'role' in ('student','parent','teacher') then u.raw_user_meta_data ->> 'role' end
+from auth.users u
+on conflict (id) do nothing;
+
+-- Аватар: әр пайдаланушы тек өз папкасына (avatars/<user id>/...) жүктей алады
+drop policy if exists "avatar own insert" on storage.objects;
+drop policy if exists "avatar own update" on storage.objects;
+drop policy if exists "avatar own select" on storage.objects;
+create policy "avatar own select" on storage.objects for select to authenticated
+  using (bucket_id = 'media' and (storage.foldername(name))[1] = 'avatars' and (storage.foldername(name))[2] = auth.uid()::text);
+create policy "avatar own insert" on storage.objects for insert to authenticated
+  with check (bucket_id = 'media' and (storage.foldername(name))[1] = 'avatars' and (storage.foldername(name))[2] = auth.uid()::text);
+create policy "avatar own update" on storage.objects for update to authenticated
+  using (bucket_id = 'media' and (storage.foldername(name))[1] = 'avatars' and (storage.foldername(name))[2] = auth.uid()::text);
+
+-- Әкімші басқа пайдаланушыны әкімші ете алады немесе құқығын ала алады
+create or replace function public.set_admin(target uuid, make boolean)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not public.is_admin() then
+    raise exception 'not allowed';
+  end if;
+  if make then
+    insert into public.admins (user_id) values (target) on conflict do nothing;
+  else
+    if (select count(*) from public.admins) <= 1 then
+      raise exception 'last admin';
+    end if;
+    delete from public.admins where user_id = target;
+  end if;
+end;
+$$;
+revoke all on function public.set_admin(uuid, boolean) from public, anon;
+grant execute on function public.set_admin(uuid, boolean) to authenticated;
+
+-- Әкімші поштасының тізімі: осы поштамен тіркеліп, растаған адам автоматты түрде әкімші болады
+-- Список почт администраторов: кто зарегистрируется с этой почтой и подтвердит её, сразу станет админом
+create table if not exists public.admin_emails (email text primary key);
+alter table public.admin_emails enable row level security;   -- сайттан оқуға/жазуға болмайды
+
+create or replace function public.grant_listed_admin()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if new.email_confirmed_at is not null
+     and exists (select 1 from public.admin_emails where lower(email) = lower(new.email)) then
+    insert into public.admins (user_id) values (new.id) on conflict do nothing;
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists on_auth_user_confirmed on auth.users;
+create trigger on_auth_user_confirmed
+  after insert or update of email_confirmed_at on auth.users
+  for each row execute function public.grant_listed_admin();
+
+-- ӘКІМШІ ПОШТАСЫН ОСЫ ЖЕРГЕ ЖАЗЫҢЫЗ / ВПИШИТЕ ПОЧТУ АДМИНИСТРАТОРА:
+-- insert into public.admin_emails (email) values ('admin@example.com') on conflict do nothing;
+
 -- ============================================================
 -- 5. ӘКІМШІНІ ТАҒАЙЫНДАУ / НАЗНАЧИТЬ АДМИНИСТРАТОРА
 -- Алдымен сайтта осы поштамен тіркеліп, хатты растаңыз.
