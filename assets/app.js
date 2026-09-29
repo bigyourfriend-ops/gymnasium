@@ -211,9 +211,36 @@ var T3={
  loading:["Жүктелуде…","Загрузка…","Loading…"], byRole:["Рөлдер бойынша","По ролям","By role"], admins:["Әкімшілер","Администраторы","Administrators"]
 };
 for(var _k3 in T3)T[_k3]=T3[_k3];
+
+var T4={
+ navFeedback:["Пікірлер мен ұсыныстар","Отзывы и предложения","Feedback"],
+ pd_feedback:["Гимназия туралы пікіріңізді, ұсынысыңызды немесе алғысыңызды жазыңыз. Тіркелу қажет емес.","Оставьте отзыв, предложение или благодарность гимназии. Регистрация не нужна.","Share a review, an idea or a thank-you with the school. No account needed."],
+ fbFormT:["Пікір қалдыру","Оставить отзыв","Leave feedback"], fbListT:["Ата-аналар мен оқушылар пікірі","Отзывы родителей и учеников","What parents and students say"],
+ fbName:["Атыңыз (міндетті емес)","Имя (необязательно)","Your name (optional)"], fbAnon:["Аноним","Аноним","Anonymous"],
+ fbWho:["Сіз кімсіз?","Кто вы?","You are"], w_parent:["Ата-ана","Родитель","Parent"], w_student:["Оқушы","Ученик","Student"], w_graduate:["Түлек","Выпускник","Graduate"], w_other:["Басқа","Другое","Other"],
+ fbKind:["Түрі","Тип","Type"], k_review:["Пікір","Отзыв","Review"], k_idea:["Ұсыныс","Предложение","Suggestion"], k_thanks:["Алғыс","Благодарность","Thank-you"], k_complaint:["Шағым","Жалоба","Complaint"],
+ fbRating:["Бағаңыз","Ваша оценка","Your rating"], fbText:["Мәтін","Текст","Message"], fbTextPh:["Пікіріңізді немесе ұсынысыңызды жазыңыз (кемінде 15 таңба)","Напишите отзыв или предложение (не менее 15 символов)","Write your feedback or suggestion (at least 15 characters)"],
+ fbContact:["Байланыс (міндетті емес)","Контакт (необязательно)","Contact (optional)"], fbContactPh:["Телефон немесе пошта: жауап алу үшін","Телефон или почта, чтобы получить ответ","Phone or email if you'd like a reply"],
+ fbContactNote:["Байланыс деректерін тек гимназия әкімшілігі көреді.","Контакты видит только администрация гимназии.","Only the school administration sees your contact details."],
+ fbPublic:["Пікірімді сайтта жариялауға келісемін","Согласен(на) на публикацию отзыва на сайте","I agree to have my feedback published on the site"],
+ fbCheck:["Тексеру: {a} + {b} = ?","Проверка: {a} + {b} = ?","Check: {a} + {b} = ?"], fbSend:["Жіберу","Отправить","Send"],
+ fbSent:["Рақмет! Пікіріңіз қабылданды. Модерациядан кейін жарияланады.","Спасибо! Отзыв принят и появится после проверки.","Thank you! Your feedback will appear after review."],
+ fbSentPrivate:["Рақмет! Хабарламаңызды гимназия әкімшілігі оқиды.","Спасибо! Сообщение получит администрация гимназии.","Thank you! The school administration will read your message."],
+ fbModNote:["Барлық пікір жарияланар алдында тексеріледі. Балағат сөздер, сілтемелер мен жарнама жарияланбайды.","Все отзывы проверяются перед публикацией. Оскорбления, ссылки и реклама не публикуются.","Every message is reviewed before publishing. Insults, links and ads are not published."],
+ e_fbShort:["Мәтін тым қысқа (кемінде 15 таңба)","Текст слишком короткий (минимум 15 символов)","The message is too short (15 characters minimum)"],
+ e_fbCheck:["Тексеру жауабы қате","Неверный ответ на проверку","Wrong answer to the check"], e_fbFast:["Тым жылдам. Мәтінді қайта тексеріп, тағы жіберіңіз.","Слишком быстро. Проверьте текст и отправьте ещё раз.","Too fast. Review your text and send again."],
+ e_fbRate:["Сіз жақында пікір жібердіңіз. Біраз уақыттан кейін қайталаңыз.","Вы недавно отправляли отзыв. Попробуйте позже.","You sent feedback recently. Please try again later."],
+ fbNone:["Әзірге жарияланған пікір жоқ. Бірінші болып жазыңыз!","Пока нет опубликованных отзывов. Напишите первым!","No published feedback yet. Be the first!"],
+ fbReply:["Гимназия жауабы","Ответ гимназии","School's reply"], fbAvg:["Орташа баға","Средняя оценка","Average rating"], fbCount:["{n} пікір","{n} отзывов","{n} reviews"], showMore:["Тағы көрсету","Показать ещё","Show more"],
+ fbHomeCta:["Пікір қалдыру","Оставить отзыв","Leave feedback"], p_fb:["Пікірлер","Отзывы","Feedback"],
+ s_pending:["Жаңа","Новые","New"], s_approved:["Жарияланған","Опубликованы","Published"], s_read:["Оқылған (жабық)","Прочитаны (закрытые)","Read (private)"], s_rejected:["Қабылданбаған","Отклонены","Rejected"], s_spam:["Спам","Спам","Spam"],
+ approve:["Жариялау","Опубликовать","Publish"], markRead:["Оқылды","Прочитано","Mark read"], reject:["Қабылдамау","Отклонить","Reject"], saveReply:["Жауапты сақтау","Сохранить ответ","Save reply"],
+ privateOnly:["Автор жариялауға келіспеген","Автор не разрешил публикацию","Author did not allow publishing"], d_fb:["Жаңа пікірлер","Новые отзывы","New feedback"], done2:["Бұл бөлімде хабарлама жоқ","В этом разделе сообщений нет","No messages here"]
+};
+for(var _k4 in T4)T[_k4]=T4[_k4];
 /* ------------------------------------------------------------ helpers */
 function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
-var st={ptab:"me",uq:"",urole:"all",admin:null,profile:null,lang:(function(){var l=store("gm-lang");return LI[l]!==undefined?l:"kk"})(),route:{page:"home",arg:""},grade:(function(){var g=store("gm-grade");return g&&DATA.schedule[g]?g:"5"})(),
+var st={fb:null,fbAdmin:null,fbKind:"all",fbShow:6,fbStatus:"pending",fbA:0,fbB:0,fbStart:0,ptab:"me",uq:"",urole:"all",admin:null,profile:null,lang:(function(){var l=store("gm-lang");return LI[l]!==undefined?l:"kk"})(),route:{page:"home",arg:""},grade:(function(){var g=store("gm-grade");return g&&DATA.schedule[g]?g:"5"})(),
  newsCat:"all",newsQ:"",newsPage:1,progF:"all",year:"all",cal:null,calSel:null,editing:false,canEdit:false,dirty:0,saving:false,sureId:null};
 var art=null;
 function t(k){var v=T[k];return v?v[LI[st.lang]]:k}
@@ -250,9 +277,9 @@ function nowHTML(){var s=lessonState(),n=s.n,b=DATA.bells,head,sub="",bar="";
 var NAV=[
  {k:"navSchool",items:[["about","navAbout"],["about.admin","navAdmin"],["about.teachers","navTeachers"],["about.base","navBase"],["docs","navDocs"]]},
  {k:"navEdu",items:[["programs","navProg"],["schedule","navSched"],["olympiad","navOlymp"],["docs.res","navRes"]]},
- {k:"navLife",items:[["events","navEvents"],["clubs","navClubs"],["gallery","navGallery"],["alumni","navAlumni"]]},
+ {k:"navLife",items:[["events","navEvents"],["clubs","navClubs"],["gallery","navGallery"],["alumni","navAlumni"],["feedback","navFeedback"]]},
  {k:"navNews",href:"news"},{k:"navContacts",href:"contacts"}];
-var PARENT={profile:null,about:"navSchool",docs:"navSchool",programs:"navEdu",schedule:"navEdu",olympiad:"navEdu",events:"navLife",clubs:"navLife",gallery:"navLife",album:"navLife",alumni:"navLife",news:null,post:null,contacts:null};
+var PARENT={profile:null,feedback:"navLife",about:"navSchool",docs:"navSchool",programs:"navEdu",schedule:"navEdu",olympiad:"navEdu",events:"navLife",clubs:"navLife",gallery:"navLife",album:"navLife",alumni:"navLife",news:null,post:null,contacts:null};
 function isOn(route){var p=route.split(".")[0];return st.route.page===p||(p==="gallery"&&st.route.page==="album")||(p==="news"&&st.route.page==="post")}
 function topbar(){var s=DATA.settings;return '<div class="topbar"><div class="container"><div class="info"><span>'+ic("pin")+esc(t("region"))+'</span><span>'+ic("phone")+'<span class="tnum">'+esc(s.phone)+'</span></span><span class="opt">'+ic("mail")+esc(s.email)+'</span></div>'+
  '<div class="lang" role="group" aria-label="Language">'+LANGS.map(function(l){return '<button data-lang="'+l+'" aria-pressed="'+(st.lang===l)+'">'+["Қаз","Рус","Eng"][LI[l]]+'</button>'}).join("")+'</div></div></div>'}
@@ -307,7 +334,7 @@ function pageHome(){var s=DATA.settings;
   '<aside class="panel"><h3>'+esc(t("upcoming"))+'</h3><div class="evlist">'+(up.length?up.map(evRow).join(""):'<p style="color:var(--muted)">'+esc(t("noEvents"))+'</p>')+'</div><div style="margin-top:14px"><a class="more" href="#events">'+esc(t("calendar"))+' →</a></div></aside></div></div></section>';
  var partners='<section class="section alt"><div class="container"><div class="sec-head"><h2>'+esc(t("partnersT"))+'</h2>'+addBtn("partners")+'</div><div class="partners">'+
   DATA.partners.map(function(p){var inner=ed("partners",p.id)+'<span class="ico">'+ic("build")+'</span><span>'+esc(pick(p.title))+'</span>';return p.url&&!st.editing?'<a class="partner" href="'+esc(p.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="partner">'+inner+'</div>'}).join("")+'</div></div></section>';
- return hero+quick+motto+stats+news+partners}
+ return hero+quick+motto+stats+news+homeFeedback()+partners}
 
 function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"});
  function person(p){var ini=(p.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join("");return '<div class="box person">'+ed("staff",p.id)+'<div class="ava">'+(p.img?'<img src="'+p.img+'" alt="">':esc(ini))+'</div><div><b>'+esc(p.name)+'</b><span>'+esc(pick(p.role))+'</span></div></div>'}
@@ -412,7 +439,7 @@ function pageContacts(){var s=DATA.settings,dir=DATA.staff.filter(function(x){re
   '<div class="map">'+map+'<div class="acts"><span style="color:var(--muted);font-size:13.5px">'+esc(t("openIn"))+'</span><a class="btn btn-outline" href="https://2gis.kz/search/'+q+'" target="_blank" rel="noopener">2GIS</a><a class="btn btn-outline" href="https://www.google.com/maps/search/?api=1&query='+q+'" target="_blank" rel="noopener">Google Maps</a><a class="btn btn-outline" href="https://yandex.kz/maps/?text='+q+'" target="_blank" rel="noopener">Яндекс</a></div></div></section>'+
   '<section id="faq" class="faq"><h2 class="h2">'+esc(t("faqT"))+' '+addBtn("faq")+'</h2>'+DATA.faq.map(function(x){return '<details>'+ed("faq",x.id)+'<summary>'+esc(pick(x.q))+'</summary><p>'+esc(pick(x.a))+'</p></details>'}).join("")+'</section></div>'}
 
-var PAGES={profile:pageProfile,home:pageHome,about:pageAbout,news:pageNews,post:pagePost,programs:pagePrograms,schedule:pageSchedule,olympiad:pageOlympiad,events:pageEvents,clubs:pageClubs,gallery:pageGallery,album:pageAlbum,alumni:pageAlumni,docs:pageDocs,contacts:pageContacts};
+var PAGES={feedback:pageFeedback,profile:pageProfile,home:pageHome,about:pageAbout,news:pageNews,post:pagePost,programs:pagePrograms,schedule:pageSchedule,olympiad:pageOlympiad,events:pageEvents,clubs:pageClubs,gallery:pageGallery,album:pageAlbum,alumni:pageAlumni,docs:pageDocs,contacts:pageContacts};
 
 /* ------------------------------------------------------------ render */
 var app=document.getElementById("app"),layer=document.getElementById("layer");
@@ -421,7 +448,7 @@ function render(keepScroll){document.documentElement.lang=st.lang;var y=window.s
  app.innerHTML=topbar()+header()+'<main id="main">'+fn()+'</main>'+footer()+editbar();
  document.title=(st.route.page==="home"?"":titleFor()+" · ")+t("name");
  if(keepScroll)window.scrollTo(0,y);startHero()}
-function titleFor(){var m={profile:"cabinet",about:"navAbout",news:"navNews",programs:"navProg",schedule:"navSched",olympiad:"navOlymp",events:"navEvents",clubs:"navClubs",gallery:"navGallery",alumni:"navAlumni",docs:"navDocs",contacts:"navContacts"}[st.route.page];
+function titleFor(){var m={feedback:"navFeedback",profile:"cabinet",about:"navAbout",news:"navNews",programs:"navProg",schedule:"navSched",olympiad:"navOlymp",events:"navEvents",clubs:"navClubs",gallery:"navGallery",alumni:"navAlumni",docs:"navDocs",contacts:"navContacts"}[st.route.page];
  if(m)return t(m);if(st.route.page==="post"){var p=DATA.posts.filter(function(x){return x.id===st.route.arg})[0];return p?pick(p.title):""}
  if(st.route.page==="album"){var a=DATA.albums.filter(function(x){return x.id===st.route.arg})[0];return a?pick(a.title):""}return""}
 function editbar(){if(!st.canEdit||!st.editing)return"";
@@ -572,13 +599,19 @@ function shrink(file,M){return new Promise(function(res){var r=new FileReader();
 
 /* ------------------------------------------------------------ events */
 document.addEventListener("click",function(e){
- var el=e.target.closest("[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-addl],[data-rml],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-urole],[data-mkadmin],a[href^='#']");
+ var el=e.target.closest("[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-addl],[data-rml],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],[data-mkadmin],a[href^='#']");
  if(!el)return;var d=el.dataset;
  if(d.close!==undefined){if(e.target===el||el.tagName==="BUTTON"){closeLayer()}return}
  if(el.tagName==="A"&&el.getAttribute("href").charAt(0)==="#"){if(el.getAttribute("href")==="#"+(location.hash.replace(/^#/,"")||"home")){e.preventDefault();parseHash()}return}
  if(d.lang){st.lang=d.lang;store("gm-lang",d.lang);closeLayer();render(true);return}
  if(d.open==="drawer"){openDrawer();return} if(d.open==="login"){openLogin();return} if(d.open==="account"){closeLayer();location.hash="profile";return}
  if(d.ptab){st.ptab=d.ptab;render(true);return}
+ if(d.fbkind){st.fbKind=d.fbkind;st.fbShow=6;render(true);return}
+ if(d.fbmore){st.fbShow+=6;render(true);return}
+ if(d.rate){var v=+d.rate,inp=document.getElementById("fb-rating");inp.value=(+inp.value===v)?0:v;document.querySelectorAll("[data-rate]").forEach(function(b){b.classList.toggle("on",+b.dataset.rate<=+inp.value)});return}
+ if(d.fbstatus){st.fbStatus=d.fbstatus;render(true);return}
+ if(d.fbset){var rep=document.getElementById("rep-"+d.fbset);fbUpdate(d.fbset,{status:d.st,reply:rep&&rep.value.trim()?rep.value.trim():null});return}
+ if(d.fbdel){if(st.sureId!=="fb"+d.fbdel){st.sureId="fb"+d.fbdel;render(true);return}st.sureId=null;sb.from("feedback").delete().eq("id",d.fbdel).then(function(r){if(r.error){toast(t("e_generic"));return}st.fbAdmin=st.fbAdmin.filter(function(x){return String(x.id)!==d.fbdel});st.fb=null;render(true)});return}
  if(d.qa){quickAction(d.qa);return}
  if(d.urole){st.urole=d.urole;document.querySelectorAll("[data-urole]").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.urole===st.urole)});document.getElementById("ulistP").innerHTML=userRows();return}
  if(d.mkadmin){el.disabled=true;sb.rpc("set_admin",{target:d.mkadmin,make:d.val==="1"}).then(function(r){if(r.error){el.disabled=false;toast(/last/i.test(r.error.message)?t("lastAdmin"):t("e_generic"));return}st.admin=null;toast(t("adminChanged"));render(true)});return}
@@ -616,8 +649,8 @@ document.addEventListener("change",function(e){var d=e.target.dataset;
  if(d.edimg){var fl=e.target.files[0];if(!fl)return;var pv=document.getElementById("edprev");pv.textContent=t("uploading");shrink(fl,1400).then(uploadImg).then(function(src){if(!src){pv.textContent=t("upErr");return}edImg=src;pv.innerHTML='<img class="prev" src="'+esc(src)+'" alt="">'});return}
  if(d.upload){var al=DATA.albums.filter(function(x){return x.id===d.upload})[0],files=[].slice.call(e.target.files||[]);
   toast(t("uploading"));Promise.all(files.map(function(fl){return shrink(fl,1600).then(uploadImg)})).then(function(srcs){var n=0;srcs.forEach(function(s){if(s){al.photos.push({src:s,cap:{}});n++}});if(n<srcs.length)toast(t("upErr"));if(n){delete al.sample;dirty();render(true)}})}});
-document.addEventListener("submit",function(e){if(/^auth/.test(e.target.id)){e.preventDefault();e.stopPropagation();submitAuth(e.target)}else if(e.target.id==="profForm"){e.preventDefault();e.stopPropagation();saveProfile(e.target)}},true);
-document.addEventListener("input",function(e){if(e.target.id==="uq"){st.uq=e.target.value;var l=document.getElementById("ulistP");if(l)l.innerHTML=userRows()}});
+document.addEventListener("submit",function(e){if(/^auth/.test(e.target.id)){e.preventDefault();e.stopPropagation();submitAuth(e.target)}else if(e.target.id==="fbForm"){e.preventDefault();e.stopPropagation();if(sb)submitFb(e.target)}else if(e.target.dataset&&e.target.dataset.fbreply){e.preventDefault();e.stopPropagation();var fid=e.target.dataset.fbreply;fbUpdate(fid,{reply:document.getElementById("rep-"+fid).value.trim()||null})}else if(e.target.id==="profForm"){e.preventDefault();e.stopPropagation();saveProfile(e.target)}},true);
+document.addEventListener("input",function(e){if(e.target.id==="fb-text"){var c=document.getElementById("fb-cnt");if(c)c.textContent=e.target.value.length+" / 1500"}if(e.target.id==="uq"){st.uq=e.target.value;var l=document.getElementById("ulistP");if(l)l.innerHTML=userRows()}});
 document.addEventListener("change",function(e){if(e.target.dataset&&e.target.dataset.avatar){var f=e.target.files[0];if(f)uploadAvatar(f)}});
 document.addEventListener("submit",function(e){e.preventDefault();if(e.target.id==="edform")saveEditor(e.target);if(e.target.id==="setform")saveSettings()});
 
@@ -629,7 +662,7 @@ function hava(){var a=avatarURL();return '<span class="hava">'+(a?'<img src="'+e
 function pageProfile(){
  if(!sb)return banner("cabinet","pd_profile")+'<div class="container page"><div class="empty"><b>'+esc(t("noAuth"))+'</b></div></div>';
  if(!st.user)return banner("cabinet","pd_profile")+'<div class="container page"><div class="panel" style="max-width:520px;margin:0 auto;text-align:center">'+emblem("em72")+'<p style="margin:14px 0 18px;color:var(--muted)">'+esc(t("needLogin"))+'</p><div class="btns" style="justify-content:center"><button class="btn btn-primary btn-lg" data-auth="login">'+esc(t("signIn"))+'</button><button class="btn btn-outline btn-lg" data-auth="register">'+esc(t("signUp"))+'</button></div>'+bilimBtn()+'</div></div>';
- var tabs=[["me","p_me","user"],["security","p_sec","gear"]];if(st.canEdit)tabs.unshift(["dash","p_dash","star"]),tabs.push(["users","p_users","users"]);
+ var tabs=[["me","p_me","user"],["security","p_sec","gear"]];if(st.canEdit)tabs.unshift(["dash","p_dash","star"]),tabs.push(["feedback","p_fb","msg"],["users","p_users","users"]);
  if(!tabs.some(function(x){return x[0]===st.ptab}))st.ptab=tabs[0][0];
  var p=st.profile||{},u=st.user,m=u.user_metadata||{},role=p.role||m.role,a=avatarURL();
  var side='<aside class="pside"><div class="pava">'+(a?'<img src="'+esc(a)+'" alt="">':esc(uname().charAt(0).toUpperCase()))+'</div><b class="pname">'+esc(uname())+'</b><span class="pmail">'+esc(u.email)+'</span>'+
@@ -637,7 +670,7 @@ function pageProfile(){
   '<small class="since">'+esc(t("memberSince"))+': '+esc(fmtDate(String(p.created_at||u.created_at||"").slice(0,10)))+'</small>'+
   '<nav class="ptabs">'+tabs.map(function(x){return '<button data-ptab="'+x[0]+'" aria-pressed="'+(st.ptab===x[0])+'">'+ic(x[2])+esc(t(x[1]))+'</button>'}).join("")+'</nav>'+
   '<button class="btn btn-soft" data-auth="signout" style="width:100%">'+esc(t("signOut"))+'</button></aside>';
- var body={me:tabMe,security:tabSec,dash:tabDash,users:tabUsers}[st.ptab]();
+ var body={me:tabMe,security:tabSec,dash:tabDash,users:tabUsers,feedback:tabFb}[st.ptab]();
  return banner("cabinet","pd_profile")+'<div class="container page"><div class="prof">'+side+'<section class="pmain">'+body+'</section></div></div>'}
 function tabMe(){var p=st.profile||{},m=st.user.user_metadata||{},role=p.role||m.role||"student";
  return '<div class="panel"><h3>'+esc(t("p_me"))+'</h3><form class="form" id="profForm">'+
@@ -654,8 +687,9 @@ function tabDash(){var A=st.admin;if(!A){loadAdmin();return '<div class="panel">
  var users=A.users,by={student:0,parent:0,teacher:0};users.forEach(function(u){if(by[u.role]!==undefined)by[u.role]++});
  var photos=DATA.albums.reduce(function(s,a){return s+a.photos.length},0),up=upcomingEvents().length;
  var who=A.meta&&A.meta.updated_by?(users.filter(function(u){return u.id===A.meta.updated_by})[0]||{}).full_name:"";
- var tiles=[["users",users.length,"d_users"],["mega",DATA.posts.length,"d_posts"],["cal",up,"d_events"],["image",photos,"d_photos"]].map(function(x){return '<div class="tile"><span class="ico">'+ic(x[0])+'</span><b class="tnum">'+x[1]+'</b><span>'+esc(t(x[2]))+'</span></div>'}).join("");
- return '<div class="tiles">'+tiles+'</div>'+
+ var pendingFb=(st.fbAdmin||[]).filter(function(x){return x.status==="pending"}).length;if(!st.fbAdmin)loadFbAdmin();
+ var tiles=[["msg",pendingFb,"d_fb"],["users",users.length,"d_users"],["mega",DATA.posts.length,"d_posts"],["cal",up,"d_events"],["image",photos,"d_photos"]].map(function(x){return '<div class="tile"><span class="ico">'+ic(x[0])+'</span><b class="tnum">'+x[1]+'</b><span>'+esc(t(x[2]))+'</span></div>'}).join("");
+ return '<div class="tiles five">'+tiles+'</div>'+
   '<div class="panel"><h3>'+esc(t("qaT"))+'</h3><div class="qa">'+[["post","mega","qa_post"],["event","cal","qa_event"],["album","image","qa_album"],["sched","cal","qa_sched"],["edit","edit","enterEdit"],["settings","gear","settings"]].map(function(x){return '<button class="lnk" data-qa="'+x[0]+'"><span class="ico">'+ic(x[1])+'</span><b>'+esc(t(x[2]))+'</b></button>'}).join("")+'</div>'+
   '<p class="hint" style="text-align:left;margin-top:14px">'+esc(t("lastPub"))+': '+esc(A.meta?fmtDate(String(A.meta.updated_at).slice(0,10))+(who?" · "+who:""):t("never"))+'</p></div>'+
   '<div class="twocol" style="gap:18px"><div class="panel"><h3>'+esc(t("recentReg"))+'</h3><div class="ulist" style="margin:0">'+(users.length?users.slice(0,5).map(urow).join(""):'<p class="hint">'+esc(t("noUsers"))+'</p>')+'</div></div>'+
@@ -693,6 +727,61 @@ function quickAction(k){if(!st.canEdit)return;st.editing=true;
  else if(k==="sched"){location.hash="schedule"}
  else if(k==="settings"){render(true);openSettings()}
  else{location.hash="home"}}
+
+/* ------------------------------------------------------------ feedback */
+function stars(n,cls){var s="";for(var i=1;i<=5;i++)s+='<span class="'+(i<=n?"on":"")+'">★</span>';return '<span class="stars '+(cls||"")+'" aria-label="'+n+'/5">'+s+'</span>'}
+var fbLoading=false;
+function loadFb(){if(!sb||fbLoading)return;fbLoading=true;sb.from("feedback_public").select("*").order("created_at",{ascending:false}).limit(200).then(function(r){fbLoading=false;st.fb=r.error?[]:(r.data||[]);if(st.route.page==="feedback"||st.route.page==="home")render(true)})}
+function fbCard(x){return '<article class="fbcard"><div class="fbhead"><div class="ava" style="width:40px;height:40px;font-size:15px">'+esc((x.name||t("fbAnon")).charAt(0).toUpperCase())+'</div><div style="min-width:0"><b>'+esc(x.name||t("fbAnon"))+'</b><span>'+esc(t("w_"+(x.author_role||"other")))+' · '+esc(fmtDate(String(x.created_at).slice(0,10)))+'</span></div>'+(x.rating?stars(x.rating):'')+'</div>'+
+ '<span class="chip k-'+esc(x.kind)+'">'+esc(t("k_"+x.kind))+'</span><p>'+esc(x.body)+'</p>'+(x.reply?'<div class="fbreply"><b>'+esc(t("fbReply"))+'</b><p>'+esc(x.reply)+'</p></div>':'')+'</article>'}
+function fbSummary(list){var rated=list.filter(function(x){return x.rating}),avg=rated.length?rated.reduce(function(s,x){return s+x.rating},0)/rated.length:0;
+ return rated.length?'<div class="fbsum"><b class="tnum">'+avg.toFixed(1)+'</b>'+stars(Math.round(avg),"lg")+'<span>'+esc(t("fbAvg"))+' · '+esc(f(t("fbCount"),{n:list.length}))+'</span></div>':''}
+function homeFeedback(){if(!sb)return"";if(st.fb===null){loadFb();return""}var l=st.fb.slice(0,3);
+ return '<section class="section"><div class="container"><div class="sec-head"><div><span class="eyebrow">'+esc(t("navFeedback"))+'</span><h2>'+esc(t("fbListT"))+'</h2></div><a class="btn btn-primary" href="#feedback">'+ic("msg")+esc(t("fbHomeCta"))+'</a></div>'+
+ (l.length?'<div class="cards">'+l.map(fbCard).join("")+'</div>':'<div class="empty"><b>'+esc(t("fbNone"))+'</b></div>')+'</div></section>'}
+function fbForm(){st.fbA=2+Math.floor(Math.random()*7);st.fbB=1+Math.floor(Math.random()*8);st.fbStart=Date.now();var dis=sb?'':' disabled';
+ return '<div class="panel fbform"><h3>'+esc(t("fbFormT"))+'</h3>'+(sb?'':'<p class="formmsg err">'+esc(t("noAuth"))+'</p>')+'<form class="form" id="fbForm" novalidate>'+
+ '<div class="row2"><label>'+esc(t("fbWho"))+'<select id="fb-role"'+dis+'>'+["parent","student","graduate","other"].map(function(r){return '<option value="'+r+'">'+esc(t("w_"+r))+'</option>'}).join("")+'</select></label>'+
+ '<label>'+esc(t("fbKind"))+'<select id="fb-kind"'+dis+'>'+["review","idea","thanks","complaint"].map(function(k){return '<option value="'+k+'">'+esc(t("k_"+k))+'</option>'}).join("")+'</select></label></div>'+
+ '<label>'+esc(t("fbName"))+'<input id="fb-name" maxlength="60" autocomplete="name"'+dis+'></label>'+
+ '<div class="rate" role="group" aria-label="'+esc(t("fbRating"))+'"><span>'+esc(t("fbRating"))+'</span><div>'+[1,2,3,4,5].map(function(i){return '<button type="button" data-rate="'+i+'" aria-label="'+i+'"'+dis+'>★</button>'}).join("")+'</div><input type="hidden" id="fb-rating" value="0"></div>'+
+ '<label>'+esc(t("fbText"))+'<textarea id="fb-text" maxlength="1500" placeholder="'+esc(t("fbTextPh"))+'"'+dis+'></textarea><small class="cnt" id="fb-cnt">0 / 1500</small></label>'+
+ '<label>'+esc(t("fbContact"))+'<input id="fb-contact" maxlength="100" placeholder="'+esc(t("fbContactPh"))+'"'+dis+'><small style="font-weight:400;color:var(--muted)">'+esc(t("fbContactNote"))+'</small></label>'+
+ '<label class="hp" aria-hidden="true">Website<input id="fb-website" tabindex="-1" autocomplete="off"></label>'+
+ '<label class="check"><input type="checkbox" id="fb-public" checked'+dis+'><span>'+esc(t("fbPublic"))+'</span></label>'+
+ '<div class="row2" style="align-items:end"><label>'+esc(f(t("fbCheck"),{a:st.fbA,b:st.fbB}))+'<input id="fb-check" inputmode="numeric" maxlength="3" autocomplete="off"'+dis+'></label><button class="btn btn-primary btn-lg" type="submit"'+dis+'>'+esc(t("fbSend"))+'</button></div>'+
+ msgBox()+'</form><p class="hint" style="text-align:left;margin-top:12px">'+esc(t("fbModNote"))+'</p></div>'}
+function pageFeedback(){if(sb&&st.fb===null)loadFb();var all=st.fb||[],list=all.filter(function(x){return st.fbKind==="all"||x.kind===st.fbKind});
+ var left='<section style="min-width:0"><div class="toolbar" style="margin-bottom:18px"><h2 class="h2" style="margin:0">'+esc(t("fbListT"))+'</h2>'+fbSummary(all)+'</div>'+
+  '<div class="pills" style="display:inline-flex;margin-bottom:18px">'+["all","review","idea","thanks","complaint"].map(function(k){return '<button data-fbkind="'+k+'" aria-pressed="'+(st.fbKind===k)+'">'+esc(k==="all"?t("all"):t("k_"+k))+'</button>'}).join("")+'</div>'+
+  (st.fb===null&&sb?'<p class="hint">'+esc(t("loading"))+'</p>':list.length?'<div class="fblist">'+list.slice(0,st.fbShow).map(fbCard).join("")+'</div>'+(list.length>st.fbShow?'<div style="text-align:center;margin-top:16px"><button class="btn btn-soft" data-fbmore="1">'+esc(t("showMore"))+'</button></div>':''):'<div class="empty"><b>'+esc(t("fbNone"))+'</b></div>')+'</section>';
+ return banner("navFeedback","pd_feedback")+'<div class="container page"><div class="fbgrid">'+left+'<aside style="min-width:0">'+fbForm()+'</aside></div></div>'}
+function submitFb(form){var g=function(x){return document.getElementById(x).value.trim()},txt=g("fb-text");
+ if(txt.length<15){showMsg("e_fbShort",false);return}
+ if(parseInt(g("fb-check"),10)!==st.fbA+st.fbB){showMsg("e_fbCheck",false);return}
+ var last=+store("gm-fb-last")||0;if(Date.now()-last<120000){showMsg("e_fbRate",false);return}
+ var pub=document.getElementById("fb-public").checked;busy(form,true);
+ sb.rpc("submit_feedback",{p_name:g("fb-name"),p_role:document.getElementById("fb-role").value,p_kind:document.getElementById("fb-kind").value,p_rating:+document.getElementById("fb-rating").value||0,
+  p_body:txt,p_contact:g("fb-contact"),p_public:pub,p_hp:document.getElementById("fb-website").value,p_elapsed:Math.round((Date.now()-st.fbStart)/1000)}).then(function(r){busy(form,false);
+  if(r.error){var m=r.error.message||"";showMsg(/rate|busy/i.test(m)?"e_fbRate":/fast/i.test(m)?"e_fbFast":/short/i.test(m)?"e_fbShort":"e_generic",false);return}
+  store("gm-fb-last",String(Date.now()));form.querySelectorAll("input,select,textarea,button").forEach(function(x){x.disabled=true});showMsg(pub?"fbSent":"fbSentPrivate",true)})}
+/* moderation (admin) */
+var fbaLoading=false;
+function loadFbAdmin(){if(!sb||!st.canEdit||fbaLoading)return;fbaLoading=true;sb.from("feedback").select("*").order("created_at",{ascending:false}).limit(500).then(function(r){fbaLoading=false;st.fbAdmin=r.error?[]:(r.data||[]);if(st.route.page==="profile")render(true)})}
+function tabFb(){if(!st.fbAdmin){loadFbAdmin();return '<div class="panel"><p class="hint">'+esc(t("loading"))+'</p></div>'}
+ var S=["pending","approved","read","rejected","spam"],cnt={};S.forEach(function(s){cnt[s]=st.fbAdmin.filter(function(x){return x.status===s}).length});
+ var list=st.fbAdmin.filter(function(x){return x.status===st.fbStatus});
+ return '<div class="panel"><h3>'+esc(t("p_fb"))+'</h3><div class="pills" style="display:inline-flex;margin-bottom:16px">'+S.map(function(s){return '<button data-fbstatus="'+s+'" aria-pressed="'+(st.fbStatus===s)+'">'+esc(t("s_"+s))+' <span class="cntb">'+cnt[s]+'</span></button>'}).join("")+'</div>'+
+ (list.length?'<div class="fblist">'+list.map(function(x){
+  var acts=(x.status!=="approved"&&x.public_ok?'<button type="button" class="btn btn-primary" data-fbset="'+x.id+'" data-st="approved">'+esc(t("approve"))+'</button>':'')+
+   (x.status!=="read"?'<button type="button" class="btn btn-soft" data-fbset="'+x.id+'" data-st="read">'+esc(t("markRead"))+'</button>':'')+
+   (x.status!=="rejected"?'<button type="button" class="btn btn-soft" data-fbset="'+x.id+'" data-st="rejected">'+esc(t("reject"))+'</button>':'')+
+   '<button type="button" class="btn btn-danger" data-fbdel="'+x.id+'">'+esc(st.sureId==="fb"+x.id?t("sure"):t("del"))+'</button>';
+  return '<article class="fbcard mod"><div class="fbhead"><div style="min-width:0"><b>'+esc(x.name||t("fbAnon"))+'</b><span>'+esc(t("w_"+(x.author_role||"other")))+' · '+esc(fmtDate(String(x.created_at).slice(0,10)))+(x.contact?' · '+esc(x.contact):'')+'</span></div>'+(x.rating?stars(x.rating):'')+'</div>'+
+   '<div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip k-'+esc(x.kind)+'">'+esc(t("k_"+x.kind))+'</span>'+(x.public_ok?'':'<span class="chip sample">'+esc(t("privateOnly"))+'</span>')+'</div><p>'+esc(x.body)+'</p>'+
+   '<form class="form fbrep" data-fbreply="'+x.id+'" style="margin-top:4px"><label>'+esc(t("fbReply"))+'<textarea id="rep-'+x.id+'" maxlength="1500" style="min-height:60px">'+esc(x.reply||"")+'</textarea></label><div class="acts" style="justify-content:flex-start;flex-wrap:wrap">'+acts+'<button class="btn btn-outline" type="submit">'+esc(t("saveReply"))+'</button></div></form></article>'}).join("")+'</div>':'<div class="empty"><b>'+esc(t("done2"))+'</b></div>')+'</div>'}
+function fbUpdate(id,patch){sb.from("feedback").update(patch).eq("id",id).then(function(r){if(r.error){toast(t("e_generic"));return}
+ st.fbAdmin.forEach(function(x){if(String(x.id)===String(id))Object.assign(x,patch)});st.fb=null;toast(t("adminChanged"));render(true)})}
 /* ------------------------------------------------------------ storage & publish (Supabase) */
 function uploadImg(src){if(!src)return Promise.resolve(null);if(!sb)return Promise.resolve(null);
  return fetch(src).then(function(r){return r.blob()}).then(function(b){var path=new Date().getFullYear()+"/"+uid("img")+".jpg";
@@ -710,7 +799,7 @@ if(/access_token=|error_description=|type=recovery/.test(location.hash))history.
 parseHash();
 setInterval(function(){var n=document.getElementById("now");if(n)n.innerHTML=nowHTML()},20000);
 function setUser(u){var was=st.user&&st.user.id;st.user=u||null;
- if(!u){st.canEdit=false;st.editing=false;st.profile=null;st.admin=null;render(true);return}
+ if(!u){st.canEdit=false;st.editing=false;st.profile=null;st.admin=null;st.fbAdmin=null;render(true);return}
  if(was===u.id)return;
  sb.from("admins").select("user_id").eq("user_id",u.id).maybeSingle().then(function(r){st.canEdit=!!(r&&r.data);if(st.canEdit&&st.route.page==="profile")st.ptab="dash";render(true);loadProfile()})}
 if(sb){
