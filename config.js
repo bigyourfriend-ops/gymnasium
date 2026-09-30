@@ -1,8 +1,8 @@
 // Supabase баптаулары / Настройки Supabase
-// Supabase → Project Settings → API бөлімінен көшіріңіз / скопируйте из раздела API.
-// "anon public" кілті ғана! service_role кілтін ЕШҚАШАН мұнда қоймаңыз.
-// Только ключ "anon public"! Ключ service_role НИКОГДА сюда не вставляйте.
+// Бұл жариялауға арналған (publishable) кілт — сайтта тұруы қалыпты.
+// Это публичный (publishable) ключ — ему место в коде сайта.
+// service_role / secret кілтін ЕШҚАШАН мұнда қоймаңыз. Ключ service_role/secret НИКОГДА сюда не вставляйте.
 window.SITE_CONFIG = {
-  supabaseUrl: "YOUR_SUPABASE_URL",        // мысалы: https://abcdxyz.supabase.co
-  supabaseAnonKey: "YOUR_SUPABASE_ANON_KEY"
+  supabaseUrl: "https://nrtfzmaxpeqqzfmrlnro.supabase.co",
+  supabaseAnonKey: "sb_publishable_GzWeyuE9sOaot5H1IiEJTA_Gs6AQ83m"
 };
