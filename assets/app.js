@@ -315,9 +315,9 @@ function upcomingEvents(){var td=todayISO();return DATA.events.filter(function(e
 
 /* ------------------------------------------------------------ pages */
 function pageHome(){var s=DATA.settings;
- var hero='<section class="hero"><canvas id="heroCanvas" aria-hidden="true"></canvas><div class="container"><div><span class="badge"><i></i>'+esc(f(t("heroBadge"),{y:s.year}))+'</span>'+
+ var hero='<section class="hero"><canvas id="heroCanvas" aria-hidden="true"></canvas><div class="container"><div>'+
   '<h1>'+esc(t("heroA"))+'<br><span class="grad-text">'+esc(t("heroB"))+'</span></h1><p class="lead">'+esc(t("heroLead"))+'</p>'+
-  '<div class="btns"><a class="btn btn-primary btn-lg" href="#news">'+esc(t("btnNews"))+'</a><a class="btn btn-outline btn-lg" href="#schedule">'+ic("cal")+esc(t("btnSched"))+'</a><a class="btn btn-outline btn-lg" href="https://bilimclass.kz" target="_blank" rel="noopener">'+ic("book")+esc(t("kundelik"))+'</a></div></div>'+
+  '</div>'+
   '<div class="hero-card card"><div class="hc-top">'+emblem()+'<div><small>'+esc(t("emblem"))+'</small><b>'+esc(t("name"))+'</b></div></div><div id="now">'+nowHTML()+'</div></div></div></section>';
  var quick='<section class="section" style="padding-block:40px"><div class="container"><div class="quick">'+
   [["schedule","cal","q1","q1d"],["https://bilimclass.kz","book","kundelik","q2d"],["contacts.faq","cap","q3","q3d"],["news.ann","mega","q4","q4d"]].map(function(q){var ext=q[0].indexOf("http")===0;
