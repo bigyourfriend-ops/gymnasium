@@ -334,7 +334,7 @@ function pageHome(){var s=DATA.settings;
   '<aside class="panel"><h3>'+esc(t("upcoming"))+'</h3><div class="evlist">'+(up.length?up.map(evRow).join(""):'<p style="color:var(--muted)">'+esc(t("noEvents"))+'</p>')+'</div><div style="margin-top:14px"><a class="more" href="#events">'+esc(t("calendar"))+' →</a></div></aside></div></div></section>';
  var partners='<section class="section alt"><div class="container"><div class="sec-head"><h2>'+esc(t("partnersT"))+'</h2>'+addBtn("partners")+'</div><div class="partners">'+
   DATA.partners.map(function(p){var inner=ed("partners",p.id)+'<span class="ico">'+ic("build")+'</span><span>'+esc(pick(p.title))+'</span>';return p.url&&!st.editing?'<a class="partner" href="'+esc(p.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="partner">'+inner+'</div>'}).join("")+'</div></div></section>';
- return hero+motto+stats+news+homeFeedback()+partners}
+ return hero+news+homeFeedback()+partners}
 
 function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"});
  function person(p){var ini=(p.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join("");return '<div class="box person">'+ed("staff",p.id)+'<div class="ava">'+(p.img?'<img src="'+p.img+'" alt="">':esc(ini))+'</div><div><b>'+esc(p.name)+'</b><span>'+esc(pick(p.role))+'</span></div></div>'}
