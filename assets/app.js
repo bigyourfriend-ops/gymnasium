@@ -275,8 +275,8 @@ function nowHTML(){var s=lessonState(),n=s.n,b=DATA.bells,head,sub="",bar="";
 
 /* ------------------------------------------------------------ chrome */
 var NAV=[
- {k:"navSchool",items:[["about","navAbout"],["about.admin","navAdmin"],["about.teachers","navTeachers"],["about.base","navBase"],["docs","navDocs"]]},
- {k:"navEdu",items:[["schedule","navSched"],["olympiad","navOlymp"],["docs.res","navRes"]]},
+ {k:"navSchool",items:[["about","navAbout"],["about.admin","navAdmin"],["about.teachers","navTeachers"],["about.base","navBase"],["docs","navRes"]]},
+ {k:"navEdu",items:[["schedule","navSched"],["olympiad","navOlymp"]]},
  {k:"navLife",items:[["events","navEvents"],["clubs","navClubs"],["gallery","navGallery"],["alumni","navAlumni"],["feedback","navFeedback"]]},
  {k:"navNews",href:"news"},{k:"navContacts",href:"contacts"}];
 var PARENT={profile:null,feedback:"navLife",about:"navSchool",docs:"navSchool",programs:"navEdu",schedule:"navEdu",olympiad:"navEdu",events:"navLife",clubs:"navLife",gallery:"navLife",album:"navLife",alumni:"navLife",news:null,post:null,contacts:null};
@@ -294,7 +294,7 @@ function footer(){var s=DATA.settings,y=nowTZ().y;
   '<div><h5>'+esc(t("navSchool"))+'</h5><ul>'+NAV[0].items.map(function(x){return '<li>'+lnk(x[0],esc(t(x[1])))+'</li>'}).join("")+'</ul></div>'+
   '<div><h5>'+esc(t("navEdu"))+'</h5><ul>'+NAV[1].items.concat([["events","navEvents"],["news","navNews"]]).map(function(x){return '<li>'+lnk(x[0],esc(t(x[1])))+'</li>'}).join("")+'</ul></div>'+
   '<div><h5>'+esc(t("navContacts"))+'</h5><ul><li>'+ic("pin")+'<span>'+esc(t("addr"))+'</span></li><li>'+ic("phone")+'<span class="tnum">'+esc(s.phone)+'</span></li><li>'+ic("mail")+'<span style="overflow-wrap:anywhere">'+esc(s.email)+'</span></li><li>'+ic("clock")+'<span>'+esc(pick(s.hours))+'</span></li></ul></div></div>'+
-  '<div class="fbottom"><span>© '+y+' '+esc(t("name"))+'. '+esc(t("rights"))+'</span><span>'+lnk("docs",esc(t("navDocs")))+'</span></div></div></footer>'}
+  '<div class="fbottom"><span>© '+y+' '+esc(t("name"))+'. '+esc(t("rights"))+'</span><span>'+lnk("docs",esc(t("navRes")))+'</span></div></div></footer>'}
 function social(){var s=DATA.settings,out="";
  if(s.instagram)out+='<a href="'+esc(s.instagram)+'" target="_blank" rel="noopener" aria-label="Instagram">'+ic("insta")+'</a>';
  if(s.telegram)out+='<a href="'+esc(s.telegram)+'" target="_blank" rel="noopener" aria-label="Telegram">'+ic("tg")+'</a>';
@@ -425,8 +425,9 @@ function pageAlumni(){return banner("navAlumni","pd_alumni")+'<div class="contai
 function linkList(items,icon,col){return '<div class="links">'+items.map(function(d){var host="";try{host=new URL(d.url).hostname.replace(/^www\./,"")}catch(e){}
  var inner=ed(col,d.id)+'<span class="ico">'+ic(icon)+'</span><div style="min-width:0"><b>'+esc(pick(d.title))+'</b><span>'+esc(host)+'</span></div><span class="arr">'+ic("arrow").replace('<svg','<svg width="18" height="18"')+'</span>';
  return d.url&&!st.editing?'<a class="lnk" href="'+esc(d.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="lnk">'+inner+'</div>'}).join("")+'</div>'}
-function pageDocs(){return banner("navDocs","pd_docs")+'<div class="container page"><section id="docs"><h2 class="h2">'+esc(t("docsT"))+' '+addBtn("docs",{cat:"docs"})+'</h2>'+linkList(DATA.docs.filter(function(d){return d.cat==="docs"}),"file","docs")+'</section>'+
- '<section id="res"><h2 class="h2">'+esc(t("resT"))+' '+addBtn("docs",{cat:"res"})+'</h2>'+linkList(DATA.docs.filter(function(d){return d.cat==="res"}),"link","docs")+'</section></div>'}
+function pageDocs(){return banner("navRes","pd_docs")+'<div class="container page">'+
+ '<section id="res"><h2 class="h2">'+esc(t("resT"))+' '+addBtn("docs",{cat:"res"})+'</h2>'+linkList(DATA.docs.filter(function(d){return d.cat==="res"}),"link","docs")+'</section>'+
+ '<section id="docs"><h2 class="h2">'+esc(t("docsT"))+' '+addBtn("docs",{cat:"docs"})+'</h2>'+linkList(DATA.docs.filter(function(d){return d.cat==="docs"}),"file","docs")+'</section></div>'}
 
 function pageContacts(){var s=DATA.settings,dir=DATA.staff.filter(function(x){return x.group==="admin"})[0],q=encodeURIComponent("Сарыкемер, улица Косы батыра, 47");
  var map='<svg viewBox="0 0 520 280" role="img" aria-label="'+esc(t("addr"))+'"><rect width="520" height="280" fill="#ecfdf3"/><g stroke="#d1fae5" stroke-width="1">'+[40,95,150,205,260].map(function(y){return '<line x1="0" y1="'+y+'" x2="520" y2="'+y+'"/>'}).join("")+[60,140,220,300,380,460].map(function(x){return '<line x1="'+x+'" y1="0" x2="'+x+'" y2="280"/>'}).join("")+'</g>'+
@@ -448,7 +449,7 @@ function render(keepScroll){document.documentElement.lang=st.lang;var y=window.s
  app.innerHTML=topbar()+header()+'<main id="main">'+fn()+'</main>'+footer()+editbar();
  document.title=(st.route.page==="home"?"":titleFor()+" · ")+t("name");
  if(keepScroll)window.scrollTo(0,y);startHero();startStrip()}
-function titleFor(){var m={feedback:"navFeedback",profile:"cabinet",about:"navAbout",news:"navNews",programs:"navProg",schedule:"navSched",olympiad:"navOlymp",events:"navEvents",clubs:"navClubs",gallery:"navGallery",alumni:"navAlumni",docs:"navDocs",contacts:"navContacts"}[st.route.page];
+function titleFor(){var m={feedback:"navFeedback",profile:"cabinet",about:"navAbout",news:"navNews",programs:"navProg",schedule:"navSched",olympiad:"navOlymp",events:"navEvents",clubs:"navClubs",gallery:"navGallery",alumni:"navAlumni",docs:"navRes",contacts:"navContacts"}[st.route.page];
  if(m)return t(m);if(st.route.page==="post"){var p=DATA.posts.filter(function(x){return x.id===st.route.arg})[0];return p?pick(p.title):""}
  if(st.route.page==="album"){var a=DATA.albums.filter(function(x){return x.id===st.route.arg})[0];return a?pick(a.title):""}return""}
 function editbar(){if(!st.canEdit||!st.editing)return"";
