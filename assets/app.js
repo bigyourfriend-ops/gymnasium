@@ -261,7 +261,7 @@ var T6={
 for(var _k6 in T6)T[_k6]=T6[_k6];
 var PERMS=["news","events","gallery","schedule","about","life","docs","settings","feedback","users"];
 var COLPERM={posts:"news",events:"events",albums:"gallery",docs:"docs",staff:"about",facilities:"about",partners:"about",faq:"about",clubs:"life",achievements:"life",alumni:"life"};
-var SECS={settings:["settings"],posts:["posts"],events:["events"],albums:["albums"],schedule:["schedule","bells","scheduleSample"],docs:["docs"],staff:["staff"],facilities:["facilities"],partners:["partners"],faq:["faq"],clubs:["clubs"],achievements:["achievements"],alumni:["alumni"]};
+var SECS={settings:["settings"],posts:["posts"],events:["events"],albums:["albums"],schedule:["schedule","bells","bells2","scheduleSample"],docs:["docs"],staff:["staff"],facilities:["facilities"],partners:["partners"],faq:["faq"],clubs:["clubs"],achievements:["achievements"],alumni:["alumni"]};
 var SECPERM={settings:"settings",posts:"news",events:"events",albums:"gallery",schedule:"schedule",docs:"docs",staff:"about",facilities:"about",partners:"about",faq:"about",clubs:"life",achievements:"life",alumni:"life"};
 function can(p){return st.perms.indexOf(p)>=0}
 function canCol(col){return can(COLPERM[col])}
@@ -277,6 +277,13 @@ var T7={
  settingsHint:["Сақтағаннан кейін төмендегі «Жариялау» батырмасын басыңыз.","После сохранения нажмите «Опубликовать» внизу экрана.","After saving, press “Publish” at the bottom of the screen."], pubHint:["Барлық өзгеріс сайтта «Жариялау» батырмасын басқаннан кейін көрінеді.","Все изменения появляются на сайте после нажатия «Опубликовать».","Changes appear on the site after you press “Publish”."]
 };
 for(var _k7 in T7)T[_k7]=T7[_k7];
+
+var T8={shift1:["1-ауысым","1 смена","Shift 1"], shift2:["2-ауысым","2 смена","Shift 2"],
+ before2:["2-ауысымның басталуы: {t}","Вторая смена начнётся в {t}","Shift 2 starts at {t}"],
+ bells2T:["Қоңырау кестесі — 2-ауысым","Расписание звонков — 2 смена","Bell schedule — shift 2"],
+ bells1T:["Қоңырау кестесі — 1-ауысым","Расписание звонков — 1 смена","Bell schedule — shift 1"],
+ addBell:["+ сабақ","+ урок","+ lesson"], rmBell:["− сабақ","− урок","− lesson"]};
+for(var _k8 in T8)T[_k8]=T8[_k8];
 /* ------------------------------------------------------------ helpers */
 function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
 var st={atab:"dash",perms:[],isAdmin:false,roleName:"",base:{},meta:null,roles:null,fb:null,fbAdmin:null,fbKind:"all",fbShow:6,fbStatus:"pending",fbA:0,fbB:0,fbStart:0,ptab:"me",uq:"",urole:"all",admin:null,profile:null,lang:(function(){var l=store("gm-lang");return LI[l]!==undefined?l:"kk"})(),route:{page:"home",arg:""},grade:(function(){var g=store("gm-grade");return g&&DATA.schedule[g]?g:"5"})(),
@@ -301,15 +308,18 @@ function addBtn(col,preset){if(!st.editing||!canCol(col))return"";return '<butto
 function empty(key){return '<div class="empty"><b>'+esc(t(key))+'</b>'+(st.editing?esc(t("emptyAdd")):"")+'</div>'}
 
 /* ------------------------------------------------------------ live lesson state */
-function lessonState(){var n=nowTZ(),b=DATA.bells;if(n.wd===0||n.wd===6)return{kind:"weekend",n:n};
- for(var i=0;i<b.length;i++){var s=toMin(b[i][0]),e=toMin(b[i][1]);if(n.min>=s&&n.min<e)return{kind:"lesson",i:i,left:e-n.min,pct:Math.round((n.min-s)/(e-s)*100),n:n};
-  if(i+1<b.length&&n.min>=e&&n.min<toMin(b[i+1][0]))return{kind:"break",i:i+1,n:n}}
- if(b.length&&n.min<toMin(b[0][0]))return{kind:"before",n:n};return{kind:"after",n:n}}
-function nowHTML(){var s=lessonState(),n=s.n,b=DATA.bells,head,sub="",bar="";
+function shiftState(b,n){for(var i=0;i<b.length;i++){var s=toMin(b[i][0]),e=toMin(b[i][1]);if(n.min>=s&&n.min<e)return{kind:"lesson",i:i,left:e-n.min,pct:Math.round((n.min-s)/(e-s)*100)};
+  if(i+1<b.length&&n.min>=e&&n.min<toMin(b[i+1][0]))return{kind:"break",i:i+1}}
+ if(b.length&&n.min<toMin(b[0][0]))return{kind:"before"};return{kind:"after"}}
+function lessonState(){var n=nowTZ(),b1=DATA.bells,b2=DATA.bells2||[],r;
+ if(n.wd===0||n.wd===6)return{kind:"weekend",n:n,shift:1,b:b1};
+ r=shiftState(b1,n);if(r.kind!=="after"||!b2.length){r.n=n;r.shift=1;r.b=b1;return r}
+ r=shiftState(b2,n);r.n=n;r.shift=2;r.b=b2;if(r.kind==="before")r.kind="before2";return r}
+function nowHTML(){var s=lessonState(),n=s.n,b=s.b,head,sub="",bar="";
  if(s.kind==="lesson"){head=f(t("lesson"),{n:s.i+1});sub=b[s.i][0]+"–"+b[s.i][1]+" · "+f(t("left"),{m:s.left});bar='<div class="pbar"><i style="width:'+s.pct+'%"></i></div>'}
- else if(s.kind==="break"){head=t("brk");sub=f(t("next"),{t:b[s.i][0]})}else if(s.kind==="before"){head=f(t("before"),{t:b[0][0]})}else if(s.kind==="after"){head=t("after")}else head=t("weekend");
+ else if(s.kind==="break"){head=t("brk");sub=f(t("next"),{t:b[s.i][0]})}else if(s.kind==="before"){head=f(t("before"),{t:b[0][0]})}else if(s.kind==="before2"){head=f(t("before2"),{t:b[0][0]})}else if(s.kind==="after"){head=t("after")}else head=t("weekend");
  return '<div class="now-row"><div class="now-clock tnum">'+pad(n.h)+':'+pad(n.mi)+'</div><div class="now-date">'+esc(WDL[LI[st.lang]][n.wd])+'<br>'+esc(fmtDate(n.y+"-"+pad(n.m)+"-"+pad(n.d)))+'</div></div>'+
-  '<div class="now-state"><b>'+esc(head)+'</b><span>'+esc(sub||t("nowT"))+'</span>'+bar+'</div>'+
+  '<div class="now-state">'+((DATA.bells2||[]).length&&s.kind!=="weekend"?'<span class="shiftchip s'+s.shift+'">'+esc(t("shift"+s.shift))+'</span>':'')+'<b>'+esc(head)+'</b><span>'+esc(sub||t("nowT"))+'</span>'+bar+'</div>'+
   '<div class="bells">'+b.map(function(x,i){return '<div class="'+(s.kind==="lesson"&&s.i===i?"on":"")+'"><b>'+(i+1)+'</b><span class="tnum">'+x[0]+'</span></div>'}).join("")+'</div>'}
 
 /* ------------------------------------------------------------ chrome */
@@ -420,12 +430,15 @@ function pageSchedule(){var g=st.grade,days=DATA.schedule[g],s=lessonState(),ti=
  var opts=function(sel){return '<option value="">—</option>'+Object.keys(SUBJ).map(function(k){return '<option value="'+k+'"'+(k===sel?" selected":"")+'>'+esc(SUBJ[k][L])+'</option>'}).join("")};
  var cards=days.map(function(ls,di){var isT=di===ti;
   return '<div class="day'+(isT?" today":"")+'"><h4>'+esc(T.days[L][di])+(isT?'<span class="chip">'+esc(t("today"))+'</span>':'')+'</h4><ol>'+ls.map(function(k,li){var b=DATA.bells[li]||["",""];
-   return '<li class="'+(isT&&s.kind==="lesson"&&s.i===li?"cur":"")+'"><span class="n">'+(li+1)+'</span><span><span class="t tnum">'+b[0]+'–'+b[1]+'</span>'+((st.editing&&can("schedule"))?'<select data-cell="'+di+':'+li+'" aria-label="'+esc(T.days[L][di]+" "+(li+1))+'">'+opts(k)+'</select>':'<span class="s">'+esc(subj(k))+'</span>')+'</span></li>'}).join("")+'</ol>'+
+   return '<li class="'+(isT&&s.kind==="lesson"&&s.shift===1&&s.i===li?"cur":"")+'"><span class="n">'+(li+1)+'</span><span><span class="t tnum">'+b[0]+'–'+b[1]+'</span>'+((st.editing&&can("schedule"))?'<select data-cell="'+di+':'+li+'" aria-label="'+esc(T.days[L][di]+" "+(li+1))+'">'+opts(k)+'</select>':'<span class="s">'+esc(subj(k))+'</span>')+'</span></li>'}).join("")+'</ol>'+
    ((st.editing&&can("schedule"))?'<div style="display:flex;gap:6px;margin-top:8px"><button class="copy" data-addl="'+di+'"'+(ls.length>=DATA.bells.length?" disabled":"")+'>+</button><button class="copy" data-rml="'+di+'"'+(ls.length<=1?" disabled":"")+'>−</button></div>':'')+'</div>'}).join("");
  return banner("navSched","pd_schedule")+'<div class="container page"><section style="display:flex;flex-direction:column;gap:20px"><div class="toolbar"><h2 class="h2" style="margin:0">'+esc(f(t("grade"),{n:g}))+' '+(DATA.scheduleSample?'<span class="chip sample">'+esc(t("sample"))+'</span>':'')+'</h2>'+
   '<div class="grades" role="group">'+Object.keys(DATA.schedule).sort(function(a,b){return a-b}).map(function(k){return '<button data-grade="'+k+'" aria-pressed="'+(k===g)+'" aria-label="'+esc(f(t("grade"),{n:k}))+'">'+k+'</button>'}).join("")+'</div></div>'+
   '<div class="days">'+cards+'</div>'+(DATA.scheduleSample?'<p style="color:var(--muted);font-size:13.5px">'+esc(t("schedNote"))+((st.editing&&can("schedule"))?' <button class="copy" data-unsample="1">✓ '+esc(t("sample"))+' ✕</button>':'')+'</p>':'')+'</section>'+
-  '<section><h2 class="h2">'+esc(t("bellsT"))+'</h2><div class="bellgrid">'+DATA.bells.map(function(b,i){return '<div>'+((st.editing&&can("schedule"))?'<b>'+(i+1)+'</b><input data-bell="'+i+':0" value="'+b[0]+'" style="width:58px;border:1px solid var(--line);border-radius:6px;padding:2px 4px">–<input data-bell="'+i+':1" value="'+b[1]+'" style="width:58px;border:1px solid var(--line);border-radius:6px;padding:2px 4px">':'<b>'+esc(f(t("lesson"),{n:i+1}))+'</b><span class="tnum">'+b[0]+'–'+b[1]+'</span>')+'</div>'}).join("")+'</div></section></div>'}
+  bellsSection(DATA.bells,"bell","bells1T")+bellsSection(DATA.bells2||[],"bell2","bells2T")+'</div>'}
+function bellsSection(arr,key,title){var ed=st.editing&&can("schedule");if(!arr.length&&!ed)return"";
+ return '<section><h2 class="h2">'+esc(t(title))+'</h2><div class="bellgrid">'+arr.map(function(b,i){return '<div>'+(ed?'<b>'+(i+1)+'</b><input data-'+key+'="'+i+':0" value="'+b[0]+'" style="width:58px;border:1px solid var(--line);border-radius:6px;padding:2px 4px">–<input data-'+key+'="'+i+':1" value="'+b[1]+'" style="width:58px;border:1px solid var(--line);border-radius:6px;padding:2px 4px">':'<b>'+esc(f(t("lesson"),{n:i+1}))+'</b><span class="tnum">'+b[0]+'–'+b[1]+'</span>')+'</div>'}).join("")+'</div>'+
+ (ed&&key==="bell2"?'<div style="display:flex;gap:6px;margin-top:10px"><button class="copy" data-b2add="1">'+esc(t("addBell"))+'</button><button class="copy" data-b2rm="1"'+(arr.length?'':' disabled')+'>'+esc(t("rmBell"))+'</button></div>':'')+'</section>'}
 
 function pageOlympiad(){var byYear={};DATA.achievements.forEach(function(a){(byYear[a.year]=byYear[a.year]||[]).push(a)});var years=Object.keys(byYear).sort().reverse();
  var lvCls={district:"c-life",region:"c-events",republic:"c-achieve",intl:"c-ann"};
@@ -657,13 +670,15 @@ function shrink(file,M){return new Promise(function(res){var r=new FileReader();
 
 /* ------------------------------------------------------------ events */
 document.addEventListener("click",function(e){
- var el=e.target.closest("[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-addl],[data-rml],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
+ var el=e.target.closest("[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-addl],[data-rml],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
  if(!el)return;var d=el.dataset;
  if(d.close!==undefined){if(e.target===el||el.tagName==="BUTTON"){closeLayer()}return}
  if(el.tagName==="A"&&el.getAttribute("href").charAt(0)==="#"){if(el.getAttribute("href")==="#"+(location.hash.replace(/^#/,"")||"home")){e.preventDefault();parseHash()}return}
  if(d.lang){st.lang=d.lang;store("gm-lang",d.lang);closeLayer();render(true);return}
  if(d.open==="drawer"){openDrawer();return} if(d.open==="login"){openLogin();return} if(d.open==="account"){closeLayer();location.hash="profile";return}
  if(d.ptab){st.ptab=d.ptab;render(true);return}
+ if(d.b2add){DATA.bells2=DATA.bells2||[];var lb=DATA.bells2[DATA.bells2.length-1],st0=lb?toMin(lb[1])+5:toMin(DATA.bells[DATA.bells.length-1][1])+10;var hm=function(m){return pad(Math.floor(m/60)%24)+":"+pad(m%60)};DATA.bells2.push([hm(st0),hm(st0+45)]);dirty();render(true);return}
+ if(d.b2rm){DATA.bells2.pop();dirty();render(true);return}
  if(d.atab){st.atab=d.atab;render(true);window.scrollTo(0,0);return}
  if(d.goedit){st.editing=true;location.hash=d.goedit;return}
  if(d.roledel){e.preventDefault();if(st.sureId!=="role"+d.roledel){st.sureId="role"+d.roledel;render(true);return}st.sureId=null;sb.from("roles").delete().eq("id",d.roledel).then(function(r){if(r.error){toast(t("e_generic"));return}st.admin=null;toast(t("roleDeleted"));render(true)});return}
@@ -707,6 +722,7 @@ document.addEventListener("input",function(e){if(e.target.id==="newsq"){st.newsQ
 document.addEventListener("change",function(e){var d=e.target.dataset;
  if(d.cell){var p=d.cell.split(":");DATA.schedule[st.grade][+p[0]][+p[1]]=e.target.value;dirty();refreshBar();return}
  if(d.bell){if(!/^[0-2]\d:[0-5]\d$/.test(e.target.value))return;var q=d.bell.split(":");DATA.bells[+q[0]][+q[1]]=e.target.value;dirty();refreshBar();return}
+ if(d.bell2){if(!/^[0-2]\d:[0-5]\d$/.test(e.target.value))return;var q2=d.bell2.split(":");DATA.bells2[+q2[0]][+q2[1]]=e.target.value;dirty();refreshBar();return}
  if(d.edimg){var fl=e.target.files[0];if(!fl)return;var pv=document.getElementById("edprev");pv.textContent=t("uploading");shrink(fl,1400).then(uploadImg).then(function(src){if(!src){pv.textContent=t("upErr");return}edImg=src;pv.innerHTML='<img class="prev" src="'+esc(src)+'" alt="">'});return}
  if(d.upload){var al=DATA.albums.filter(function(x){return x.id===d.upload})[0],files=[].slice.call(e.target.files||[]);
   toast(t("uploading"));Promise.all(files.map(function(fl){return shrink(fl,1600).then(uploadImg)})).then(function(srcs){var n=0;srcs.forEach(function(s){if(s){al.photos.push({src:s,cap:{}});n++}});if(n<srcs.length)toast(t("upErr"));if(n){delete al.sample;dirty();render(true)}})}});
@@ -899,7 +915,7 @@ function publish(){if(!sb||!st.user||st.saving)return;
 
 /* ------------------------------------------------------------ boot */
 function normalize(){if(!DATA.settings.motto)DATA.settings.motto={kk:"Білімді ұрпақ — ауылдың ертеңі",ru:"Образованное поколение — будущее села",en:"An educated generation is the village's future"};
- ["posts","events","clubs","facilities","docs","faq","albums","partners","achievements","alumni","staff"].forEach(function(k){if(!Array.isArray(DATA[k]))DATA[k]=[]})}
+ ["posts","events","clubs","facilities","docs","faq","albums","partners","achievements","alumni","staff"].forEach(function(k){if(!Array.isArray(DATA[k]))DATA[k]=[]});if(!Array.isArray(DATA.bells2))DATA.bells2=[["15:00","15:45"],["15:50","16:35"],["16:45","17:30"],["17:35","18:20"],["18:25","19:10"],["19:15","20:00"]]}
 normalize();snapshot();
 if(/access_token=|error_description=|type=recovery/.test(location.hash))history.replaceState(null,"",location.pathname+location.search+"#home");
 parseHash();
