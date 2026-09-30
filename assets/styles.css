@@ -605,3 +605,5 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 .acard{flex-wrap:wrap}
 .acard>div{flex:1 1 150px}
 .acard .btn{flex:none}
+.ccol{display:flex;flex-direction:column;gap:20px;min-width:0}
+.cfb .fbform{position:static}

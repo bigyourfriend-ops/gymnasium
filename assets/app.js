@@ -210,7 +210,7 @@ for(var _k3 in T3)T[_k3]=T3[_k3];
 var T4={
  navFeedback:["Пікірлер мен ұсыныстар","Отзывы и предложения","Feedback"],
  pd_feedback:["Гимназия туралы пікіріңізді, ұсынысыңызды немесе алғысыңызды жазыңыз. Тіркелу қажет емес.","Оставьте отзыв, предложение или благодарность гимназии. Регистрация не нужна.","Share a review, an idea or a thank-you with the school. No account needed."],
- fbFormT:["Пікір қалдыру","Оставить отзыв","Leave feedback"], fbListT:["Ата-аналар мен оқушылар пікірі","Отзывы родителей и учеников","What parents and students say"],
+ fbFormT:["Пікір немесе ұсыныс қалдыру","Оставить отзыв или предложение","Leave feedback or a suggestion"], fbListT:["Ата-аналар мен оқушылар пікірі","Отзывы родителей и учеников","What parents and students say"],
  fbName:["Атыңыз (міндетті емес)","Имя (необязательно)","Your name (optional)"], fbAnon:["Аноним","Аноним","Anonymous"],
  fbWho:["Сіз кімсіз?","Кто вы?","You are"], w_parent:["Ата-ана","Родитель","Parent"], w_student:["Оқушы","Ученик","Student"], w_graduate:["Түлек","Выпускник","Graduate"], w_other:["Басқа","Другое","Other"],
  fbKind:["Түрі","Тип","Type"], k_review:["Пікір","Отзыв","Review"], k_idea:["Ұсыныс","Предложение","Suggestion"], k_thanks:["Алғыс","Благодарность","Thank-you"], k_complaint:["Шағым","Жалоба","Complaint"],
@@ -221,7 +221,7 @@ var T4={
  fbCheck:["Тексеру: {a} + {b} = ?","Проверка: {a} + {b} = ?","Check: {a} + {b} = ?"], fbSend:["Жіберу","Отправить","Send"],
  fbSent:["Рақмет! Пікіріңіз қабылданды. Модерациядан кейін жарияланады.","Спасибо! Отзыв принят и появится после проверки.","Thank you! Your feedback will appear after review."],
  fbSentPrivate:["Рақмет! Хабарламаңызды гимназия әкімшілігі оқиды.","Спасибо! Сообщение получит администрация гимназии.","Thank you! The school administration will read your message."],
- fbModNote:["Барлық пікір жарияланар алдында тексеріледі. Балағат сөздер, сілтемелер мен жарнама жарияланбайды.","Все отзывы проверяются перед публикацией. Оскорбления, ссылки и реклама не публикуются.","Every message is reviewed before publishing. Insults, links and ads are not published."],
+ fbModNote:["Хабарламаңызды тек гимназия әкімшілігі оқиды, сайтта жарияланбайды.","Ваше сообщение прочитает только администрация гимназии, на сайте оно не публикуется.","Only the school administration reads your message; it is not published on the site."],
  e_fbShort:["Мәтін тым қысқа (кемінде 15 таңба)","Текст слишком короткий (минимум 15 символов)","The message is too short (15 characters minimum)"],
  e_fbCheck:["Тексеру жауабы қате","Неверный ответ на проверку","Wrong answer to the check"], e_fbFast:["Тым жылдам. Мәтінді қайта тексеріп, тағы жіберіңіз.","Слишком быстро. Проверьте текст и отправьте ещё раз.","Too fast. Review your text and send again."],
  e_fbRate:["Сіз жақында пікір жібердіңіз. Біраз уақыттан кейін қайталаңыз.","Вы недавно отправляли отзыв. Попробуйте позже.","You sent feedback recently. Please try again later."],
@@ -316,7 +316,7 @@ function nowHTML(){var s=lessonState(),n=s.n,b=DATA.bells,head,sub="",bar="";
 var NAV=[
  {k:"navSchool",items:[["about","navAbout"],["about.admin","navAdmin"],["about.teachers","navTeachers"],["about.base","navBase"],["docs","navRes"]]},
  {k:"navEdu",items:[["schedule","navSched"],["olympiad","navOlymp"]]},
- {k:"navLife",items:[["events","navEvents"],["clubs","navClubs"],["gallery","navGallery"],["alumni","navAlumni"],["feedback","navFeedback"]]},
+ {k:"navLife",items:[["events","navEvents"],["clubs","navClubs"],["gallery","navGallery"],["alumni","navAlumni"]]},
  {k:"navNews",href:"news"},{k:"navContacts",href:"contacts"}];
 var PARENT={admin:null,profile:null,feedback:"navLife",about:"navSchool",docs:"navSchool",programs:"navEdu",schedule:"navEdu",olympiad:"navEdu",events:"navLife",clubs:"navLife",gallery:"navLife",album:"navLife",alumni:"navLife",news:null,post:null,contacts:null};
 function isOn(route){var p=route.split(".")[0];return st.route.page===p||(p==="gallery"&&st.route.page==="album")||(p==="news"&&st.route.page==="post")}
@@ -373,7 +373,7 @@ function pageHome(){var s=DATA.settings;
   '<aside class="panel"><h3>'+esc(t("upcoming"))+'</h3><div class="evlist">'+(up.length?up.map(evRow).join(""):'<p style="color:var(--muted)">'+esc(t("noEvents"))+'</p>')+'</div><div style="margin-top:14px"><a class="more" href="#events">'+esc(t("calendar"))+' →</a></div></aside></div></div></section>';
  var partners='<section class="section alt"><div class="container"><div class="sec-head"><h2>'+esc(t("partnersT"))+'</h2>'+addBtn("partners")+'</div><div class="partners">'+
   DATA.partners.map(function(p){var inner=ed("partners",p.id)+'<span class="ico">'+ic("build")+'</span><span>'+esc(pick(p.title))+'</span>';return p.url&&!st.editing?'<a class="partner" href="'+esc(p.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="partner">'+inner+'</div>'}).join("")+'</div></div></section>';
- return photoStrip()+hero+news+homeFeedback()+partners}
+ return photoStrip()+hero+news+partners}
 
 function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"});
  function person(p){var ini=(p.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join("");return '<div class="box person">'+ed("staff",p.id)+'<div class="ava">'+(p.img?'<img src="'+p.img+'" alt="">':esc(ini))+'</div><div><b>'+esc(p.name)+'</b><span>'+esc(pick(p.role))+'</span></div></div>'}
@@ -476,10 +476,10 @@ function pageContacts(){var s=DATA.settings,dir=DATA.staff.filter(function(x){re
  return banner("navContacts","pd_contacts")+'<div class="container page"><section class="twocol"><div class="panel"><div class="clist">'+crow("pin",t("f_addr"),t("addr"),t("addr"))+crow("phone",t("phoneL"),s.phone,s.phone)+crow("mail",t("emailL"),s.email,s.email)+crow("clock",t("hoursL"),pick(s.hours))+
   (dir?crow("user",t("dirL"),dir.name):'')+crow("file",t("postL"),s.postcode)+'</div>'+(s.whatsapp?'<a class="btn btn-primary" style="margin-top:16px" href="https://wa.me/'+esc(s.whatsapp.replace(/\D/g,""))+'" target="_blank" rel="noopener">'+ic("msg")+esc(t("wa"))+'</a>':'')+social()+
   (st.editing&&can("settings")?'<div style="margin-top:14px"><button class="addbtn" data-open="settings">'+esc(t("settings"))+'</button></div>':'')+'</div>'+
-  '<div class="map">'+map+'<div class="acts"><span style="color:var(--muted);font-size:13.5px">'+esc(t("openIn"))+'</span><a class="btn btn-outline" href="https://2gis.kz/search/'+q+'" target="_blank" rel="noopener">2GIS</a><a class="btn btn-outline" href="https://www.google.com/maps/search/?api=1&query='+q+'" target="_blank" rel="noopener">Google Maps</a><a class="btn btn-outline" href="https://yandex.kz/maps/?text='+q+'" target="_blank" rel="noopener">Яндекс</a></div></div></section>'+
+  '<div class="ccol"><div class="map">'+map+'<div class="acts"><span style="color:var(--muted);font-size:13.5px">'+esc(t("openIn"))+'</span><a class="btn btn-outline" href="https://2gis.kz/search/'+q+'" target="_blank" rel="noopener">2GIS</a><a class="btn btn-outline" href="https://www.google.com/maps/search/?api=1&query='+q+'" target="_blank" rel="noopener">Google Maps</a><a class="btn btn-outline" href="https://yandex.kz/maps/?text='+q+'" target="_blank" rel="noopener">Яндекс</a></div></div><section id="feedback" class="cfb">'+fbForm()+'</section></div></section>'+
   '<section id="faq" class="faq"><h2 class="h2">'+esc(t("faqT"))+' '+addBtn("faq")+'</h2>'+DATA.faq.map(function(x){return '<details>'+ed("faq",x.id)+'<summary>'+esc(pick(x.q))+'</summary><p>'+esc(pick(x.a))+'</p></details>'}).join("")+'</section></div>'}
 
-var PAGES={admin:pageAdmin,feedback:pageFeedback,profile:pageProfile,home:pageHome,about:pageAbout,news:pageNews,post:pagePost,schedule:pageSchedule,olympiad:pageOlympiad,events:pageEvents,clubs:pageClubs,gallery:pageGallery,album:pageAlbum,alumni:pageAlumni,docs:pageDocs,contacts:pageContacts};
+var PAGES={admin:pageAdmin,profile:pageProfile,home:pageHome,about:pageAbout,news:pageNews,post:pagePost,schedule:pageSchedule,olympiad:pageOlympiad,events:pageEvents,clubs:pageClubs,gallery:pageGallery,album:pageAlbum,alumni:pageAlumni,docs:pageDocs,contacts:pageContacts};
 
 /* ------------------------------------------------------------ render */
 var app=document.getElementById("app"),layer=document.getElementById("layer");
@@ -498,7 +498,7 @@ function toast(msg){var d=document.createElement("div");d.className="toast";d.se
 function dirty(){st.dirty++}
 
 /* routing: plain #token or #page.arg */
-function parseHash(){var h=(location.hash||"").replace(/^#/,""),parts=h.split("."),page=parts[0]||"home",arg=parts.slice(1).join(".");
+function parseHash(){var h=(location.hash||"").replace(/^#/,""),parts=h.split("."),page=parts[0]||"home",arg=parts.slice(1).join(".");if(page==="feedback"){page="contacts";arg="feedback"}
  if(!PAGES[page]){page="home";arg=""}
  if(page==="news"&&arg&&["events","achieve","life","ann"].indexOf(arg)>=0){st.newsCat=arg;st.newsPage=1;arg=""}
  if(page==="programs"&&PROG[arg]){st.progF=arg;arg=""}
@@ -851,7 +851,7 @@ function fbForm(){st.fbA=2+Math.floor(Math.random()*7);st.fbB=1+Math.floor(Math.
  '<label>'+esc(t("fbText"))+'<textarea id="fb-text" maxlength="1500" placeholder="'+esc(t("fbTextPh"))+'"'+dis+'></textarea><small class="cnt" id="fb-cnt">0 / 1500</small></label>'+
  '<label>'+esc(t("fbContact"))+'<input id="fb-contact" maxlength="100" placeholder="'+esc(t("fbContactPh"))+'"'+dis+'><small style="font-weight:400;color:var(--muted)">'+esc(t("fbContactNote"))+'</small></label>'+
  '<label class="hp" aria-hidden="true">Website<input id="fb-website" tabindex="-1" autocomplete="off"></label>'+
- '<label class="check"><input type="checkbox" id="fb-public" checked'+dis+'><span>'+esc(t("fbPublic"))+'</span></label>'+
+ 
  '<div class="row2" style="align-items:end"><label>'+esc(f(t("fbCheck"),{a:st.fbA,b:st.fbB}))+'<input id="fb-check" inputmode="numeric" maxlength="3" autocomplete="off"'+dis+'></label><button class="btn btn-primary btn-lg" type="submit"'+dis+'>'+esc(t("fbSend"))+'</button></div>'+
  msgBox()+'</form><p class="hint" style="text-align:left;margin-top:12px">'+esc(t("fbModNote"))+'</p></div>'}
 function pageFeedback(){if(sb&&st.fb===null)loadFb();var all=st.fb||[],list=all.filter(function(x){return st.fbKind==="all"||x.kind===st.fbKind});
@@ -863,26 +863,26 @@ function submitFb(form){var g=function(x){return document.getElementById(x).valu
  if(txt.length<15){showMsg("e_fbShort",false);return}
  if(parseInt(g("fb-check"),10)!==st.fbA+st.fbB){showMsg("e_fbCheck",false);return}
  var last=+store("gm-fb-last")||0;if(Date.now()-last<120000){showMsg("e_fbRate",false);return}
- var pub=document.getElementById("fb-public").checked;busy(form,true);
+ var pb=document.getElementById("fb-public"),pub=pb?pb.checked:true;busy(form,true);
  sb.rpc("submit_feedback",{p_name:g("fb-name"),p_role:document.getElementById("fb-role").value,p_kind:document.getElementById("fb-kind").value,p_rating:+document.getElementById("fb-rating").value||0,
   p_body:txt,p_contact:g("fb-contact"),p_public:pub,p_hp:document.getElementById("fb-website").value,p_elapsed:Math.round((Date.now()-st.fbStart)/1000)}).then(function(r){busy(form,false);
   if(r.error){var m=r.error.message||"";showMsg(/rate|busy/i.test(m)?"e_fbRate":/fast/i.test(m)?"e_fbFast":/short/i.test(m)?"e_fbShort":"e_generic",false);return}
-  store("gm-fb-last",String(Date.now()));form.querySelectorAll("input,select,textarea,button").forEach(function(x){x.disabled=true});showMsg(pub?"fbSent":"fbSentPrivate",true)})}
+  store("gm-fb-last",String(Date.now()));form.querySelectorAll("input,select,textarea,button").forEach(function(x){x.disabled=true});showMsg("fbSentPrivate",true)})}
 /* moderation (admin) */
 var fbaLoading=false;
 function loadFbAdmin(){if(!sb||!can("feedback")||fbaLoading)return;fbaLoading=true;sb.from("feedback").select("*").order("created_at",{ascending:false}).limit(500).then(function(r){fbaLoading=false;st.fbAdmin=r.error?[]:(r.data||[]);if(st.route.page==="profile"||st.route.page==="admin")render(true)})}
 function tabFb(){if(!st.fbAdmin){loadFbAdmin();return '<div class="panel"><p class="hint">'+esc(t("loading"))+'</p></div>'}
- var S=["pending","approved","read","rejected","spam"],cnt={};S.forEach(function(s){cnt[s]=st.fbAdmin.filter(function(x){return x.status===s}).length});
+ var S=["pending","read","rejected","spam"],cnt={};S.forEach(function(s){cnt[s]=st.fbAdmin.filter(function(x){return x.status===s}).length});
  var list=st.fbAdmin.filter(function(x){return x.status===st.fbStatus});
  return '<div class="panel"><h3>'+esc(t("p_fb"))+'</h3><div class="pills" style="display:inline-flex;margin-bottom:16px">'+S.map(function(s){return '<button data-fbstatus="'+s+'" aria-pressed="'+(st.fbStatus===s)+'">'+esc(t("s_"+s))+' <span class="cntb">'+cnt[s]+'</span></button>'}).join("")+'</div>'+
  (list.length?'<div class="fblist">'+list.map(function(x){
-  var acts=(x.status!=="approved"&&x.public_ok?'<button type="button" class="btn btn-primary" data-fbset="'+x.id+'" data-st="approved">'+esc(t("approve"))+'</button>':'')+
+  var acts=
    (x.status!=="read"?'<button type="button" class="btn btn-soft" data-fbset="'+x.id+'" data-st="read">'+esc(t("markRead"))+'</button>':'')+
    (x.status!=="rejected"?'<button type="button" class="btn btn-soft" data-fbset="'+x.id+'" data-st="rejected">'+esc(t("reject"))+'</button>':'')+
    '<button type="button" class="btn btn-danger" data-fbdel="'+x.id+'">'+esc(st.sureId==="fb"+x.id?t("sure"):t("del"))+'</button>';
   return '<article class="fbcard mod"><div class="fbhead"><div style="min-width:0"><b>'+esc(x.name||t("fbAnon"))+'</b><span>'+esc(t("w_"+(x.author_role||"other")))+' · '+esc(fmtDate(String(x.created_at).slice(0,10)))+(x.contact?' · '+esc(x.contact):'')+'</span></div>'+(x.rating?stars(x.rating):'')+'</div>'+
-   '<div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip k-'+esc(x.kind)+'">'+esc(t("k_"+x.kind))+'</span>'+(x.public_ok?'':'<span class="chip sample">'+esc(t("privateOnly"))+'</span>')+'</div><p>'+esc(x.body)+'</p>'+
-   '<form class="form fbrep" data-fbreply="'+x.id+'" style="margin-top:4px"><label>'+esc(t("fbReply"))+'<textarea id="rep-'+x.id+'" maxlength="1500" style="min-height:60px">'+esc(x.reply||"")+'</textarea></label><div class="acts" style="justify-content:flex-start;flex-wrap:wrap">'+acts+'<button class="btn btn-outline" type="submit">'+esc(t("saveReply"))+'</button></div></form></article>'}).join("")+'</div>':'<div class="empty"><b>'+esc(t("done2"))+'</b></div>')+'</div>'}
+   '<div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip k-'+esc(x.kind)+'">'+esc(t("k_"+x.kind))+'</span>'+''+'</div><p>'+esc(x.body)+'</p>'+
+   '<div class="acts" style="display:flex;gap:8px;flex-wrap:wrap">'+acts+'</div></article>'}).join("")+'</div>':'<div class="empty"><b>'+esc(t("done2"))+'</b></div>')+'</div>'}
 function fbUpdate(id,patch){sb.from("feedback").update(patch).eq("id",id).then(function(r){if(r.error){toast(t("e_generic"));return}
  st.fbAdmin.forEach(function(x){if(String(x.id)===String(id))Object.assign(x,patch)});st.fb=null;toast(t("adminChanged"));render(true)})}
 /* ------------------------------------------------------------ storage & publish (Supabase) */
