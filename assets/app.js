@@ -284,6 +284,9 @@ var T8={shift1:["1-ауысым","1 смена","Shift 1"], shift2:["2-ауыс�
  bells1T:["Қоңырау кестесі — 1-ауысым","Расписание звонков — 1 смена","Bell schedule — shift 1"],
  addBell:["+ сабақ","+ урок","+ lesson"], rmBell:["− сабақ","− урок","− lesson"]};
 for(var _k8 in T8)T[_k8]=T8[_k8];
+
+var T9={f_logo:["Логотип","Логотип","Logo"],logoHint:["PNG мөлдір фонмен жақсы көрінеді. Сурет 400 px-ке дейін кішірейтіледі.","Лучше всего PNG с прозрачным фоном. Картинка уменьшится до 400 px.","PNG with a transparent background works best. Images are resized to 400 px."]};
+for(var _k9 in T9)T[_k9]=T9[_k9];
 /* ------------------------------------------------------------ helpers */
 function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
 var st={atab:"dash",perms:[],isAdmin:false,roleName:"",base:{},meta:null,roles:null,fb:null,fbAdmin:null,fbKind:"all",fbShow:6,fbStatus:"pending",fbA:0,fbB:0,fbStart:0,ptab:"me",uq:"",urole:"all",admin:null,profile:null,lang:(function(){var l=store("gm-lang");return LI[l]!==undefined?l:"kk"})(),route:{page:"home",arg:""},grade:(function(){var g=store("gm-grade");return g&&DATA.schedule[g]?g:"5"})(),
@@ -382,7 +385,7 @@ function pageHome(){var s=DATA.settings;
   '<div class="split"><div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr))">'+sortedPosts().slice(0,4).map(newsCard).join("")+'</div>'+
   '<aside class="panel"><h3>'+esc(t("upcoming"))+'</h3><div class="evlist">'+(up.length?up.map(evRow).join(""):'<p style="color:var(--muted)">'+esc(t("noEvents"))+'</p>')+'</div><div style="margin-top:14px"><a class="more" href="#events">'+esc(t("calendar"))+' →</a></div></aside></div></div></section>';
  var partners='<section class="section alt"><div class="container"><div class="sec-head"><h2>'+esc(t("partnersT"))+'</h2>'+addBtn("partners")+'</div><div class="partners">'+
-  DATA.partners.map(function(p){var inner=ed("partners",p.id)+'<span class="ico">'+ic("build")+'</span><span>'+esc(pick(p.title))+'</span>';return p.url&&!st.editing?'<a class="partner" href="'+esc(p.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="partner">'+inner+'</div>'}).join("")+'</div></div></section>';
+  DATA.partners.map(function(p){var inner=ed("partners",p.id)+(p.img?'<img class="plogo" src="'+esc(p.img)+'" alt="" loading="lazy">':'<span class="ico">'+ic("build")+'</span>')+'<span>'+esc(pick(p.title))+'</span>';return p.url&&!st.editing?'<a class="partner" href="'+esc(p.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="partner">'+inner+'</div>'}).join("")+'</div></div></section>';
  return photoStrip()+hero+news+partners}
 
 function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"});
@@ -630,13 +633,13 @@ var SCHEMA={
  faq:[["q","ml"],["a","mlarea"]],
  albums:[["year","text"],["title","ml"]],
  alumni:[["name","text"],["year","text"],["text","mlarea"]],
- partners:[["title","ml"],["url","url"]]};
+ partners:[["title","ml"],["url","url"],["img","logo"]]};
 var LBL={cat:"f_cat",date:"f_date",title:"f_title",text:"f_text",img:"f_img",time:"f_time",place:"f_place",group:"f_group",name:"f_name",role:"f_role",desc:"f_desc",when:"f_when",grades:"f_grades",level:"f_level",year:"f_year",url:"f_url",q:"f_q",a:"f_a"};
 var edImg=null;
 function field(name,type,val,opts,pref){var id="fe-"+name,lab=esc(t(LBL[name]||name));
  if(type==="ml"||type==="mlarea")return '<label>'+lab+'<div class="ml">'+LANGS.map(function(l){var v=val&&val[l]||"";return type==="ml"?'<input id="'+id+'-'+l+'" placeholder="'+["KZ","RU","EN"][LI[l]]+'" value="'+esc(v)+'">':'<textarea id="'+id+'-'+l+'" placeholder="'+["KZ","RU","EN"][LI[l]]+'">'+esc(v)+'</textarea>'}).join("")+'</div></label>';
  if(type==="select")return '<label>'+lab+'<select id="'+id+'">'+opts.map(function(o){return '<option value="'+o+'"'+(o===val?" selected":"")+'>'+esc(t(pref+o))+'</option>'}).join("")+'</select></label>';
- if(type==="image")return '<label>'+lab+'<input id="'+id+'" type="file" accept="image/*" data-edimg="1"></label><div id="edprev">'+(val?'<img class="prev" src="'+val+'" alt=""> <button type="button" class="copy" data-clearimg="1">'+esc(t("del"))+'</button>':'')+'</div>';
+ if(type==="image"||type==="logo")return '<label>'+(type==="logo"?esc(t("f_logo")):lab)+'<input id="'+id+'" type="file" accept="image/*" data-edimg="'+(type==="logo"?"logo":"1")+'"></label>'+(type==="logo"?'<small class="hint" style="text-align:left;margin:-6px 0 0">'+esc(t("logoHint"))+'</small>':'')+'<div id="edprev">'+(val?'<img class="prev" src="'+val+'" alt=""> <button type="button" class="copy" data-clearimg="1">'+esc(t("del"))+'</button>':'')+'</div>';
  return '<label>'+lab+'<input id="'+id+'" type="'+(type==="date"?"date":type==="url"?"url":"text")+'" value="'+esc(val||"")+'"></label>'}
 function openEditor(col,id,preset){var item=id?DATA[col].filter(function(x){return x.id===id})[0]:(preset||{});edImg=item&&item.img||null;
  openLayer('<h3>'+esc(t(id?"edit":"add"))+'</h3><form class="form" id="edform" data-col="'+col+'" data-id="'+esc(id||"")+'">'+SCHEMA[col].map(function(s){return field(s[0],s[1],item[s[0]],s[2],s[3])}).join("")+
@@ -644,7 +647,7 @@ function openEditor(col,id,preset){var item=id?DATA[col].filter(function(x){retu
 function saveEditor(form){var col=form.dataset.col,id=form.dataset.id,obj={},hasText=false;
  SCHEMA[col].forEach(function(s){var n=s[0],tp=s[1];
   if(tp==="ml"||tp==="mlarea"){var o={};LANGS.forEach(function(l){var v=document.getElementById("fe-"+n+"-"+l).value.trim();if(v)o[l]=v});obj[n]=o;if((n==="title"||n==="q")&&Object.keys(o).length)hasText=true}
-  else if(tp==="image")obj[n]=edImg||"";else obj[n]=document.getElementById("fe-"+n).value.trim()});
+  else if(tp==="image"||tp==="logo")obj[n]=edImg||"";else obj[n]=document.getElementById("fe-"+n).value.trim()});
  var needs=SCHEMA[col].some(function(s){return s[0]==="title"||s[0]==="q"});if(col==="staff"||col==="alumni")needs=false,hasText=!!obj.name;
  if((needs||col==="staff"||col==="alumni")&&!hasText){toast(t("needTitle"));return}
  if(id){var it=DATA[col].filter(function(x){return x.id===id})[0];Object.keys(obj).forEach(function(k){it[k]=obj[k]});delete it.sample}
@@ -666,6 +669,7 @@ function saveSettings(){var s=DATA.settings,g=function(id){return document.getEl
  s.stats.forEach(function(x,i){var nv=g("se-sn-"+i);if(nv!==x.n)s.statsSample=false;x.n=nv;LANGS.forEach(function(l){x.l[l]=g("se-sl-"+i+"-"+l)})});
  st.editing=true;dirty();closeLayer();render(true);toast(t("settingsHint"))}
 
+function shrinkLogo(file,M){return new Promise(function(res){var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,M/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*s));c.height=Math.max(1,Math.round(im.height*s));c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/png"))};im.onerror=function(){res(null)};im.src=r.result};r.onerror=function(){res(null)};r.readAsDataURL(file)})}
 function shrink(file,M){return new Promise(function(res){var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,M/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.8))};im.onerror=function(){res(null)};im.src=r.result};r.onerror=function(){res(null)};r.readAsDataURL(file)})}
 
 /* ------------------------------------------------------------ events */
@@ -723,7 +727,7 @@ document.addEventListener("change",function(e){var d=e.target.dataset;
  if(d.cell){var p=d.cell.split(":");DATA.schedule[st.grade][+p[0]][+p[1]]=e.target.value;dirty();refreshBar();return}
  if(d.bell){if(!/^[0-2]\d:[0-5]\d$/.test(e.target.value))return;var q=d.bell.split(":");DATA.bells[+q[0]][+q[1]]=e.target.value;dirty();refreshBar();return}
  if(d.bell2){if(!/^[0-2]\d:[0-5]\d$/.test(e.target.value))return;var q2=d.bell2.split(":");DATA.bells2[+q2[0]][+q2[1]]=e.target.value;dirty();refreshBar();return}
- if(d.edimg){var fl=e.target.files[0];if(!fl)return;var pv=document.getElementById("edprev");pv.textContent=t("uploading");shrink(fl,1400).then(uploadImg).then(function(src){if(!src){pv.textContent=t("upErr");return}edImg=src;pv.innerHTML='<img class="prev" src="'+esc(src)+'" alt="">'});return}
+ if(d.edimg){var fl=e.target.files[0];if(!fl)return;var pv=document.getElementById("edprev");pv.textContent=t("uploading");(d.edimg==="logo"?shrinkLogo(fl,400):shrink(fl,1400)).then(uploadImg).then(function(src){if(!src){pv.textContent=t("upErr");return}edImg=src;pv.innerHTML='<img class="prev" src="'+esc(src)+'" alt="">'});return}
  if(d.upload){var al=DATA.albums.filter(function(x){return x.id===d.upload})[0],files=[].slice.call(e.target.files||[]);
   toast(t("uploading"));Promise.all(files.map(function(fl){return shrink(fl,1600).then(uploadImg)})).then(function(srcs){var n=0;srcs.forEach(function(s){if(s){al.photos.push({src:s,cap:{}});n++}});if(n<srcs.length)toast(t("upErr"));if(n){delete al.sample;dirty();render(true)}})}});
 document.addEventListener("submit",function(e){if(/^auth/.test(e.target.id)){e.preventDefault();e.stopPropagation();submitAuth(e.target)}else if(e.target.dataset&&e.target.dataset.roleform!==undefined){e.preventDefault();e.stopPropagation();saveRole(e.target)}else if(e.target.id==="fbForm"){e.preventDefault();e.stopPropagation();if(sb)submitFb(e.target)}else if(e.target.dataset&&e.target.dataset.fbreply){e.preventDefault();e.stopPropagation();var fid=e.target.dataset.fbreply;fbUpdate(fid,{reply:document.getElementById("rep-"+fid).value.trim()||null})}else if(e.target.id==="profForm"){e.preventDefault();e.stopPropagation();saveProfile(e.target)}},true);
@@ -903,8 +907,8 @@ function fbUpdate(id,patch){sb.from("feedback").update(patch).eq("id",id).then(f
  st.fbAdmin.forEach(function(x){if(String(x.id)===String(id))Object.assign(x,patch)});st.fb=null;toast(t("adminChanged"));render(true)})}
 /* ------------------------------------------------------------ storage & publish (Supabase) */
 function uploadImg(src){if(!src)return Promise.resolve(null);if(!sb)return Promise.resolve(null);
- return fetch(src).then(function(r){return r.blob()}).then(function(b){var path=new Date().getFullYear()+"/"+uid("img")+".jpg";
-  return sb.storage.from("media").upload(path,b,{contentType:"image/jpeg",cacheControl:"31536000",upsert:false}).then(function(r){if(r.error)throw r.error;return sb.storage.from("media").getPublicUrl(path).data.publicUrl})}).catch(function(){return null})}
+ return fetch(src).then(function(r){return r.blob()}).then(function(b){var mt=/^data:(image\/(png|webp|jpeg))/.exec(src),ct=mt?mt[1]:"image/jpeg",ext={"image/png":"png","image/webp":"webp"}[ct]||"jpg";var path=new Date().getFullYear()+"/"+uid("img")+"."+ext;
+  return sb.storage.from("media").upload(path,b,{contentType:ct,cacheControl:"31536000",upsert:false}).then(function(r){if(r.error)throw r.error;return sb.storage.from("media").getPublicUrl(path).data.publicUrl})}).catch(function(){return null})}
 function publish(){if(!sb||!st.user||st.saving)return;
  var now=new Date().toISOString(),rows=Object.keys(SECS).filter(function(s){return JSON.stringify(secData(s))!==st.base[s]&&can(SECPERM[s])}).map(function(s){return{id:s,data:secData(s),updated_at:now,updated_by:st.user.id}});
  if(!rows.length){toast(t("nothingToSave"));st.dirty=0;refreshBar();return}
