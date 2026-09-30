@@ -238,6 +238,11 @@ var T4={
  privateOnly:["Автор жариялауға келіспеген","Автор не разрешил публикацию","Author did not allow publishing"], d_fb:["Жаңа пікірлер","Новые отзывы","New feedback"], done2:["Бұл бөлімде хабарлама жоқ","В этом разделе сообщений нет","No messages here"]
 };
 for(var _k4 in T4)T[_k4]=T4[_k4];
+
+var T5={stripT:["Мектеп өмірінен","Из жизни школы","School life"], allPhotos:["Барлық фото","Все фото","All photos"], stripAdd:["Фото қосу","Добавить фото","Add photos"],
+ ph1:["Білім күні","День знаний","Knowledge Day"], ph2:["Сабақ үстінде","На уроке","In class"], ph3:["Спорт жарысы","Спортивные соревнования","Sports day"], ph4:["Кітапхана","Библиотека","Library"],
+ ph5:["Мерекелік концерт","Праздничный концерт","Holiday concert"], ph6:["Наурыз мейрамы","Наурыз","Nauryz"], ph7:["Олимпиада","Олимпиада","Olympiad"], ph8:["Соңғы қоңырау","Последний звонок","Last Bell"]};
+for(var _k5 in T5)T[_k5]=T5[_k5];
 /* ------------------------------------------------------------ helpers */
 function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
 var st={fb:null,fbAdmin:null,fbKind:"all",fbShow:6,fbStatus:"pending",fbA:0,fbB:0,fbStart:0,ptab:"me",uq:"",urole:"all",admin:null,profile:null,lang:(function(){var l=store("gm-lang");return LI[l]!==undefined?l:"kk"})(),route:{page:"home",arg:""},grade:(function(){var g=store("gm-grade");return g&&DATA.schedule[g]?g:"5"})(),
@@ -334,7 +339,7 @@ function pageHome(){var s=DATA.settings;
   '<aside class="panel"><h3>'+esc(t("upcoming"))+'</h3><div class="evlist">'+(up.length?up.map(evRow).join(""):'<p style="color:var(--muted)">'+esc(t("noEvents"))+'</p>')+'</div><div style="margin-top:14px"><a class="more" href="#events">'+esc(t("calendar"))+' →</a></div></aside></div></div></section>';
  var partners='<section class="section alt"><div class="container"><div class="sec-head"><h2>'+esc(t("partnersT"))+'</h2>'+addBtn("partners")+'</div><div class="partners">'+
   DATA.partners.map(function(p){var inner=ed("partners",p.id)+'<span class="ico">'+ic("build")+'</span><span>'+esc(pick(p.title))+'</span>';return p.url&&!st.editing?'<a class="partner" href="'+esc(p.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="partner">'+inner+'</div>'}).join("")+'</div></div></section>';
- return hero+news+homeFeedback()+partners}
+ return photoStrip()+hero+news+homeFeedback()+partners}
 
 function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"});
  function person(p){var ini=(p.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join("");return '<div class="box person">'+ed("staff",p.id)+'<div class="ava">'+(p.img?'<img src="'+p.img+'" alt="">':esc(ini))+'</div><div><b>'+esc(p.name)+'</b><span>'+esc(pick(p.role))+'</span></div></div>'}
@@ -447,7 +452,7 @@ function render(keepScroll){document.documentElement.lang=st.lang;var y=window.s
  var fn=PAGES[st.route.page]||pageHome;
  app.innerHTML=topbar()+header()+'<main id="main">'+fn()+'</main>'+footer()+editbar();
  document.title=(st.route.page==="home"?"":titleFor()+" · ")+t("name");
- if(keepScroll)window.scrollTo(0,y);startHero()}
+ if(keepScroll)window.scrollTo(0,y);startHero();startStrip()}
 function titleFor(){var m={feedback:"navFeedback",profile:"cabinet",about:"navAbout",news:"navNews",programs:"navProg",schedule:"navSched",olympiad:"navOlymp",events:"navEvents",clubs:"navClubs",gallery:"navGallery",alumni:"navAlumni",docs:"navDocs",contacts:"navContacts"}[st.route.page];
  if(m)return t(m);if(st.route.page==="post"){var p=DATA.posts.filter(function(x){return x.id===st.route.arg})[0];return p?pick(p.title):""}
  if(st.route.page==="album"){var a=DATA.albums.filter(function(x){return x.id===st.route.arg})[0];return a?pick(a.title):""}return""}
@@ -469,6 +474,23 @@ window.addEventListener("hashchange",parseHash);
 
 /* ------------------------------------------------------------ hero canvas */
 var heroRAF=0;
+
+/* ------------------------------------------------------------ photo strip (home, above hero) */
+function latestPhotos(n){var out=[];for(var a=DATA.albums.length-1;a>=0&&out.length<n;a--){var al=DATA.albums[a];for(var i=al.photos.length-1;i>=0&&out.length<n;i--)out.push({aid:al.id,i:i,src:al.photos[i].src,cap:pick(al.photos[i].cap)||pick(al.title)})}return out}
+function photoStrip(){var ph=latestPhotos(16),tiles;
+ if(ph.length){tiles=ph.map(function(p){return '<button class="stile" data-lb="'+esc(p.aid)+':'+p.i+'" aria-label="'+esc(p.cap)+'"><img src="'+esc(p.src)+'" alt="" loading="lazy"><span>'+esc(p.cap)+'</span></button>'}).join("")}
+ else{tiles=[["ph1","cal","g1"],["ph2","book","g2"],["ph3","ball","g4"],["ph4","book","g6"],["ph5","star","g5"],["ph6","users","g3"],["ph7","trophy","g2"],["ph8","bell","g1"]].map(function(x){return '<a class="stile ph '+x[2]+'" href="#gallery"><span class="big">'+ic(x[1])+'</span><span>'+esc(t(x[0]))+'<small>'+esc(t("noPhotos"))+'</small></span></a>'}).join("")}
+ return '<section class="strip" aria-label="'+esc(t("stripT"))+'"><div class="strack" id="strack">'+tiles+tiles.replace(/class="stile/g,'tabindex="-1" aria-hidden="true" class="stile')+'</div><div class="shead"><span>'+ic("image")+esc(t("stripT"))+'</span><a href="#gallery">'+esc(st.editing?t("stripAdd"):t("allPhotos"))+' →</a></div></section>'}
+var stripRAF=0;
+function startStrip(){cancelAnimationFrame(stripRAF);var tr=document.getElementById("strack");if(!tr)return;
+ if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+ var paused=false,last=0,pos=tr.scrollLeft;
+ ["pointerenter","focusin","touchstart"].forEach(function(ev){tr.addEventListener(ev,function(){paused=true},{passive:true})});
+ ["pointerleave","focusout","touchend"].forEach(function(ev){tr.addEventListener(ev,function(){paused=false;pos=tr.scrollLeft;last=0},{passive:true})});
+ function step(ts){if(document.getElementById("strack")!==tr)return;var half=tr.scrollWidth/2;
+  if(!paused&&!document.hidden&&half>tr.clientWidth){var dt=last?Math.min(ts-last,64):16;pos+=dt*0.04;if(pos>=half)pos-=half;tr.scrollLeft=pos}else{pos=tr.scrollLeft;if(pos>=half)pos-=half}
+  last=ts;stripRAF=requestAnimationFrame(step)}
+ stripRAF=requestAnimationFrame(step)}
 function startHero(){cancelAnimationFrame(heroRAF);var c=document.getElementById("heroCanvas");if(!c)return;var ctx=c.getContext("2d"),dpr=Math.min(window.devicePixelRatio||1,2),W,H,pts=[],mouse={x:-999,y:-999};
  var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
  function size(){var r=c.getBoundingClientRect();W=r.width;H=r.height;c.width=W*dpr;c.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);var n=Math.round(Math.min(70,W*H/16000));pts=[];for(var i=0;i<n;i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,r:1.2+Math.random()*2.2})}
