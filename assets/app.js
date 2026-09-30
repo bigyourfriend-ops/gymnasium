@@ -276,7 +276,7 @@ function nowHTML(){var s=lessonState(),n=s.n,b=DATA.bells,head,sub="",bar="";
 /* ------------------------------------------------------------ chrome */
 var NAV=[
  {k:"navSchool",items:[["about","navAbout"],["about.admin","navAdmin"],["about.teachers","navTeachers"],["about.base","navBase"],["docs","navDocs"]]},
- {k:"navEdu",items:[["programs","navProg"],["schedule","navSched"],["olympiad","navOlymp"],["docs.res","navRes"]]},
+ {k:"navEdu",items:[["schedule","navSched"],["olympiad","navOlymp"],["docs.res","navRes"]]},
  {k:"navLife",items:[["events","navEvents"],["clubs","navClubs"],["gallery","navGallery"],["alumni","navAlumni"],["feedback","navFeedback"]]},
  {k:"navNews",href:"news"},{k:"navContacts",href:"contacts"}];
 var PARENT={profile:null,feedback:"navLife",about:"navSchool",docs:"navSchool",programs:"navEdu",schedule:"navEdu",olympiad:"navEdu",events:"navLife",clubs:"navLife",gallery:"navLife",album:"navLife",alumni:"navLife",news:null,post:null,contacts:null};
@@ -439,7 +439,7 @@ function pageContacts(){var s=DATA.settings,dir=DATA.staff.filter(function(x){re
   '<div class="map">'+map+'<div class="acts"><span style="color:var(--muted);font-size:13.5px">'+esc(t("openIn"))+'</span><a class="btn btn-outline" href="https://2gis.kz/search/'+q+'" target="_blank" rel="noopener">2GIS</a><a class="btn btn-outline" href="https://www.google.com/maps/search/?api=1&query='+q+'" target="_blank" rel="noopener">Google Maps</a><a class="btn btn-outline" href="https://yandex.kz/maps/?text='+q+'" target="_blank" rel="noopener">Яндекс</a></div></div></section>'+
   '<section id="faq" class="faq"><h2 class="h2">'+esc(t("faqT"))+' '+addBtn("faq")+'</h2>'+DATA.faq.map(function(x){return '<details>'+ed("faq",x.id)+'<summary>'+esc(pick(x.q))+'</summary><p>'+esc(pick(x.a))+'</p></details>'}).join("")+'</section></div>'}
 
-var PAGES={feedback:pageFeedback,profile:pageProfile,home:pageHome,about:pageAbout,news:pageNews,post:pagePost,programs:pagePrograms,schedule:pageSchedule,olympiad:pageOlympiad,events:pageEvents,clubs:pageClubs,gallery:pageGallery,album:pageAlbum,alumni:pageAlumni,docs:pageDocs,contacts:pageContacts};
+var PAGES={feedback:pageFeedback,profile:pageProfile,home:pageHome,about:pageAbout,news:pageNews,post:pagePost,schedule:pageSchedule,olympiad:pageOlympiad,events:pageEvents,clubs:pageClubs,gallery:pageGallery,album:pageAlbum,alumni:pageAlumni,docs:pageDocs,contacts:pageContacts};
 
 /* ------------------------------------------------------------ render */
 var app=document.getElementById("app"),layer=document.getElementById("layer");
