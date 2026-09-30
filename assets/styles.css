@@ -557,3 +557,4 @@ a.partner:hover{border-color:var(--b300)}
 .stile.g4{background:linear-gradient(135deg,#65a30d,#3f6212)}
 .stile.g5{background:linear-gradient(135deg,#b45309,#78350f)}
 .stile.g6{background:linear-gradient(135deg,#0f766e,#134e4a)}
+img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}

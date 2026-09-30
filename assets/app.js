@@ -162,12 +162,7 @@ var IC={pin:'<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circ
 function ic(n){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(IC[n]||"")+'</svg>'}
 var emN=0;
 var HORN="M20 21V11C20 4 14 1.5 9.5 3.5 5.5 5.3 6.2 11 10.5 11 13.7 11 13.8 6.8 11.5 6.8M20 11C20 4 26 1.5 30.5 3.5 34.5 5.3 33.8 11 29.5 11 26.3 11 26.2 6.8 28.5 6.8";
-function emblem(cls){ var n=++emN;
- return '<svg class="em '+(cls||"")+'" viewBox="0 0 120 120" role="img" aria-label="'+esc(t("emblem"))+'"><defs><linearGradient id="eg'+n+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#84cc16"/><stop offset=".5" stop-color="#22c55e"/><stop offset="1" stop-color="#15803d"/></linearGradient><path id="ea'+n+'" d="M25 70 A35 35 0 0 0 95 70"/></defs>'+
- '<circle cx="60" cy="60" r="57" fill="#fff" stroke="#15803d" stroke-width="4"/><circle cx="60" cy="60" r="51" fill="none" stroke="#22c55e" stroke-width="1.5"/>'+
- '<path d="'+HORN+'" transform="translate(44 14) scale(.8)" fill="none" stroke="#15803d" stroke-width="2.6" stroke-linecap="round"/>'+
- '<text x="60" y="67" text-anchor="middle" font-family="Montserrat,Inter,sans-serif" font-weight="900" font-size="33" fill="url(#eg'+n+')" letter-spacing="-1">ҒМ</text>'+
- '<text font-family="Inter,sans-serif" font-weight="800" font-size="8.6" fill="#15803d" letter-spacing=".6"><textPath href="#ea'+n+'" startOffset="50%" text-anchor="middle">ҒАНИ МҰРАТБАЕВ · 1–11</textPath></text></svg>'}
+function emblem(cls){return '<img class="em '+(cls||"")+'" src="assets/logo.png" alt="'+esc(t("emblem"))+'" width="120" height="120" decoding="async">'}
 
 
 var T2={
