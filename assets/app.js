@@ -322,7 +322,7 @@ function pageHome(){var s=DATA.settings;
  var quick='<section class="section" style="padding-block:40px"><div class="container"><div class="quick">'+
   [["schedule","cal","q1","q1d"],["https://bilimclass.kz","book","kundelik","q2d"],["contacts.faq","cap","q3","q3d"],["news.ann","mega","q4","q4d"]].map(function(q){var ext=q[0].indexOf("http")===0;
    return '<a class="qcard" href="'+(ext?q[0]:"#"+q[0])+'"'+(ext?' target="_blank" rel="noopener"':'')+'><div class="ico">'+ic(q[1])+'</div><h4>'+esc(t(q[2]))+'</h4><p>'+esc(q[3]==="q2d"?"BilimClass · "+t(q[3]):t(q[3]))+'</p></a>'}).join("")+'</div></div></section>';
- var motto='<section class="section" style="padding-top:0"><div class="container"><div class="quote">'+emblem()+'<div><blockquote>«'+esc(pick(s.motto))+'»</blockquote><cite>'+esc(t("name"))+'</cite></div></div></div></section>';
+ var motto='<section class="section"><div class="container"><div class="quote">'+emblem()+'<div><blockquote>«'+esc(pick(s.motto))+'»</blockquote><cite>'+esc(t("name"))+'</cite></div></div></div></section>';
  var dirs=[["programs.primary","g1","grades14","d1","d1d"],["programs.basic","g2","grades59","d2","d2d"],["programs.senior","g3","grades1011","d3","d3d"],["clubs","g4","allGrades","d4","d4d"],["olympiad","g5","allGrades","d5","d5d"],["alumni","g6","navAlumni","d6","d6d"]];
  var dirsH='<section class="section alt"><div class="container"><div class="sec-head"><div><span class="eyebrow">'+esc(t("dirE"))+'</span><h2>'+esc(t("dirT"))+'</h2></div></div><div class="dirs">'+
   dirs.map(function(d){return '<a class="dir '+d[1]+'" href="#'+d[0]+'"><div><span class="tag">'+esc(t(d[2]))+'</span><h3>'+esc(t(d[3]))+'</h3><p>'+esc(t(d[4]))+'</p></div><span class="go">'+esc(t("open"))+ic("arrow").replace('<svg','<svg width="15" height="15"')+'</span></a>'}).join("")+'</div></div></section>';
@@ -334,7 +334,7 @@ function pageHome(){var s=DATA.settings;
   '<aside class="panel"><h3>'+esc(t("upcoming"))+'</h3><div class="evlist">'+(up.length?up.map(evRow).join(""):'<p style="color:var(--muted)">'+esc(t("noEvents"))+'</p>')+'</div><div style="margin-top:14px"><a class="more" href="#events">'+esc(t("calendar"))+' →</a></div></aside></div></div></section>';
  var partners='<section class="section alt"><div class="container"><div class="sec-head"><h2>'+esc(t("partnersT"))+'</h2>'+addBtn("partners")+'</div><div class="partners">'+
   DATA.partners.map(function(p){var inner=ed("partners",p.id)+'<span class="ico">'+ic("build")+'</span><span>'+esc(pick(p.title))+'</span>';return p.url&&!st.editing?'<a class="partner" href="'+esc(p.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="partner">'+inner+'</div>'}).join("")+'</div></div></section>';
- return hero+quick+motto+stats+news+homeFeedback()+partners}
+ return hero+motto+stats+news+homeFeedback()+partners}
 
 function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"});
  function person(p){var ini=(p.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join("");return '<div class="box person">'+ed("staff",p.id)+'<div class="ava">'+(p.img?'<img src="'+p.img+'" alt="">':esc(ini))+'</div><div><b>'+esc(p.name)+'</b><span>'+esc(pick(p.role))+'</span></div></div>'}
