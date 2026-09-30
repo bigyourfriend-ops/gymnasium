@@ -267,9 +267,19 @@ function can(p){return st.perms.indexOf(p)>=0}
 function canCol(col){return can(COLPERM[col])}
 function secData(sec){var o={};SECS[sec].forEach(function(k){o[k]=DATA[k]});return o}
 function snapshot(){st.base={};Object.keys(SECS).forEach(function(s){st.base[s]=JSON.stringify(secData(s))})}
+
+var T7={
+ adminPanel:["Басқару панелі","Панель управления","Admin panel"], adminShort:["Басқару","Управление","Admin"],
+ pd_admin:["Сайтты басқару: мазмұн, пікірлер, пайдаланушылар және рөлдер.","Управление сайтом: содержимое, отзывы, пользователи и роли.","Manage the site: content, feedback, users and roles."],
+ a_content:["Сайт мазмұны","Содержимое сайта","Site content"], noAccess:["Бұл бетке кіруге рұқсатыңыз жоқ. Рөл беру үшін әкімшіге жүгініңіз.","Нет доступа к этой странице. Обратитесь к администратору, чтобы получить роль.","You don't have access to this page. Ask the administrator for a role."],
+ openEdit:["Өңдеу","Редактировать","Edit"], nItems:["{n} жазба","{n} записей","{n} items"], backSite:["Сайтқа оралу","Вернуться на сайт","Back to site"],
+ a_contentHint:["Бөлімді ашыңыз: өңдеу режимі қосылады. Өзгерістерден кейін төмендегі «Жариялау» батырмасын басыңыз.","Откройте раздел — включится режим редактирования. После изменений нажмите «Опубликовать» внизу экрана.","Open a section to edit it. When you're done, press “Publish” at the bottom of the screen."],
+ settingsHint:["Сақтағаннан кейін төмендегі «Жариялау» батырмасын басыңыз.","После сохранения нажмите «Опубликовать» внизу экрана.","After saving, press “Publish” at the bottom of the screen."], pubHint:["Барлық өзгеріс сайтта «Жариялау» батырмасын басқаннан кейін көрінеді.","Все изменения появляются на сайте после нажатия «Опубликовать».","Changes appear on the site after you press “Publish”."]
+};
+for(var _k7 in T7)T[_k7]=T7[_k7];
 /* ------------------------------------------------------------ helpers */
 function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
-var st={perms:[],isAdmin:false,roleName:"",base:{},meta:null,roles:null,fb:null,fbAdmin:null,fbKind:"all",fbShow:6,fbStatus:"pending",fbA:0,fbB:0,fbStart:0,ptab:"me",uq:"",urole:"all",admin:null,profile:null,lang:(function(){var l=store("gm-lang");return LI[l]!==undefined?l:"kk"})(),route:{page:"home",arg:""},grade:(function(){var g=store("gm-grade");return g&&DATA.schedule[g]?g:"5"})(),
+var st={atab:"dash",perms:[],isAdmin:false,roleName:"",base:{},meta:null,roles:null,fb:null,fbAdmin:null,fbKind:"all",fbShow:6,fbStatus:"pending",fbA:0,fbB:0,fbStart:0,ptab:"me",uq:"",urole:"all",admin:null,profile:null,lang:(function(){var l=store("gm-lang");return LI[l]!==undefined?l:"kk"})(),route:{page:"home",arg:""},grade:(function(){var g=store("gm-grade");return g&&DATA.schedule[g]?g:"5"})(),
  newsCat:"all",newsQ:"",newsPage:1,progF:"all",year:"all",cal:null,calSel:null,editing:false,canEdit:false,dirty:0,saving:false,sureId:null};
 var art=null;
 function t(k){var v=T[k];return v?v[LI[st.lang]]:k}
@@ -308,7 +318,7 @@ var NAV=[
  {k:"navEdu",items:[["schedule","navSched"],["olympiad","navOlymp"]]},
  {k:"navLife",items:[["events","navEvents"],["clubs","navClubs"],["gallery","navGallery"],["alumni","navAlumni"],["feedback","navFeedback"]]},
  {k:"navNews",href:"news"},{k:"navContacts",href:"contacts"}];
-var PARENT={profile:null,feedback:"navLife",about:"navSchool",docs:"navSchool",programs:"navEdu",schedule:"navEdu",olympiad:"navEdu",events:"navLife",clubs:"navLife",gallery:"navLife",album:"navLife",alumni:"navLife",news:null,post:null,contacts:null};
+var PARENT={admin:null,profile:null,feedback:"navLife",about:"navSchool",docs:"navSchool",programs:"navEdu",schedule:"navEdu",olympiad:"navEdu",events:"navLife",clubs:"navLife",gallery:"navLife",album:"navLife",alumni:"navLife",news:null,post:null,contacts:null};
 function isOn(route){var p=route.split(".")[0];return st.route.page===p||(p==="gallery"&&st.route.page==="album")||(p==="news"&&st.route.page==="post")}
 function topbar(){var s=DATA.settings;return '<div class="topbar"><div class="container"><div class="info"><span>'+ic("pin")+esc(t("region"))+'</span><span>'+ic("phone")+'<span class="tnum">'+esc(s.phone)+'</span></span><span class="opt">'+ic("mail")+esc(s.email)+'</span></div>'+
  '<div class="lang" role="group" aria-label="Language">'+LANGS.map(function(l){return '<button data-lang="'+l+'" aria-pressed="'+(st.lang===l)+'">'+["Қаз","Рус","Eng"][LI[l]]+'</button>'}).join("")+'</div></div></div>'}
@@ -317,7 +327,7 @@ function header(){
   var on=g.items.some(function(x){return isOn(x[0])});
   return '<div class="nav-item"><button class="nav-link'+(on?" on":"")+'" aria-haspopup="true">'+esc(t(g.k))+ic("chev")+'</button><div class="dropdown">'+g.items.map(function(x){return '<a href="#'+x[0]+'">'+esc(t(x[1]))+'</a>'}).join("")+'</div></div>'}).join("");
  return '<header class="header"><div class="container"><a class="logo" href="#home">'+emblem()+'<span><b>'+esc(t("name"))+'</b><small>Ğani Muratbaev atyndağy gimnaziasy</small></span></a>'+
-  '<nav class="nav" aria-label="Main">'+nav+'</nav><div class="hactions"><button class="btn btn-primary" data-open="'+(st.user?"account":"login")+'">'+(st.user?hava():ic("user"))+'<span>'+esc(st.user?t("cabinet"):t("login"))+'</span></button><button class="burger" data-open="drawer" aria-label="'+esc(t("menu"))+'">'+ic("menu")+'</button></div></div></header>'}
+  '<nav class="nav" aria-label="Main">'+nav+'</nav><div class="hactions">'+(st.canEdit?'<a class="btn btn-outline hadm" href="#admin" title="'+esc(t("adminPanel"))+'">'+ic("star")+'<span>'+esc(t("adminShort"))+'</span></a>':'')+'<button class="btn btn-primary" data-open="'+(st.user?"account":"login")+'">'+(st.user?hava():ic("user"))+'<span>'+esc(st.user?t("cabinet"):t("login"))+'</span></button><button class="burger" data-open="drawer" aria-label="'+esc(t("menu"))+'">'+ic("menu")+'</button></div></div></header>'}
 function footer(){var s=DATA.settings,y=nowTZ().y;
  return '<footer class="footer"><div class="container"><div class="fgrid"><div><div class="fbrand">'+emblem()+'<b>'+esc(t("name"))+'</b></div><p>'+esc(t("fdesc"))+'</p>'+social()+'</div>'+
   '<div><h5>'+esc(t("navSchool"))+'</h5><ul>'+NAV[0].items.map(function(x){return '<li>'+lnk(x[0],esc(t(x[1])))+'</li>'}).join("")+'</ul></div>'+
@@ -469,7 +479,7 @@ function pageContacts(){var s=DATA.settings,dir=DATA.staff.filter(function(x){re
   '<div class="map">'+map+'<div class="acts"><span style="color:var(--muted);font-size:13.5px">'+esc(t("openIn"))+'</span><a class="btn btn-outline" href="https://2gis.kz/search/'+q+'" target="_blank" rel="noopener">2GIS</a><a class="btn btn-outline" href="https://www.google.com/maps/search/?api=1&query='+q+'" target="_blank" rel="noopener">Google Maps</a><a class="btn btn-outline" href="https://yandex.kz/maps/?text='+q+'" target="_blank" rel="noopener">Яндекс</a></div></div></section>'+
   '<section id="faq" class="faq"><h2 class="h2">'+esc(t("faqT"))+' '+addBtn("faq")+'</h2>'+DATA.faq.map(function(x){return '<details>'+ed("faq",x.id)+'<summary>'+esc(pick(x.q))+'</summary><p>'+esc(pick(x.a))+'</p></details>'}).join("")+'</section></div>'}
 
-var PAGES={feedback:pageFeedback,profile:pageProfile,home:pageHome,about:pageAbout,news:pageNews,post:pagePost,schedule:pageSchedule,olympiad:pageOlympiad,events:pageEvents,clubs:pageClubs,gallery:pageGallery,album:pageAlbum,alumni:pageAlumni,docs:pageDocs,contacts:pageContacts};
+var PAGES={admin:pageAdmin,feedback:pageFeedback,profile:pageProfile,home:pageHome,about:pageAbout,news:pageNews,post:pagePost,schedule:pageSchedule,olympiad:pageOlympiad,events:pageEvents,clubs:pageClubs,gallery:pageGallery,album:pageAlbum,alumni:pageAlumni,docs:pageDocs,contacts:pageContacts};
 
 /* ------------------------------------------------------------ render */
 var app=document.getElementById("app"),layer=document.getElementById("layer");
@@ -478,7 +488,7 @@ function render(keepScroll){document.documentElement.lang=st.lang;var y=window.s
  app.innerHTML=topbar()+header()+'<main id="main">'+fn()+'</main>'+footer()+editbar();
  document.title=(st.route.page==="home"?"":titleFor()+" · ")+t("name");
  if(keepScroll)window.scrollTo(0,y);startHero();startStrip()}
-function titleFor(){var m={feedback:"navFeedback",profile:"cabinet",about:"navAbout",news:"navNews",programs:"navProg",schedule:"navSched",olympiad:"navOlymp",events:"navEvents",clubs:"navClubs",gallery:"navGallery",alumni:"navAlumni",docs:"navRes",contacts:"navContacts"}[st.route.page];
+function titleFor(){var m={admin:"adminPanel",feedback:"navFeedback",profile:"cabinet",about:"navAbout",news:"navNews",programs:"navProg",schedule:"navSched",olympiad:"navOlymp",events:"navEvents",clubs:"navClubs",gallery:"navGallery",alumni:"navAlumni",docs:"navRes",contacts:"navContacts"}[st.route.page];
  if(m)return t(m);if(st.route.page==="post"){var p=DATA.posts.filter(function(x){return x.id===st.route.arg})[0];return p?pick(p.title):""}
  if(st.route.page==="album"){var a=DATA.albums.filter(function(x){return x.id===st.route.arg})[0];return a?pick(a.title):""}return""}
 function editbar(){if(!st.canEdit||!st.editing)return"";
@@ -586,7 +596,7 @@ function submitAuth(form){var id=form.id,v=function(x){return document.getElemen
    if(r.data&&r.data.session){closeLayer();return} form.querySelectorAll("input,select,button").forEach(function(x){x.disabled=true});showMsg("regDone",true)})}
  else if(id==="authForgot"){sb.auth.resetPasswordForEmail(v("af-email"),{redirectTo:redirectURL()}).then(function(r){done();if(r.error){var e=authErr(r.error);showMsg(e[0],false,e[1]);return}showMsg("linkSent",true)})}
  else if(id==="authNew"){var a=document.getElementById("an-pass").value;if(a.length<8){showMsg("e_short",false);done();return}if(a!==document.getElementById("an-pass2").value){showMsg("e_match",false);done();return}
-  sb.auth.updateUser({password:a}).then(function(r){done();if(r.error){var e=authErr(r.error);showMsg(e[0],false,e[1]);return}closeLayer();toast(t("passSaved"));if(st.route.page==="profile")render(true)})}}
+  sb.auth.updateUser({password:a}).then(function(r){done();if(r.error){var e=authErr(r.error);showMsg(e[0],false,e[1]);return}closeLayer();toast(t("passSaved"));if(st.route.page==="profile"||st.route.page==="admin")render(true)})}}
 function openProg(k){var p=PROG[k],L=LI[st.lang];var list=k==="extra"?DATA.clubs.map(function(c){return pick(c.title)}):p.subj.map(subj);
  openLayer('<span class="eyebrow">'+esc(p.sub[L])+' · '+esc(p.g)+'</span><h3>'+esc(p.title[L])+'</h3><p style="color:var(--muted);margin-top:10px;font-size:14px">'+esc(p.desc[L])+'</p>'+
  '<h4 style="margin-top:18px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8">'+esc(k==="extra"?t("navClubs"):t("subjT"))+'</h4><div class="subjlist">'+list.map(function(s){return '<div>'+esc(s)+'</div>'}).join("")+'</div>'+
@@ -627,32 +637,35 @@ function saveEditor(form){var col=form.dataset.col,id=form.dataset.id,obj={},has
  if(id){var it=DATA[col].filter(function(x){return x.id===id})[0];Object.keys(obj).forEach(function(k){it[k]=obj[k]});delete it.sample}
  else{obj.id=uid(col[0]);if(col==="albums")obj.photos=[];DATA[col].push(obj)}
  dirty();closeLayer();render(true)}
-function openSettings(){var s=DATA.settings;
- openLayer('<h3>'+esc(t("settings"))+'</h3><form class="form" id="setform"><div class="row2"><label>'+esc(t("f_phone"))+'<input id="se-phone" value="'+esc(s.phone)+'"></label><label>Email<input id="se-email" value="'+esc(s.email)+'"></label></div>'+
+function openSettings(){openLayer('<h3>'+esc(t("settings"))+'</h3>'+settingsForm(true))}
+function settingsForm(modal){var s=DATA.settings;
+ return '<form class="form" id="setform"><div class="row2"><label>'+esc(t("f_phone"))+'<input id="se-phone" value="'+esc(s.phone)+'"></label><label>Email<input id="se-email" value="'+esc(s.email)+'"></label></div>'+
  '<div class="row2"><label>'+esc(t("f_whatsapp"))+'<input id="se-whatsapp" inputmode="numeric" value="'+esc(s.whatsapp)+'"></label><label>'+esc(t("f_acad"))+'<input id="se-year" value="'+esc(s.year)+'"></label></div>'+
  '<div class="row2"><label>Instagram<input id="se-instagram" type="url" placeholder="https://instagram.com/…" value="'+esc(s.instagram)+'"></label><label>Telegram<input id="se-telegram" type="url" placeholder="https://t.me/…" value="'+esc(s.telegram)+'"></label></div>'+
  '<label>Facebook<input id="se-facebook" type="url" value="'+esc(s.facebook)+'"></label>'+
  '<label>'+esc(t("f_hours"))+'<div class="ml">'+LANGS.map(function(l){return '<input id="se-hours-'+l+'" value="'+esc(s.hours[l]||"")+'">'}).join("")+'</div></label>'+
  '<label>'+esc(t("f_motto"))+'<div class="ml">'+LANGS.map(function(l){return '<input id="se-motto-'+l+'" value="'+esc((s.motto||{})[l]||"")+'">'}).join("")+'</div></label>'+
  s.stats.map(function(x,i){return '<label>'+esc(t("f_stat"))+' '+(i+1)+'<div class="ml" style="grid-template-columns:90px repeat(3,minmax(0,1fr))"><input id="se-sn-'+i+'" value="'+esc(x.n)+'">'+LANGS.map(function(l){return '<input id="se-sl-'+i+'-'+l+'" value="'+esc(x.l[l]||"")+'">'}).join("")+'</div></label>'}).join("")+
- '<div class="acts"><button type="button" class="btn btn-soft" data-close="1">'+esc(t("cancel"))+'</button><button class="btn btn-primary" type="submit">'+esc(t("ok"))+'</button></div></form>')}
+ '<div class="acts">'+(modal?'<button type="button" class="btn btn-soft" data-close="1">'+esc(t("cancel"))+'</button>':'')+'<button class="btn btn-primary" type="submit">'+esc(t("ok"))+'</button></div></form>'}
 function saveSettings(){var s=DATA.settings,g=function(id){return document.getElementById(id).value.trim()};
  ["phone","email","whatsapp","year","instagram","telegram","facebook"].forEach(function(k){s[k]=g("se-"+k)});
  LANGS.forEach(function(l){s.hours[l]=g("se-hours-"+l);s.motto=s.motto||{};s.motto[l]=g("se-motto-"+l)});
  s.stats.forEach(function(x,i){var nv=g("se-sn-"+i);if(nv!==x.n)s.statsSample=false;x.n=nv;LANGS.forEach(function(l){x.l[l]=g("se-sl-"+i+"-"+l)})});
- dirty();closeLayer();render(true)}
+ st.editing=true;dirty();closeLayer();render(true);toast(t("settingsHint"))}
 
 function shrink(file,M){return new Promise(function(res){var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,M/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.8))};im.onerror=function(){res(null)};im.src=r.result};r.onerror=function(){res(null)};r.readAsDataURL(file)})}
 
 /* ------------------------------------------------------------ events */
 document.addEventListener("click",function(e){
- var el=e.target.closest("[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-addl],[data-rml],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
+ var el=e.target.closest("[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-addl],[data-rml],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
  if(!el)return;var d=el.dataset;
  if(d.close!==undefined){if(e.target===el||el.tagName==="BUTTON"){closeLayer()}return}
  if(el.tagName==="A"&&el.getAttribute("href").charAt(0)==="#"){if(el.getAttribute("href")==="#"+(location.hash.replace(/^#/,"")||"home")){e.preventDefault();parseHash()}return}
  if(d.lang){st.lang=d.lang;store("gm-lang",d.lang);closeLayer();render(true);return}
  if(d.open==="drawer"){openDrawer();return} if(d.open==="login"){openLogin();return} if(d.open==="account"){closeLayer();location.hash="profile";return}
  if(d.ptab){st.ptab=d.ptab;render(true);return}
+ if(d.atab){st.atab=d.atab;render(true);window.scrollTo(0,0);return}
+ if(d.goedit){st.editing=true;location.hash=d.goedit;return}
  if(d.roledel){e.preventDefault();if(st.sureId!=="role"+d.roledel){st.sureId="role"+d.roledel;render(true);return}st.sureId=null;sb.from("roles").delete().eq("id",d.roledel).then(function(r){if(r.error){toast(t("e_generic"));return}st.admin=null;toast(t("roleDeleted"));render(true)});return}
  if(d.fbkind){st.fbKind=d.fbkind;st.fbShow=6;render(true);return}
  if(d.fbmore){st.fbShow+=6;render(true);return}
@@ -664,7 +677,7 @@ document.addEventListener("click",function(e){
  if(d.urole){st.urole=d.urole;document.querySelectorAll("[data-urole]").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.urole===st.urole)});document.getElementById("ulistP").innerHTML=userRows();return}
 
  if(d.auth==="signoutall"&&sb){sb.auth.signOut({scope:"global"}).then(function(){location.hash="home"});return}
- if(d.auth){e.preventDefault();if(d.auth==="login")openLogin();else if(d.auth==="register")openRegister();else if(d.auth==="forgot")openForgot();else if(d.auth==="users")openUsers();else if(d.auth==="signout"&&sb){sb.auth.signOut().then(function(){closeLayer();if(st.route.page==="profile")render(true)})}return} if(d.open==="settings"){if(can("settings"))openSettings();return}
+ if(d.auth){e.preventDefault();if(d.auth==="login")openLogin();else if(d.auth==="register")openRegister();else if(d.auth==="forgot")openForgot();else if(d.auth==="users")openUsers();else if(d.auth==="signout"&&sb){sb.auth.signOut().then(function(){closeLayer();if(st.route.page==="profile"||st.route.page==="admin")render(true)})}return} if(d.open==="settings"){if(can("settings"))openSettings();return}
  if(d.act==="edit"){if(!st.canEdit)return;st.editing=true;closeLayer();render(true);refreshBar();return}
  if(d.act==="discard"){if(st.dirty)location.reload();else{st.editing=false;render(true)}return}
  if(d.act==="save"){publish();return}
@@ -711,14 +724,14 @@ function hava(){var a=avatarURL();return '<span class="hava">'+(a?'<img src="'+e
 function pageProfile(){
  if(!sb)return banner("cabinet","pd_profile")+'<div class="container page"><div class="empty"><b>'+esc(t("noAuth"))+'</b></div></div>';
  if(!st.user)return banner("cabinet","pd_profile")+'<div class="container page"><div class="panel" style="max-width:520px;margin:0 auto;text-align:center">'+emblem("em72")+'<p style="margin:14px 0 18px;color:var(--muted)">'+esc(t("needLogin"))+'</p><div class="btns" style="justify-content:center"><button class="btn btn-primary btn-lg" data-auth="login">'+esc(t("signIn"))+'</button><button class="btn btn-outline btn-lg" data-auth="register">'+esc(t("signUp"))+'</button></div>'+bilimBtn()+'</div></div>';
- var tabs=[["me","p_me","user"],["security","p_sec","gear"]];if(st.canEdit)tabs.unshift(["dash","p_dash","star"]);if(can("feedback"))tabs.push(["feedback","p_fb","msg"]);if(st.isAdmin)tabs.push(["users","p_users","users"],["roles","p_roles","gear"]);
+ var tabs=[["me","p_me","user"],["security","p_sec","gear"]];
  if(!tabs.some(function(x){return x[0]===st.ptab}))st.ptab=tabs[0][0];
  var p=st.profile||{},u=st.user,m=u.user_metadata||{},role=p.role||m.role,a=avatarURL();
  var side='<aside class="pside"><div class="pava">'+(a?'<img src="'+esc(a)+'" alt="">':esc(uname().charAt(0).toUpperCase()))+'</div><b class="pname">'+esc(uname())+'</b><span class="pmail">'+esc(u.email)+'</span>'+
   '<div class="tags" style="justify-content:center;margin-top:8px">'+(role?'<span>'+esc(t("r_"+role))+'</span>':'')+(p.grade?'<span>'+esc(p.grade)+'</span>':'')+(st.roleName?'<span class="adm">'+esc(st.roleName)+'</span>':'')+'</div>'+
   '<small class="since">'+esc(t("memberSince"))+': '+esc(fmtDate(String(p.created_at||u.created_at||"").slice(0,10)))+'</small>'+
   '<nav class="ptabs">'+tabs.map(function(x){return '<button data-ptab="'+x[0]+'" aria-pressed="'+(st.ptab===x[0])+'">'+ic(x[2])+esc(t(x[1]))+'</button>'}).join("")+'</nav>'+
-  '<button class="btn btn-soft" data-auth="signout" style="width:100%">'+esc(t("signOut"))+'</button></aside>';
+  (st.canEdit?'<a class="btn btn-primary" href="#admin" style="width:100%;margin-bottom:8px">'+ic("star")+esc(t("adminPanel"))+'</a>':'')+'<button class="btn btn-soft" data-auth="signout" style="width:100%">'+esc(t("signOut"))+'</button></aside>';
  var body={me:tabMe,security:tabSec,dash:tabDash,users:tabUsers,feedback:tabFb,roles:tabRoles}[st.ptab]();
  return banner("cabinet","pd_profile")+'<div class="container page"><div class="prof">'+side+'<section class="pmain">'+body+'</section></div></div>'}
 function tabMe(){var p=st.profile||{},m=st.user.user_metadata||{},role=p.role||m.role||"student";
@@ -765,7 +778,7 @@ var adminLoading=false;
 function loadAdmin(){if(adminLoading||!sb||!st.isAdmin)return;adminLoading=true;
  Promise.all([sb.from("profiles").select("id,full_name,email,role,grade,avatar_url,created_at").order("created_at",{ascending:false}).limit(1000),sb.from("staff").select("user_id,role_id"),sb.from("roles").select("id,name,perms,is_system").order("created_at")]).then(function(r){adminLoading=false;
   var staff={};(r[1].data||[]).forEach(function(x){staff[x.user_id]=x.role_id});
-  st.admin={users:(r[0].data||[]),staff:staff,roles:(r[2].data||[])};if(st.route.page==="profile")render(true)})}
+  st.admin={users:(r[0].data||[]),staff:staff,roles:(r[2].data||[])};if(st.route.page==="profile"||st.route.page==="admin")render(true)})}
 function tabRoles(){var A=st.admin;if(!A){loadAdmin();return '<div class="panel"><p class="hint">'+esc(t("loading"))+'</p></div>'}
  var cnt={};Object.keys(A.staff).forEach(function(k){cnt[A.staff[k]]=(cnt[A.staff[k]]||0)+1});
  function card(r,isNew){var sys=r.is_system;
@@ -792,9 +805,32 @@ function quickAction(k){if(!st.canEdit)return;st.editing=true;var need={post:"ne
  else if(k==="event"){location.hash="events";setTimeout(function(){openEditor("events",null,{date:todayISO(),time:"10:00"})},60)}
  else if(k==="album"){location.hash="gallery";setTimeout(function(){openEditor("albums",null,{year:DATA.settings.year})},60)}
  else if(k==="sched"){location.hash="schedule"}
- else if(k==="settings"){render(true);openSettings()}
+ else if(k==="settings"){st.atab="settings";location.hash="admin";render(true)}
  else{location.hash="home"}}
 
+
+/* ------------------------------------------------------------ admin page (#admin) */
+function adminTabs(){var tb=[["dash","p_dash","star"],["content","a_content","book"]];if(can("feedback"))tb.push(["feedback","p_fb","msg"]);if(can("settings"))tb.push(["settings","settings","gear"]);if(st.isAdmin)tb.push(["users","p_users","users"],["roles","p_roles","user"]);return tb}
+function pageAdmin(){
+ if(!sb)return banner("adminPanel","pd_admin")+'<div class="container page"><div class="empty"><b>'+esc(t("noAuth"))+'</b></div></div>';
+ if(!st.user)return pageProfile();
+ if(!st.canEdit)return banner("adminPanel","pd_admin")+'<div class="container page"><div class="empty"><b>'+esc(t("noAccess"))+'</b><p style="margin-top:12px"><a class="btn btn-soft" href="#profile">'+esc(t("cabinet"))+'</a></p></div></div>';
+ var tabs=adminTabs();if(!tabs.some(function(x){return x[0]===st.atab}))st.atab="dash";
+ var side='<aside class="aside"><div class="ahead">'+emblem()+'<div><b>'+esc(t("adminPanel"))+'</b><span>'+esc(uname())+'</span></div></div>'+
+  (st.roleName?'<span class="arole">'+esc(st.roleName)+'</span>':'')+
+  '<nav class="anav">'+tabs.map(function(x){var badge=x[0]==="feedback"&&st.fbAdmin?st.fbAdmin.filter(function(f){return f.status==="pending"}).length:0;return '<button data-atab="'+x[0]+'" aria-pressed="'+(st.atab===x[0])+'">'+ic(x[2])+'<span>'+esc(t(x[1]))+'</span>'+(badge?'<i class="abadge">'+badge+'</i>':'')+'</button>'}).join("")+'</nav>'+
+  '<div class="afoot"><a href="#home">'+ic("left")+esc(t("backSite"))+'</a><a href="#profile">'+ic("user")+esc(t("cabinet"))+'</a></div></aside>';
+ var body={dash:tabDash,content:tabContent,feedback:tabFb,settings:tabSettings,users:tabUsers,roles:tabRoles}[st.atab]();
+ var title=(tabs.filter(function(x){return x[0]===st.atab})[0]||tabs[0])[1];
+ return '<div class="adminwrap"><div class="container"><div class="adm">'+side+'<section class="amain"><div class="atop"><div><span class="eyebrow">'+esc(t("adminPanel"))+'</span><h1>'+esc(t(title))+'</h1></div>'+(st.dirty?'<span class="chip sample">'+esc(f(t("unsaved"),{n:st.dirty}))+'</span>':'')+'</div>'+body+'</section></div></div></div>'}
+function tabContent(){var photos=DATA.albums.reduce(function(s,a){return s+a.photos.length},0);
+ var cards=[["news","mega","navNews","news",DATA.posts.length],["events","cal","navEvents","events",DATA.events.length],["gallery","image","navGallery","gallery",photos],
+  ["schedule","cal","navSched","schedule","1–11"],["about","build","navAbout","about",DATA.staff.length+DATA.facilities.length],["about","users","navTeachers","about.teachers",DATA.staff.filter(function(x){return x.group==="teacher"}).length],
+  ["life","star","navClubs","clubs",DATA.clubs.length],["life","trophy","navOlymp","olympiad",DATA.achievements.length],["life","cap","navAlumni","alumni",DATA.alumni.length],
+  ["docs","link","navRes","docs",DATA.docs.length],["about","msg","faqT","contacts.faq",DATA.faq.length],["about","build","partnersT","home",DATA.partners.length]].filter(function(c){return can(c[0])});
+ return '<p class="hint" style="text-align:left;margin:0 0 16px">'+esc(t("a_contentHint"))+'</p><div class="acards">'+cards.map(function(c){
+  return '<div class="acard"><span class="ico">'+ic(c[1])+'</span><div style="min-width:0"><b>'+esc(t(c[2]))+'</b><span>'+esc(typeof c[4]==="number"?f(t("nItems"),{n:c[4]}):c[4])+'</span></div><button class="btn btn-soft" data-goedit="'+c[3]+'">'+esc(t("openEdit"))+' →</button></div>'}).join("")+'</div>'}
+function tabSettings(){return '<div class="panel">'+settingsForm(false)+'</div><p class="hint" style="text-align:left">'+esc(t("pubHint"))+'</p>'}
 /* ------------------------------------------------------------ feedback */
 function stars(n,cls){var s="";for(var i=1;i<=5;i++)s+='<span class="'+(i<=n?"on":"")+'">★</span>';return '<span class="stars '+(cls||"")+'" aria-label="'+n+'/5">'+s+'</span>'}
 var fbLoading=false;
@@ -834,7 +870,7 @@ function submitFb(form){var g=function(x){return document.getElementById(x).valu
   store("gm-fb-last",String(Date.now()));form.querySelectorAll("input,select,textarea,button").forEach(function(x){x.disabled=true});showMsg(pub?"fbSent":"fbSentPrivate",true)})}
 /* moderation (admin) */
 var fbaLoading=false;
-function loadFbAdmin(){if(!sb||!can("feedback")||fbaLoading)return;fbaLoading=true;sb.from("feedback").select("*").order("created_at",{ascending:false}).limit(500).then(function(r){fbaLoading=false;st.fbAdmin=r.error?[]:(r.data||[]);if(st.route.page==="profile")render(true)})}
+function loadFbAdmin(){if(!sb||!can("feedback")||fbaLoading)return;fbaLoading=true;sb.from("feedback").select("*").order("created_at",{ascending:false}).limit(500).then(function(r){fbaLoading=false;st.fbAdmin=r.error?[]:(r.data||[]);if(st.route.page==="profile"||st.route.page==="admin")render(true)})}
 function tabFb(){if(!st.fbAdmin){loadFbAdmin();return '<div class="panel"><p class="hint">'+esc(t("loading"))+'</p></div>'}
  var S=["pending","approved","read","rejected","spam"],cnt={};S.forEach(function(s){cnt[s]=st.fbAdmin.filter(function(x){return x.status===s}).length});
  var list=st.fbAdmin.filter(function(x){return x.status===st.fbStatus});
@@ -873,7 +909,7 @@ function setUser(u){var was=st.user&&st.user.id;st.user=u||null;
  if(was===u.id)return;
  sb.from("staff").select("role_id,roles(name,perms)").eq("user_id",u.id).maybeSingle().then(function(r){var ro=r&&r.data&&r.data.roles;
   st.perms=(ro&&ro.perms)||[];st.roleName=(ro&&ro.name)||"";st.canEdit=st.perms.length>0;st.isAdmin=can("users");
-  if(st.canEdit&&st.route.page==="profile")st.ptab="dash";render(true);loadProfile()})}
+  render(true);loadProfile()})}
 if(sb){
  sb.from("site_content").select("id,data,updated_at,updated_by").then(function(r){if(!r||r.error||!r.data||!r.data.length||st.dirty)return;
   r.data.forEach(function(row){if(!SECS[row.id]||!row.data)return;SECS[row.id].forEach(function(k){if(row.data[k]!==undefined)DATA[k]=row.data[k]});if(!st.meta||row.updated_at>st.meta.updated_at)st.meta={updated_at:row.updated_at,updated_by:row.updated_by}});

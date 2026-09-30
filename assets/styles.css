@@ -566,3 +566,42 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 .permgrid input{margin-top:3px;accent-color:var(--b600)}
 .rolecard .rname{width:100%;padding:8px 10px;border:1px solid #cbd5e1;border-radius:10px;background:#f8fafc;margin-top:4px;font-size:14px}
 .rolesel{padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:12.5px;font-weight:600;color:var(--b800);max-width:190px}
+
+/* admin page */
+.adminwrap{background:linear-gradient(180deg,#f3faf5,var(--bg) 320px);padding-block:28px 64px}
+.adm{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:900px){.adm{grid-template-columns:1fr}}
+.aside{background:linear-gradient(180deg,var(--b900),var(--b950));color:#dcfce7;border-radius:22px;padding:18px;position:sticky;top:96px;display:flex;flex-direction:column;gap:12px}
+@media (max-width:900px){.aside{position:static}}
+.ahead{display:flex;gap:10px;align-items:center;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.1)}
+.ahead .em{width:44px;height:44px;flex:none}
+.ahead b{display:block;color:#fff;font:800 15px/1.2 var(--f-display)}
+.ahead span{font-size:12.5px;color:var(--b300);overflow-wrap:anywhere}
+.arole{align-self:flex-start;font-size:11.5px;font-weight:800;letter-spacing:.04em;background:rgba(250,204,21,.16);color:#fde68a;padding:4px 10px;border-radius:999px}
+.anav{display:flex;flex-direction:column;gap:3px}
+@media (max-width:900px){.anav{flex-direction:row;flex-wrap:wrap}}
+.anav button{display:flex;align-items:center;gap:10px;background:none;border:0;color:#d1fae5;padding:10px 12px;border-radius:10px;font-weight:600;font-size:14px;text-align:left;position:relative}
+.anav button svg{width:18px;height:18px;opacity:.85}
+.anav button:hover{background:rgba(255,255,255,.07)}
+.anav button[aria-pressed="true"]{background:#fff;color:var(--b900)}
+.abadge{margin-left:auto;font-style:normal;background:#f59e0b;color:#1c1917;font-size:11px;font-weight:800;border-radius:999px;padding:1px 7px}
+.afoot{display:flex;flex-direction:column;gap:4px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1)}
+.afoot a{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--b300);padding:6px 4px}
+.afoot a:hover{color:#fff}
+.afoot svg{width:15px;height:15px}
+.amain{display:flex;flex-direction:column;gap:18px;min-width:0}
+.atop{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.atop h1{font:900 clamp(24px,3vw,32px)/1.15 var(--f-display)}
+.acards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:12px}
+.acard{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px}
+.acard .ico{margin:0;width:44px;height:44px;border-radius:12px;flex:none}
+.acard b{display:block;font-size:14.5px;color:var(--ink)}
+.acard span:not(.ico){font-size:12.5px;color:var(--muted)}
+.acard .btn{margin-left:auto;padding:8px 12px;font-size:12.5px}
+.hadm{padding:8px 14px}
+@media (max-width:760px){.hadm span{display:none}}
+@media (max-width:1360px){.hadm span{display:none}.hadm{padding:9px 11px}}
+@media (max-width:520px){.hactions .btn span.hava{display:inline-flex}}
+.acard{flex-wrap:wrap}
+.acard>div{flex:1 1 150px}
+.acard .btn{flex:none}
