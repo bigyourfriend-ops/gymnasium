@@ -614,3 +614,19 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 .partner{gap:14px}
 .partner:has(.ed){padding-right:88px}
 .form .prev{object-fit:contain;background:#fff}
+
+/* timetable by class */
+.ttpick{display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px}
+.ttrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.ttlab{font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;width:80px}
+.tthead{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tthead .shiftchip{margin:0}
+.ttshift{font-size:13px;font-weight:600;color:#475569;display:flex;gap:6px;align-items:center}
+.ttshift select{padding:4px 8px;border:1px solid var(--line);border-radius:8px}
+.day li .rm{display:inline-block;margin-top:2px;font-size:11px;font-weight:700;color:var(--b700);background:var(--b50);border-radius:6px;padding:0 6px}
+.day li .s{display:block}
+.day li.tted input{width:100%;padding:4px 6px;border:1px solid var(--line);border-radius:6px;font-size:12.5px;background:#f8fafc;margin-top:2px}
+.ttr2{display:flex;gap:4px;align-items:center;margin-top:3px}
+.ttr2 .ttr{width:70px}
+.ttaddform label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:700;color:#475569}
+.ttaddform input,.ttaddform select{padding:7px 9px;border:1px solid #cbd5e1;border-radius:9px;background:#f8fafc}

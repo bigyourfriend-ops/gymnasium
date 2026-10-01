@@ -261,7 +261,7 @@ var T6={
 for(var _k6 in T6)T[_k6]=T6[_k6];
 var PERMS=["news","events","gallery","schedule","about","life","docs","settings","feedback","users"];
 var COLPERM={posts:"news",events:"events",albums:"gallery",docs:"docs",staff:"about",facilities:"about",partners:"about",faq:"about",clubs:"life",achievements:"life",alumni:"life"};
-var SECS={settings:["settings"],posts:["posts"],events:["events"],albums:["albums"],schedule:["schedule","bells","bells2","scheduleSample"],docs:["docs"],staff:["staff"],facilities:["facilities"],partners:["partners"],faq:["faq"],clubs:["clubs"],achievements:["achievements"],alumni:["alumni"]};
+var SECS={settings:["settings"],posts:["posts"],events:["events"],albums:["albums"],schedule:["classes","bells","bells2"],docs:["docs"],staff:["staff"],facilities:["facilities"],partners:["partners"],faq:["faq"],clubs:["clubs"],achievements:["achievements"],alumni:["alumni"]};
 var SECPERM={settings:"settings",posts:"news",events:"events",albums:"gallery",schedule:"schedule",docs:"docs",staff:"about",facilities:"about",partners:"about",faq:"about",clubs:"life",achievements:"life",alumni:"life"};
 function can(p){return st.perms.indexOf(p)>=0}
 function canCol(col){return can(COLPERM[col])}
@@ -287,9 +287,22 @@ for(var _k8 in T8)T[_k8]=T8[_k8];
 
 var T9={f_logo:["Логотип","Логотип","Logo"],logoHint:["PNG мөлдір фонмен жақсы көрінеді. Сурет 400 px-ке дейін кішірейтіледі.","Лучше всего PNG с прозрачным фоном. Картинка уменьшится до 400 px.","PNG with a transparent background works best. Images are resized to 400 px."]};
 for(var _k9 in T9)T[_k9]=T9[_k9];
+
+var T10={clsTitle:["{c} сынып","{c} класс","Class {c}"], gradeL:["Параллель","Параллель","Grade"], letterL:["Әрпі","Буква","Letter"],
+ roomL:["каб.","каб.","room"], gym:["спорт залы","спортзал","gym"], noLessons:["Сабақ жоқ","Уроков нет","No lessons"],
+ ttLegend:["(к) — кеңейтілген, (т) — тереңдетілген, (у) — углублённый, (р) — расширенный. с/з — спорт залы.","(к) — кеңейтілген, (т) — тереңдетілген, (у) — углублённый, (р) — расширенный. с/з — спортзал.","(к), (р) — extended course; (т), (у) — advanced course. с/з — gym."],
+ ttSource:["2026–2027 оқу жылының сабақ кестесі (директор бекіткен, 31.08.2026).","Расписание на 2026–2027 учебный год (утверждено директором 31.08.2026).","2026–2027 timetable (approved by the principal on 31.08.2026)."],
+ addClass:["Сынып қосу","Добавить класс","Add class"], delClass:["Сыныпты жою","Удалить класс","Delete class"], shiftL:["Ауысым","Смена","Shift"],
+ subjPh:["Пән","Предмет","Subject"], roomPh:["Каб.","Каб.","Room"], addLessonB:["+ сабақ","+ урок","+ lesson"], noClasses:["Кесте әлі жүктелмеген","Расписание ещё не загружено","No timetable yet"],
+ pickClass:["Сыныпты таңдаңыз","Выберите класс","Choose a class"], nClasses:["{n} сынып","{n} классов","{n} classes"]};
+for(var _k10 in T10)T[_k10]=T10[_k10];
+var LETTERS="АӘБВГҒДЕЖЗИ";
+function clsSort(a,b){var ga=parseInt(a,10),gb=parseInt(b,10);if(ga!==gb)return ga-gb;return LETTERS.indexOf(a.slice(-1))-LETTERS.indexOf(b.slice(-1))}
+function bellLabel(x,i){return x[2]!=null?x[2]:i+1}
+function bellFor(shift,n){var arr=shift===2?(DATA.bells2||[]):DATA.bells;for(var i=0;i<arr.length;i++)if(bellLabel(arr[i],i)===n)return arr[i];return null}
 /* ------------------------------------------------------------ helpers */
 function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
-var st={atab:"dash",perms:[],isAdmin:false,roleName:"",base:{},meta:null,roles:null,fb:null,fbAdmin:null,fbKind:"all",fbShow:6,fbStatus:"pending",fbA:0,fbB:0,fbStart:0,ptab:"me",uq:"",urole:"all",admin:null,profile:null,lang:(function(){var l=store("gm-lang");return LI[l]!==undefined?l:"kk"})(),route:{page:"home",arg:""},grade:(function(){var g=store("gm-grade");return g&&DATA.schedule[g]?g:"5"})(),
+var st={cls:(function(){try{return localStorage.getItem("gm-cls")||""}catch(e){return""}})(),atab:"dash",perms:[],isAdmin:false,roleName:"",base:{},meta:null,roles:null,fb:null,fbAdmin:null,fbKind:"all",fbShow:6,fbStatus:"pending",fbA:0,fbB:0,fbStart:0,ptab:"me",uq:"",urole:"all",admin:null,profile:null,lang:(function(){var l=store("gm-lang");return LI[l]!==undefined?l:"kk"})(),route:{page:"home",arg:""},grade:"5",
  newsCat:"all",newsQ:"",newsPage:1,progF:"all",year:"all",cal:null,calSel:null,editing:false,canEdit:false,dirty:0,saving:false,sureId:null};
 var art=null;
 function t(k){var v=T[k];return v?v[LI[st.lang]]:k}
@@ -319,11 +332,11 @@ function lessonState(){var n=nowTZ(),b1=DATA.bells,b2=DATA.bells2||[],r;
  r=shiftState(b1,n);if(r.kind!=="after"||!b2.length){r.n=n;r.shift=1;r.b=b1;return r}
  r=shiftState(b2,n);r.n=n;r.shift=2;r.b=b2;if(r.kind==="before")r.kind="before2";return r}
 function nowHTML(){var s=lessonState(),n=s.n,b=s.b,head,sub="",bar="";
- if(s.kind==="lesson"){head=f(t("lesson"),{n:s.i+1});sub=b[s.i][0]+"–"+b[s.i][1]+" · "+f(t("left"),{m:s.left});bar='<div class="pbar"><i style="width:'+s.pct+'%"></i></div>'}
+ if(s.kind==="lesson"){head=f(t("lesson"),{n:bellLabel(b[s.i],s.i)});sub=b[s.i][0]+"–"+b[s.i][1]+" · "+f(t("left"),{m:s.left});bar='<div class="pbar"><i style="width:'+s.pct+'%"></i></div>'}
  else if(s.kind==="break"){head=t("brk");sub=f(t("next"),{t:b[s.i][0]})}else if(s.kind==="before"){head=f(t("before"),{t:b[0][0]})}else if(s.kind==="before2"){head=f(t("before2"),{t:b[0][0]})}else if(s.kind==="after"){head=t("after")}else head=t("weekend");
  return '<div class="now-row"><div class="now-clock tnum">'+pad(n.h)+':'+pad(n.mi)+'</div><div class="now-date">'+esc(WDL[LI[st.lang]][n.wd])+'<br>'+esc(fmtDate(n.y+"-"+pad(n.m)+"-"+pad(n.d)))+'</div></div>'+
   '<div class="now-state">'+((DATA.bells2||[]).length&&s.kind!=="weekend"?'<span class="shiftchip s'+s.shift+'">'+esc(t("shift"+s.shift))+'</span>':'')+'<b>'+esc(head)+'</b><span>'+esc(sub||t("nowT"))+'</span>'+bar+'</div>'+
-  '<div class="bells">'+b.map(function(x,i){return '<div class="'+(s.kind==="lesson"&&s.i===i?"on":"")+'"><b>'+(i+1)+'</b><span class="tnum">'+x[0]+'</span></div>'}).join("")+'</div>'}
+  '<div class="bells">'+b.map(function(x,i){return '<div class="'+(s.kind==="lesson"&&s.i===i?"on":"")+'"><b>'+bellLabel(x,i)+'</b><span class="tnum">'+x[0]+'</span></div>'}).join("")+'</div>'}
 
 /* ------------------------------------------------------------ chrome */
 var NAV=[
@@ -429,18 +442,30 @@ function pagePrograms(){var keys=["primary","basic","senior","extra"],L=LI[st.la
   '<div class="cards four">'+cards+'</div></section>'+
   '<section class="dark3">'+[["m1","file","linear-gradient(135deg,#14532d,#0b2e19)"],["m2","cap","linear-gradient(135deg,#0f172a,#020617)"],["m3","book","linear-gradient(135deg,#134e4a,#0f172a)"]].map(function(m){return '<div class="dcard" style="background:'+m[2]+'"><div class="ico">'+ic(m[1])+'</div><h4>'+esc(t(m[0]))+'</h4><p>'+esc(t(m[0]+"d"))+'</p></div>'}).join("")+'</section></div>'}
 
-function pageSchedule(){var g=st.grade,days=DATA.schedule[g],s=lessonState(),ti=(s.n.wd>=1&&s.n.wd<=5)?s.n.wd-1:-1,L=LI[st.lang];
- var opts=function(sel){return '<option value="">—</option>'+Object.keys(SUBJ).map(function(k){return '<option value="'+k+'"'+(k===sel?" selected":"")+'>'+esc(SUBJ[k][L])+'</option>'}).join("")};
- var cards=days.map(function(ls,di){var isT=di===ti;
-  return '<div class="day'+(isT?" today":"")+'"><h4>'+esc(T.days[L][di])+(isT?'<span class="chip">'+esc(t("today"))+'</span>':'')+'</h4><ol>'+ls.map(function(k,li){var b=DATA.bells[li]||["",""];
-   return '<li class="'+(isT&&s.kind==="lesson"&&s.shift===1&&s.i===li?"cur":"")+'"><span class="n">'+(li+1)+'</span><span><span class="t tnum">'+b[0]+'–'+b[1]+'</span>'+((st.editing&&can("schedule"))?'<select data-cell="'+di+':'+li+'" aria-label="'+esc(T.days[L][di]+" "+(li+1))+'">'+opts(k)+'</select>':'<span class="s">'+esc(subj(k))+'</span>')+'</span></li>'}).join("")+'</ol>'+
-   ((st.editing&&can("schedule"))?'<div style="display:flex;gap:6px;margin-top:8px"><button class="copy" data-addl="'+di+'"'+(ls.length>=DATA.bells.length?" disabled":"")+'>+</button><button class="copy" data-rml="'+di+'"'+(ls.length<=1?" disabled":"")+'>−</button></div>':'')+'</div>'}).join("");
- return banner("navSched","pd_schedule")+'<div class="container page"><section style="display:flex;flex-direction:column;gap:20px"><div class="toolbar"><h2 class="h2" style="margin:0">'+esc(f(t("grade"),{n:g}))+' '+(DATA.scheduleSample?'<span class="chip sample">'+esc(t("sample"))+'</span>':'')+'</h2>'+
-  '<div class="grades" role="group">'+Object.keys(DATA.schedule).sort(function(a,b){return a-b}).map(function(k){return '<button data-grade="'+k+'" aria-pressed="'+(k===g)+'" aria-label="'+esc(f(t("grade"),{n:k}))+'">'+k+'</button>'}).join("")+'</div></div>'+
-  '<div class="days">'+cards+'</div>'+(DATA.scheduleSample?'<p style="color:var(--muted);font-size:13.5px">'+esc(t("schedNote"))+((st.editing&&can("schedule"))?' <button class="copy" data-unsample="1">✓ '+esc(t("sample"))+' ✕</button>':'')+'</p>':'')+'</section>'+
+function pageSchedule(){var C=DATA.classes||{},names=Object.keys(C).sort(clsSort),ed=st.editing&&can("schedule"),L=LI[st.lang];
+ if(!names.length&&!ed)return banner("navSched","pd_schedule")+'<div class="container page"><div class="empty"><b>'+esc(t("noClasses"))+'</b></div></div>';
+ if(!C[st.cls]){st.cls=names[0]||""}
+ var grades=[];names.forEach(function(n){var g=parseInt(n,10);if(grades.indexOf(g)<0)grades.push(g)});
+ var g=parseInt(st.cls,10),letters=names.filter(function(n){return parseInt(n,10)===g});
+ var picker='<div class="ttpick"><div class="ttrow"><span class="ttlab">'+esc(t("gradeL"))+'</span><div class="grades">'+grades.map(function(x){return '<button data-ttgrade="'+x+'" aria-pressed="'+(x===g)+'">'+x+'</button>'}).join("")+'</div></div>'+
+  '<div class="ttrow"><span class="ttlab">'+esc(t("letterL"))+'</span><div class="grades">'+letters.map(function(n){return '<button data-ttcls="'+esc(n)+'" aria-pressed="'+(n===st.cls)+'">'+esc(n.slice(String(g).length))+'</button>'}).join("")+'</div></div></div>';
+ var c=C[st.cls],s=lessonState(),ti=(s.n.wd>=1&&s.n.wd<=5)?s.n.wd-1:-1;
+ var body='';
+ if(c){var curN=(s.kind==="lesson"&&s.shift===c.shift)?bellLabel(s.b[s.i],s.i):null;
+  body='<div class="tthead"><h2 class="h2" style="margin:0">'+esc(f(t("clsTitle"),{c:st.cls}))+'</h2><span class="shiftchip s'+c.shift+'">'+esc(t("shift"+c.shift))+'</span>'+
+   (ed?'<label class="ttshift">'+esc(t("shiftL"))+' <select data-ttshift="1"><option value="1"'+(c.shift===1?" selected":"")+'>1</option><option value="2"'+(c.shift===2?" selected":"")+'>2</option></select></label><button class="btn btn-danger" data-ttdelcls="1" style="padding:6px 12px;font-size:12.5px">'+esc(st.sureId==="cls"+st.cls?t("sure"):t("delClass"))+'</button>':'')+'</div>'+
+   '<div class="days">'+c.days.map(function(ls,di){var isT=di===ti;var sorted=ls.map(function(l,idx){return{l:l,idx:idx}}).sort(function(x,y){return x.l.n-y.l.n});
+    return '<div class="day'+(isT?" today":"")+'"><h4>'+esc(T.days[L][di])+(isT?'<span class="chip">'+esc(t("today"))+'</span>':'')+'</h4>'+
+     (sorted.length?'<ol>'+sorted.map(function(o){var l=o.l,bb=bellFor(c.shift,l.n),cur=isT&&curN===l.n,rm=l.r==="с/з"?t("gym"):(l.r?t("roomL")+" "+l.r:"");
+      if(ed)return '<li class="tted"><span class="n">'+l.n+'</span><span><span class="t tnum">'+(bb?bb[0]+'–'+bb[1]:'')+'</span><input class="tts" data-tts="'+di+':'+o.idx+'" value="'+esc(l.s)+'" placeholder="'+esc(t("subjPh"))+'"><span class="ttr2"><input class="ttr" data-ttr="'+di+':'+o.idx+'" value="'+esc(l.r)+'" placeholder="'+esc(t("roomPh"))+'"><button class="copy" data-ttdel="'+di+':'+o.idx+'" aria-label="'+esc(t("del"))+'">×</button></span></span></li>';
+      return '<li class="'+(cur?"cur":"")+'"><span class="n">'+l.n+'</span><span><span class="t tnum">'+(bb?bb[0]+'–'+bb[1]:'')+'</span><span class="s">'+esc(l.s)+'</span>'+(rm?'<span class="rm">'+esc(rm)+'</span>':'')+'</span></li>'}).join("")+'</ol>':'<p class="hint" style="text-align:left">'+esc(t("noLessons"))+'</p>')+
+     (ed?'<button class="copy" data-ttadd="'+di+'" style="margin-top:8px">'+esc(t("addLessonB"))+'</button>':'')+'</div>'}).join("")+'</div>'+
+   '<p class="hint" style="text-align:left;margin-top:12px">'+esc(t("ttLegend"))+'</p>'}
+ var addForm=ed?'<form class="panel form ttaddform" id="ttAddForm" style="flex-direction:row;flex-wrap:wrap;align-items:end;gap:10px;margin:0"><b style="width:100%">'+esc(t("addClass"))+'</b><label>'+esc(t("gradeL"))+'<input id="tta-g" type="number" min="1" max="11" value="'+(g||1)+'" style="width:90px"></label><label>'+esc(t("letterL"))+'<select id="tta-l">'+LETTERS.split("").map(function(x){return '<option>'+x+'</option>'}).join("")+'</select></label><label>'+esc(t("shiftL"))+'<select id="tta-s"><option value="1">1</option><option value="2">2</option></select></label><button class="btn btn-primary" type="submit">'+esc(t("add"))+'</button></form>':'';
+ return banner("navSched","pd_schedule")+'<div class="container page"><section style="display:flex;flex-direction:column;gap:18px">'+picker+body+addForm+'<p class="hint" style="text-align:left;margin:0">'+esc(t("ttSource"))+'</p></section>'+
   bellsSection(DATA.bells,"bell","bells1T")+bellsSection(DATA.bells2||[],"bell2","bells2T")+'</div>'}
 function bellsSection(arr,key,title){var ed=st.editing&&can("schedule");if(!arr.length&&!ed)return"";
- return '<section><h2 class="h2">'+esc(t(title))+'</h2><div class="bellgrid">'+arr.map(function(b,i){return '<div>'+(ed?'<b>'+(i+1)+'</b><input data-'+key+'="'+i+':0" value="'+b[0]+'" style="width:58px;border:1px solid var(--line);border-radius:6px;padding:2px 4px">–<input data-'+key+'="'+i+':1" value="'+b[1]+'" style="width:58px;border:1px solid var(--line);border-radius:6px;padding:2px 4px">':'<b>'+esc(f(t("lesson"),{n:i+1}))+'</b><span class="tnum">'+b[0]+'–'+b[1]+'</span>')+'</div>'}).join("")+'</div>'+
+ return '<section><h2 class="h2">'+esc(t(title))+'</h2><div class="bellgrid">'+arr.map(function(b,i){return '<div>'+(ed?'<b>'+bellLabel(b,i)+'</b><input data-'+key+'="'+i+':0" value="'+b[0]+'" style="width:58px;border:1px solid var(--line);border-radius:6px;padding:2px 4px">–<input data-'+key+'="'+i+':1" value="'+b[1]+'" style="width:58px;border:1px solid var(--line);border-radius:6px;padding:2px 4px">':'<b>'+esc(f(t("lesson"),{n:bellLabel(b,i)}))+'</b><span class="tnum">'+b[0]+'–'+b[1]+'</span>')+'</div>'}).join("")+'</div>'+
  (ed&&key==="bell2"?'<div style="display:flex;gap:6px;margin-top:10px"><button class="copy" data-b2add="1">'+esc(t("addBell"))+'</button><button class="copy" data-b2rm="1"'+(arr.length?'':' disabled')+'>'+esc(t("rmBell"))+'</button></div>':'')+'</section>'}
 
 function pageOlympiad(){var byYear={};DATA.achievements.forEach(function(a){(byYear[a.year]=byYear[a.year]||[]).push(a)});var years=Object.keys(byYear).sort().reverse();
@@ -674,14 +699,14 @@ function shrink(file,M){return new Promise(function(res){var r=new FileReader();
 
 /* ------------------------------------------------------------ events */
 document.addEventListener("click",function(e){
- var el=e.target.closest("[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-addl],[data-rml],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
+ var el=e.target.closest("[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
  if(!el)return;var d=el.dataset;
  if(d.close!==undefined){if(e.target===el||el.tagName==="BUTTON"){closeLayer()}return}
  if(el.tagName==="A"&&el.getAttribute("href").charAt(0)==="#"){if(el.getAttribute("href")==="#"+(location.hash.replace(/^#/,"")||"home")){e.preventDefault();parseHash()}return}
  if(d.lang){st.lang=d.lang;store("gm-lang",d.lang);closeLayer();render(true);return}
  if(d.open==="drawer"){openDrawer();return} if(d.open==="login"){openLogin();return} if(d.open==="account"){closeLayer();location.hash="profile";return}
  if(d.ptab){st.ptab=d.ptab;render(true);return}
- if(d.b2add){DATA.bells2=DATA.bells2||[];var lb=DATA.bells2[DATA.bells2.length-1],st0=lb?toMin(lb[1])+5:toMin(DATA.bells[DATA.bells.length-1][1])+10;var hm=function(m){return pad(Math.floor(m/60)%24)+":"+pad(m%60)};DATA.bells2.push([hm(st0),hm(st0+45)]);dirty();render(true);return}
+ if(d.b2add){DATA.bells2=DATA.bells2||[];var lb=DATA.bells2[DATA.bells2.length-1],st0=lb?toMin(lb[1])+5:toMin(DATA.bells[DATA.bells.length-1][1])+10;var hm=function(m){return pad(Math.floor(m/60)%24)+":"+pad(m%60)};DATA.bells2.push([hm(st0),hm(st0+45),lb?(lb[2]!=null?lb[2]+1:DATA.bells2.length+1):0]);dirty();render(true);return}
  if(d.b2rm){DATA.bells2.pop();dirty();render(true);return}
  if(d.atab){st.atab=d.atab;render(true);window.scrollTo(0,0);return}
  if(d.goedit){st.editing=true;location.hash=d.goedit;return}
@@ -704,7 +729,11 @@ document.addEventListener("click",function(e){
  if(d.npage){st.newsPage=+d.npage;render();document.getElementById("main").scrollIntoView();return}
  if(d.progf){st.progF=d.progf;render(true);return}
  if(d.prog){openProg(d.prog);return}
- if(d.grade){st.grade=d.grade;store("gm-grade",d.grade);render(true);return}
+ if(d.ttgrade){var nm=Object.keys(DATA.classes).sort(clsSort).filter(function(n){return parseInt(n,10)===+d.ttgrade});if(nm.length){st.cls=nm[0];store("gm-cls",st.cls)}render(true);return}
+ if(d.ttcls){st.cls=d.ttcls;store("gm-cls",st.cls);render(true);return}
+ if(d.ttadd!==undefined){var dd=DATA.classes[st.cls].days[+d.ttadd],mx=dd.reduce(function(m,l){return Math.max(m,l.n)},-1),first=bellLabel((DATA.classes[st.cls].shift===2?DATA.bells2:DATA.bells)[0]||[0,0,1],0);dd.push({n:mx<0?first:mx+1,s:"",r:""});dirty();render(true);return}
+ if(d.ttdel){var pq=d.ttdel.split(":");DATA.classes[st.cls].days[+pq[0]].splice(+pq[1],1);dirty();render(true);return}
+ if(d.ttdelcls){if(st.sureId!=="cls"+st.cls){st.sureId="cls"+st.cls;render(true);return}st.sureId=null;delete DATA.classes[st.cls];st.cls="";dirty();render(true);return}
  if(d.calm){var m=st.cal.m+(+d.calm),y=st.cal.y;if(m<1){m=12;y--}if(m>12){m=1;y++}st.cal={y:y,m:m};st.calSel=null;render(true);return}
  if(d.day){st.calSel=st.calSel===d.day?null:d.day;render(true);return}
  if(d.year){st.year=d.year;render(true);return}
@@ -713,9 +742,9 @@ document.addEventListener("click",function(e){
  if(d.edit){e.preventDefault();openEditor(d.edit,d.id);return}
  if(d.del){e.preventDefault();var key=d.del+d.id;if(st.sureId!==key){st.sureId=key;render(true);return}DATA[d.del]=DATA[d.del].filter(function(x){return x.id!==d.id});st.sureId=null;dirty();if(st.route.arg===d.id)location.hash=d.del==="posts"?"news":"gallery";render(true);return}
  if(d.add){e.preventDefault();openEditor(d.add,null,d.preset?JSON.parse(d.preset):null);return}
- if(d.addl!==undefined){DATA.schedule[st.grade][+d.addl].push("");dirty();render(true);return}
- if(d.rml!==undefined){DATA.schedule[st.grade][+d.rml].pop();dirty();render(true);return}
- if(d.unsample){DATA.scheduleSample=false;dirty();render(true);return}
+ 
+ 
+ 
  if(d.delph){var r=d.delph.split(":"),al=DATA.albums.filter(function(x){return x.id===r[0]})[0];al.photos.splice(+r[1],1);dirty();render(true);return}
  if(d.clearimg){edImg=null;document.getElementById("edprev").innerHTML="";return}
 });
@@ -724,13 +753,15 @@ document.addEventListener("input",function(e){if(e.target.id==="newsq"){st.newsQ
  var list=sortedPosts().filter(function(p){return(st.newsCat==="all"||p.cat===st.newsCat)&&(!q||(pick(p.title)+" "+pick(p.text)).toLowerCase().indexOf(q)>=0)});
  document.getElementById("newslist").innerHTML=newsList(list.slice(0,9),Math.max(1,Math.ceil(list.length/9)))}});
 document.addEventListener("change",function(e){var d=e.target.dataset;
- if(d.cell){var p=d.cell.split(":");DATA.schedule[st.grade][+p[0]][+p[1]]=e.target.value;dirty();refreshBar();return}
+ 
+ if(d.tts||d.ttr){var pp=(d.tts||d.ttr).split(":"),ll=DATA.classes[st.cls].days[+pp[0]][+pp[1]];if(d.tts)ll.s=e.target.value.trim();else ll.r=e.target.value.trim();dirty();refreshBar();return}
+ if(d.ttshift){DATA.classes[st.cls].shift=+e.target.value;dirty();render(true);return}
  if(d.bell){if(!/^[0-2]\d:[0-5]\d$/.test(e.target.value))return;var q=d.bell.split(":");DATA.bells[+q[0]][+q[1]]=e.target.value;dirty();refreshBar();return}
  if(d.bell2){if(!/^[0-2]\d:[0-5]\d$/.test(e.target.value))return;var q2=d.bell2.split(":");DATA.bells2[+q2[0]][+q2[1]]=e.target.value;dirty();refreshBar();return}
  if(d.edimg){var fl=e.target.files[0];if(!fl)return;var pv=document.getElementById("edprev");pv.textContent=t("uploading");(d.edimg==="logo"?shrinkLogo(fl,400):shrink(fl,1400)).then(uploadImg).then(function(src){if(!src){pv.textContent=t("upErr");return}edImg=src;pv.innerHTML='<img class="prev" src="'+esc(src)+'" alt="">'});return}
  if(d.upload){var al=DATA.albums.filter(function(x){return x.id===d.upload})[0],files=[].slice.call(e.target.files||[]);
   toast(t("uploading"));Promise.all(files.map(function(fl){return shrink(fl,1600).then(uploadImg)})).then(function(srcs){var n=0;srcs.forEach(function(s){if(s){al.photos.push({src:s,cap:{}});n++}});if(n<srcs.length)toast(t("upErr"));if(n){delete al.sample;dirty();render(true)}})}});
-document.addEventListener("submit",function(e){if(/^auth/.test(e.target.id)){e.preventDefault();e.stopPropagation();submitAuth(e.target)}else if(e.target.dataset&&e.target.dataset.roleform!==undefined){e.preventDefault();e.stopPropagation();saveRole(e.target)}else if(e.target.id==="fbForm"){e.preventDefault();e.stopPropagation();if(sb)submitFb(e.target)}else if(e.target.dataset&&e.target.dataset.fbreply){e.preventDefault();e.stopPropagation();var fid=e.target.dataset.fbreply;fbUpdate(fid,{reply:document.getElementById("rep-"+fid).value.trim()||null})}else if(e.target.id==="profForm"){e.preventDefault();e.stopPropagation();saveProfile(e.target)}},true);
+document.addEventListener("submit",function(e){if(/^auth/.test(e.target.id)){e.preventDefault();e.stopPropagation();submitAuth(e.target)}else if(e.target.dataset&&e.target.dataset.roleform!==undefined){e.preventDefault();e.stopPropagation();saveRole(e.target)}else if(e.target.id==="ttAddForm"){e.preventDefault();e.stopPropagation();var gg=parseInt(document.getElementById("tta-g").value,10),lt=document.getElementById("tta-l").value,nm2=gg+lt;if(gg>=1&&gg<=11&&!DATA.classes[nm2]){DATA.classes[nm2]={shift:+document.getElementById("tta-s").value,days:[[],[],[],[],[]]};st.cls=nm2;dirty();render(true)}}else if(e.target.id==="fbForm"){e.preventDefault();e.stopPropagation();if(sb)submitFb(e.target)}else if(e.target.dataset&&e.target.dataset.fbreply){e.preventDefault();e.stopPropagation();var fid=e.target.dataset.fbreply;fbUpdate(fid,{reply:document.getElementById("rep-"+fid).value.trim()||null})}else if(e.target.id==="profForm"){e.preventDefault();e.stopPropagation();saveProfile(e.target)}},true);
 document.addEventListener("input",function(e){if(e.target.id==="fb-text"){var c=document.getElementById("fb-cnt");if(c)c.textContent=e.target.value.length+" / 1500"}if(e.target.id==="uq"){st.uq=e.target.value;var l=document.getElementById("ulistP");if(l)l.innerHTML=userRows()}});
 document.addEventListener("change",function(e){if(e.target.dataset&&e.target.dataset.setrole){var sel=e.target,uid=sel.dataset.setrole;sel.disabled=true;sb.rpc("set_role",{target:uid,role:sel.value||null}).then(function(r){sel.disabled=false;if(r.error){toast(/last/i.test(r.error.message)?t("lastAdmin"):t("e_generic"));st.admin=null;render(true);return}st.admin.staff[uid]=sel.value||undefined;if(!sel.value)delete st.admin.staff[uid];toast(t("adminChanged"))});return}
  if(e.target.dataset&&e.target.dataset.avatar){var f=e.target.files[0];if(f)uploadAvatar(f)}});
@@ -845,7 +876,7 @@ function pageAdmin(){
  return '<div class="adminwrap"><div class="container"><div class="adm">'+side+'<section class="amain"><div class="atop"><div><span class="eyebrow">'+esc(t("adminPanel"))+'</span><h1>'+esc(t(title))+'</h1></div>'+(st.dirty?'<span class="chip sample">'+esc(f(t("unsaved"),{n:st.dirty}))+'</span>':'')+'</div>'+body+'</section></div></div></div>'}
 function tabContent(){var photos=DATA.albums.reduce(function(s,a){return s+a.photos.length},0);
  var cards=[["news","mega","navNews","news",DATA.posts.length],["events","cal","navEvents","events",DATA.events.length],["gallery","image","navGallery","gallery",photos],
-  ["schedule","cal","navSched","schedule","1–11"],["about","build","navAbout","about",DATA.staff.length+DATA.facilities.length],["about","users","navTeachers","about.teachers",DATA.staff.filter(function(x){return x.group==="teacher"}).length],
+  ["schedule","cal","navSched","schedule",f(t("nClasses"),{n:Object.keys(DATA.classes).length})],["about","build","navAbout","about",DATA.staff.length+DATA.facilities.length],["about","users","navTeachers","about.teachers",DATA.staff.filter(function(x){return x.group==="teacher"}).length],
   ["life","star","navClubs","clubs",DATA.clubs.length],["life","trophy","navOlymp","olympiad",DATA.achievements.length],["life","cap","navAlumni","alumni",DATA.alumni.length],
   ["docs","link","navRes","docs",DATA.docs.length],["about","msg","faqT","contacts.faq",DATA.faq.length],["about","build","partnersT","home",DATA.partners.length]].filter(function(c){return can(c[0])});
  return '<p class="hint" style="text-align:left;margin:0 0 16px">'+esc(t("a_contentHint"))+'</p><div class="acards">'+cards.map(function(c){
@@ -919,7 +950,7 @@ function publish(){if(!sb||!st.user||st.saving)return;
 
 /* ------------------------------------------------------------ boot */
 function normalize(){if(!DATA.settings.motto)DATA.settings.motto={kk:"Білімді ұрпақ — ауылдың ертеңі",ru:"Образованное поколение — будущее села",en:"An educated generation is the village's future"};
- ["posts","events","clubs","facilities","docs","faq","albums","partners","achievements","alumni","staff"].forEach(function(k){if(!Array.isArray(DATA[k]))DATA[k]=[]});if(!Array.isArray(DATA.bells2))DATA.bells2=[["15:00","15:45"],["15:50","16:35"],["16:45","17:30"],["17:35","18:20"],["18:25","19:10"],["19:15","20:00"]]}
+ ["posts","events","clubs","facilities","docs","faq","albums","partners","achievements","alumni","staff"].forEach(function(k){if(!Array.isArray(DATA[k]))DATA[k]=[]});if(!DATA.classes||typeof DATA.classes!=="object")DATA.classes={};if(!Array.isArray(DATA.bells2))DATA.bells2=[["15:00","15:45"],["15:50","16:35"],["16:45","17:30"],["17:35","18:20"],["18:25","19:10"],["19:15","20:00"]]}
 normalize();snapshot();
 if(/access_token=|error_description=|type=recovery/.test(location.hash))history.replaceState(null,"",location.pathname+location.search+"#home");
 parseHash();
