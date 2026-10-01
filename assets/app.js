@@ -290,7 +290,7 @@ for(var _k9 in T9)T[_k9]=T9[_k9];
 
 var T10={clsTitle:["{c} сынып","{c} класс","Class {c}"], gradeL:["Параллель","Параллель","Grade"], letterL:["Әрпі","Буква","Letter"],
  roomL:["каб.","каб.","room"], gym:["спорт залы","спортзал","gym"], noLessons:["Сабақ жоқ","Уроков нет","No lessons"],
- ttLegend:["(к) — кеңейтілген, (т) — тереңдетілген, (у) — углублённый, (р) — расширенный. с/з — спорт залы.","(к) — кеңейтілген, (т) — тереңдетілген, (у) — углублённый, (р) — расширенный. с/з — спортзал.","(к), (р) — extended course; (т), (у) — advanced course. с/з — gym."],
+ ttLegend:["(к) — кеңейтілген, (т) — тереңдетілген, (у) — углублённый, (р) — расширенный.","(к) — кеңейтілген, (т) — тереңдетілген, (у) — углублённый, (р) — расширенный.","(к), (р) — extended course; (т), (у) — advanced course."],
  ttSource:["2026–2027 оқу жылының сабақ кестесі (директор бекіткен, 31.08.2026).","Расписание на 2026–2027 учебный год (утверждено директором 31.08.2026).","2026–2027 timetable (approved by the principal on 31.08.2026)."],
  addClass:["Сынып қосу","Добавить класс","Add class"], delClass:["Сыныпты жою","Удалить класс","Delete class"], shiftL:["Ауысым","Смена","Shift"],
  subjPh:["Пән","Предмет","Subject"], roomPh:["Каб.","Каб.","Room"], addLessonB:["+ сабақ","+ урок","+ lesson"], noClasses:["Кесте әлі жүктелмеген","Расписание ещё не загружено","No timetable yet"],
@@ -298,6 +298,12 @@ var T10={clsTitle:["{c} сынып","{c} класс","Class {c}"], gradeL:["Па
 for(var _k10 in T10)T[_k10]=T10[_k10];
 var LETTERS="АӘБВГҒДЕЖЗИ";
 function clsSort(a,b){var ga=parseInt(a,10),gb=parseInt(b,10);if(ga!==gb)return ga-gb;return LETTERS.indexOf(a.slice(-1))-LETTERS.indexOf(b.slice(-1))}
+var T11={pickSubj:["— Пәнді таңдаңыз —","— Выберите предмет —","— Choose a subject —"],otherSubj:["＋ Басқа пән (жазу)…","＋ Другой предмет (ввести)…","＋ Other subject (type)…"],newSubjPh:["Жаңа пәннің атауы","Название нового предмета","New subject name"]};
+for(var _k11 in T11)T[_k11]=T11[_k11];
+function allSubjects(){var m={};Object.keys(DATA.classes||{}).forEach(function(k){DATA.classes[k].days.forEach(function(d){d.forEach(function(l){if(l.s)m[l.s]=1})})});(st.ttExtra||[]).forEach(function(s){m[s]=1});return Object.keys(m).sort(function(a,b){return a.localeCompare(b,"kk")})}
+function subjSelect(di,idx,cur){var key=di+":"+idx;st.ttCustom=st.ttCustom||{};
+ if(st.ttCustom[key])return '<input class="tts" data-tts="'+key+'" value="" placeholder="'+esc(t("newSubjPh"))+'">';
+ var subs=allSubjects();return '<select class="tts" data-ttsel="'+key+'"><option value="">'+esc(t("pickSubj"))+'</option>'+subs.map(function(s){return '<option'+(s===cur?" selected":"")+'>'+esc(s)+'</option>'}).join("")+'<option value="__new__">'+esc(t("otherSubj"))+'</option></select>'}
 function bellLabel(x,i){return x[2]!=null?x[2]:i+1}
 function bellFor(shift,n){var arr=shift===2?(DATA.bells2||[]):DATA.bells;for(var i=0;i<arr.length;i++)if(bellLabel(arr[i],i)===n)return arr[i];return null}
 /* ------------------------------------------------------------ helpers */
@@ -456,9 +462,9 @@ function pageSchedule(){var C=DATA.classes||{},names=Object.keys(C).sort(clsSort
    (ed?'<label class="ttshift">'+esc(t("shiftL"))+' <select data-ttshift="1"><option value="1"'+(c.shift===1?" selected":"")+'>1</option><option value="2"'+(c.shift===2?" selected":"")+'>2</option></select></label><button class="btn btn-danger" data-ttdelcls="1" style="padding:6px 12px;font-size:12.5px">'+esc(st.sureId==="cls"+st.cls?t("sure"):t("delClass"))+'</button>':'')+'</div>'+
    '<div class="days">'+c.days.map(function(ls,di){var isT=di===ti;var sorted=ls.map(function(l,idx){return{l:l,idx:idx}}).sort(function(x,y){return x.l.n-y.l.n});
     return '<div class="day'+(isT?" today":"")+'"><h4>'+esc(T.days[L][di])+(isT?'<span class="chip">'+esc(t("today"))+'</span>':'')+'</h4>'+
-     (sorted.length?'<ol>'+sorted.map(function(o){var l=o.l,bb=bellFor(c.shift,l.n),cur=isT&&curN===l.n,rm=l.r==="с/з"?t("gym"):(l.r?t("roomL")+" "+l.r:"");
-      if(ed)return '<li class="tted"><span class="n">'+l.n+'</span><span><span class="t tnum">'+(bb?bb[0]+'–'+bb[1]:'')+'</span><input class="tts" data-tts="'+di+':'+o.idx+'" value="'+esc(l.s)+'" placeholder="'+esc(t("subjPh"))+'"><span class="ttr2"><input class="ttr" data-ttr="'+di+':'+o.idx+'" value="'+esc(l.r)+'" placeholder="'+esc(t("roomPh"))+'"><button class="copy" data-ttdel="'+di+':'+o.idx+'" aria-label="'+esc(t("del"))+'">×</button></span></span></li>';
-      return '<li class="'+(cur?"cur":"")+'"><span class="n">'+l.n+'</span><span><span class="t tnum">'+(bb?bb[0]+'–'+bb[1]:'')+'</span><span class="s">'+esc(l.s)+'</span>'+(rm?'<span class="rm">'+esc(rm)+'</span>':'')+'</span></li>'}).join("")+'</ol>':'<p class="hint" style="text-align:left">'+esc(t("noLessons"))+'</p>')+
+     (sorted.length?'<ol>'+sorted.map(function(o){var l=o.l,bb=bellFor(c.shift,l.n),cur=isT&&curN===l.n;
+      if(ed)return '<li class="tted"><span class="n">'+l.n+'</span><span><span class="t tnum">'+(bb?bb[0]+'–'+bb[1]:'')+'</span><span class="ttr2">'+subjSelect(di,o.idx,l.s)+'<button class="copy" data-ttdel="'+di+':'+o.idx+'" aria-label="'+esc(t("del"))+'">×</button></span></span></li>';
+      return '<li class="'+(cur?"cur":"")+'"><span class="n">'+l.n+'</span><span><span class="t tnum">'+(bb?bb[0]+'–'+bb[1]:'')+'</span><span class="s">'+esc(l.s)+'</span></span></li>'}).join("")+'</ol>':'<p class="hint" style="text-align:left">'+esc(t("noLessons"))+'</p>')+
      (ed?'<button class="copy" data-ttadd="'+di+'" style="margin-top:8px">'+esc(t("addLessonB"))+'</button>':'')+'</div>'}).join("")+'</div>'+
    '<p class="hint" style="text-align:left;margin-top:12px">'+esc(t("ttLegend"))+'</p>'}
  var addForm=ed?'<form class="panel form ttaddform" id="ttAddForm" style="flex-direction:row;flex-wrap:wrap;align-items:end;gap:10px;margin:0"><b style="width:100%">'+esc(t("addClass"))+'</b><label>'+esc(t("gradeL"))+'<input id="tta-g" type="number" min="1" max="11" value="'+(g||1)+'" style="width:90px"></label><label>'+esc(t("letterL"))+'<select id="tta-l">'+LETTERS.split("").map(function(x){return '<option>'+x+'</option>'}).join("")+'</select></label><label>'+esc(t("shiftL"))+'<select id="tta-s"><option value="1">1</option><option value="2">2</option></select></label><button class="btn btn-primary" type="submit">'+esc(t("add"))+'</button></form>':'';
@@ -754,7 +760,8 @@ document.addEventListener("input",function(e){if(e.target.id==="newsq"){st.newsQ
  document.getElementById("newslist").innerHTML=newsList(list.slice(0,9),Math.max(1,Math.ceil(list.length/9)))}});
 document.addEventListener("change",function(e){var d=e.target.dataset;
  
- if(d.tts||d.ttr){var pp=(d.tts||d.ttr).split(":"),ll=DATA.classes[st.cls].days[+pp[0]][+pp[1]];if(d.tts)ll.s=e.target.value.trim();else ll.r=e.target.value.trim();dirty();refreshBar();return}
+ if(d.ttsel){var px=d.ttsel.split(":"),lx=DATA.classes[st.cls].days[+px[0]][+px[1]];if(e.target.value==="__new__"){st.ttCustom=st.ttCustom||{};st.ttCustom[d.ttsel]=1;render(true);var inp=document.querySelector('[data-tts="'+d.ttsel+'"]');if(inp)inp.focus();return}lx.s=e.target.value;dirty();refreshBar();return}
+ if(d.tts){var pp=d.tts.split(":"),ll=DATA.classes[st.cls].days[+pp[0]][+pp[1]],v=e.target.value.trim();if(v){ll.s=v;st.ttExtra=st.ttExtra||[];if(st.ttExtra.indexOf(v)<0)st.ttExtra.push(v)}if(st.ttCustom)delete st.ttCustom[d.tts];dirty();render(true);return}
  if(d.ttshift){DATA.classes[st.cls].shift=+e.target.value;dirty();render(true);return}
  if(d.bell){if(!/^[0-2]\d:[0-5]\d$/.test(e.target.value))return;var q=d.bell.split(":");DATA.bells[+q[0]][+q[1]]=e.target.value;dirty();refreshBar();return}
  if(d.bell2){if(!/^[0-2]\d:[0-5]\d$/.test(e.target.value))return;var q2=d.bell2.split(":");DATA.bells2[+q2[0]][+q2[1]]=e.target.value;dirty();refreshBar();return}
