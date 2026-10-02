@@ -26,8 +26,8 @@ create table if not exists public.roles (
 alter table public.roles enable row level security;
 
 insert into public.roles (id, name, perms, is_system) values
-  ('admin',     'Әкімші / Администратор', array['news','events','gallery','schedule','about','life','docs','settings','feedback','users'], true),
-  ('secretary', 'Хатшы / Секретарь',      array['news','events','gallery','schedule','about','life','docs','settings','feedback'], false),
+  ('admin',     'Әкімші / Администратор', array['news','events','gallery','schedule','about','life','docs','settings','projects','feedback','users'], true),
+  ('secretary', 'Хатшы / Секретарь',      array['news','events','gallery','schedule','about','life','docs','settings','projects','feedback'], false),
   ('teacher',   'Мұғалім / Учитель',      array['news','events','gallery'], false)
 on conflict (id) do nothing;
 
@@ -101,20 +101,29 @@ alter table public.site_content enable row level security;
 
 create or replace function public.section_perm(section text)
 returns text language sql immutable set search_path = public as $$
-  select case section
-    when 'posts' then 'news'  when 'events' then 'events'  when 'albums' then 'gallery'
-    when 'schedule' then 'schedule'  when 'docs' then 'docs'  when 'settings' then 'settings'
-    when 'staff' then 'about' when 'facilities' then 'about' when 'partners' then 'about' when 'faq' then 'about'
-    when 'clubs' then 'life'  when 'achievements' then 'life' when 'alumni' then 'life'
+  select case
+    when section = 'posts' then 'news'  when section = 'events' then 'events'  when section = 'albums' then 'gallery'
+    when section = 'schedule' then 'schedule'  when section = 'docs' then 'docs'  when section = 'settings' then 'settings'
+    when section in ('staff','facilities','partners','faq') then 'about'
+    when section in ('clubs','achievements','alumni') then 'life'
+    when section = 'projects' or section like 'pi\_%' then 'projects'
     else 'users' end;
 $$;
+
+-- Жоба материалдары (pi_<id>): "projects" құқығы немесе тек сол жобаның "p_<id>" құқығы
+create or replace function public.can_edit_section(section text)
+returns boolean language sql stable security definer set search_path = public as $$
+  select public.has_perm(public.section_perm(section))
+      or (section like 'pi\_%' and public.has_perm('p_' || substr(section, 4)));
+$$;
+revoke execute on function public.can_edit_section(text) from anon;
 
 drop policy if exists "content read"   on public.site_content;
 drop policy if exists "content insert" on public.site_content;
 drop policy if exists "content update" on public.site_content;
 create policy "content read"   on public.site_content for select to anon, authenticated using (true);
-create policy "content insert" on public.site_content for insert to authenticated with check (public.has_perm(public.section_perm(id)));
-create policy "content update" on public.site_content for update to authenticated using (public.has_perm(public.section_perm(id))) with check (public.has_perm(public.section_perm(id)));
+create policy "content insert" on public.site_content for insert to authenticated with check (public.can_edit_section(id));
+create policy "content update" on public.site_content for update to authenticated using (public.can_edit_section(id)) with check (public.can_edit_section(id));
 
 -- ---------- Профильдер ----------
 create table if not exists public.profiles (
@@ -166,8 +175,8 @@ create trigger on_auth_user_confirmed after insert or update of email_confirmed_
 
 -- ---------- Фото сақтау орны ----------
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('media', 'media', true, 5242880, array['image/jpeg','image/png','image/webp'])
-on conflict (id) do update set public = true, file_size_limit = 5242880, allowed_mime_types = array['image/jpeg','image/png','image/webp'];
+values ('media', 'media', true, 20971520, array['image/jpeg','image/png','image/webp','application/pdf'])
+on conflict (id) do update set public = true, file_size_limit = 20971520, allowed_mime_types = array['image/jpeg','image/png','image/webp','application/pdf'];
 
 drop policy if exists "media staff insert" on storage.objects;
 drop policy if exists "media staff update" on storage.objects;
