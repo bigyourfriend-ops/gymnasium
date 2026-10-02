@@ -707,3 +707,5 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 .pcard .pjlogo{background:radial-gradient(circle at 50% 45%,var(--b50),#fff 72%)}
 .header .logo{margin-right:14px}
 @media (max-width:600px){.pitems.issues{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pitems.issues .pib{padding:10px 12px 12px}.pitems.issues .pib h4{font-size:14px}}
+.partner span{min-width:0;overflow-wrap:anywhere;line-height:1.35}
+@media (max-width:520px){.partners{gap:10px}.partner{flex-direction:column;justify-content:flex-start;text-align:center;padding:14px 10px;gap:8px;font-size:12.5px;min-height:0}.partner .plogo{width:52px;height:52px}.partner:has(.ed){padding-right:10px;padding-top:50px}}
