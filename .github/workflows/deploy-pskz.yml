@@ -1,11 +1,19 @@
 # Выгрузка сайта на хостинг PS.kz (gmonline.kz) по FTP.
 # Запуск вручную: GitHub → Actions → «Выгрузка на gmonline.kz» → Run workflow.
+# Режим «zaglushka» — на домене страница «Сайт в разработке» (файлы сайта с хостинга убираются).
+# Режим «sait» — выкладывается полный сайт.
 # Нужны секреты репозитория: FTP_SERVER, FTP_USERNAME, FTP_PASSWORD
 # (домашняя папка FTP-учётки — /httpdocs).
 name: Выгрузка на gmonline.kz
 
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: "Что выложить: zaglushka — «Сайт в разработке», sait — полный сайт"
+        type: choice
+        options: [zaglushka, sait]
+        default: zaglushka
 
 concurrency:
   group: deploy-pskz
@@ -28,6 +36,17 @@ jobs:
             exit 1
           fi
 
+      - name: Подготовка файлов
+        run: |
+          mkdir -p _out
+          if [ "${{ inputs.mode }}" = "sait" ]; then
+            cp -r index.html config.js assets .nojekyll _out/
+          else
+            cp maintenance/index.html maintenance/logo.png _out/
+            printf 'User-agent: *\nDisallow: /\n' > _out/robots.txt
+          fi
+          ls -la _out
+
       - name: Выгрузка файлов по FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -35,10 +54,5 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
+          local-dir: ./_out/
           server-dir: ./
-          exclude: |
-            **/.git*
-            **/.git*/**
-            .github/**
-            supabase/**
-            README.md
