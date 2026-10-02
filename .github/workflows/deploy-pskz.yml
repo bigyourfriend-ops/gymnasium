@@ -1,15 +1,22 @@
-# Выгрузка сайта на хостинг PS.kz (gmonline.kz).
-# Запускается только вручную: GitHub → Actions → «Выгрузить на gmonline.kz» → Run workflow.
+# Выгрузка сайта на хостинг PS.kz (gmonline.kz) по FTP.
+# Запуск вручную: GitHub → Actions → «Выгрузка на gmonline.kz» → Run workflow.
 # Нужны секреты репозитория: FTP_SERVER, FTP_USERNAME, FTP_PASSWORD
-# (учётная запись FTP с домашней папкой /httpdocs).
-name: Выгрузить на gmonline.kz
+# (домашняя папка FTP-учётки — /httpdocs).
+name: Выгрузка на gmonline.kz
+
 on:
   workflow_dispatch:
+
+concurrency:
+  group: deploy-pskz
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Проверка секретов
         env:
           S: ${{ secrets.FTP_SERVER }}
@@ -17,15 +24,17 @@ jobs:
           P: ${{ secrets.FTP_PASSWORD }}
         run: |
           if [ -z "$S" ] || [ -z "$U" ] || [ -z "$P" ]; then
-            echo "::error::Добавьте секреты FTP_SERVER, FTP_USERNAME и FTP_PASSWORD (Settings → Secrets and variables → Actions)"; exit 1; fi
-      - name: Выгрузка по FTPS
+            echo "::error::Добавьте секреты FTP_SERVER, FTP_USERNAME и FTP_PASSWORD (Settings → Secrets and variables → Actions)"
+            exit 1
+          fi
+
+      - name: Выгрузка файлов по FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
-          security: loose
           server-dir: ./
           exclude: |
             **/.git*
