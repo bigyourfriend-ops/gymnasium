@@ -402,7 +402,17 @@ function banner(titleKey,descKey,extraCrumb,titleText){var p=PARENT[st.route.pag
 function catIcon(c){return{events:"cal",achieve:"trophy",life:"users",ann:"mega"}[c]||"book"}
 function newsCard(p){return '<article class="ncard">'+ed("posts",p.id)+'<div class="thumb t-'+p.cat+'">'+(p.img?'<img src="'+p.img+'" alt="" loading="lazy">':'<div class="pat"></div><div class="big">'+ic(catIcon(p.cat))+'</div>')+'<span class="date">'+esc(fmtDate(p.date))+'</span></div>'+
  '<div class="body"><div class="meta"><span class="chip c-'+p.cat+'">'+esc(t("c_"+p.cat))+'</span>'+chipSample(p)+'</div><h3><a class="stretch" href="#post.'+esc(p.id)+'">'+esc(pick(p.title))+'</a></h3><p>'+esc(pick(p.text))+'</p></div></article>'}
-function evRow(e){var p=e.date.split("-");return '<div class="ev" style="position:relative">'+ed("events",e.id)+'<div class="evd"><b>'+(+p[2])+'</b><span>'+esc(MONS[LI[st.lang]][+p[1]-1])+'</span></div><div><h4>'+esc(pick(e.title))+' '+chipSample(e)+'</h4><p>'+esc([e.time,pick(e.place)].filter(Boolean).join(" · "))+'</p></div></div>'}
+/* home page news: one large featured card, two compact cards, events panel */
+var T14={newsD:["Мектебіміздегі маңызды жаңалықтар, іс-шаралар және жетістіктерден хабардар болыңыз.","Будьте в курсе важных новостей, событий и достижений нашей школы.","Stay up to date with our school's news, events and achievements."],readOn:["Толығырақ оқу","Читать подробнее","Read more"],allEv:["Барлық іс-шаралар","Все мероприятия","All events"]};
+for(var _k14 in T14)T[_k14]=T14[_k14];
+function excerpt(p){return String(pick(p.text)||"").replace(/\s*\n+\s*/g," ").trim()}
+function ndate(p){return '<span class="ndate">'+ic("cal")+esc(fmtDate(p.date))+'</span>'}
+function newsFeat(p){return '<article class="nfeat t-'+p.cat+'">'+ed("posts",p.id)+(p.img?'<img src="'+esc(p.img)+'" alt="" loading="lazy">':'<div class="pat"></div>')+
+ '<div class="nf-top">'+ndate(p)+'<span class="chip c-'+p.cat+'">'+esc(t("c_"+p.cat))+'</span>'+chipSample(p)+'</div>'+
+ '<div class="nf-body"><h3><a class="stretch" href="#post.'+esc(p.id)+'">'+esc(pick(p.title))+'</a></h3><p>'+esc(excerpt(p))+'</p><span class="btn btn-primary nf-btn">'+esc(t("readOn"))+' →</span></div></article>'}
+function newsRow(p){return '<article class="nrow">'+ed("posts",p.id)+'<div class="thumb t-'+p.cat+'">'+(p.img?'<img src="'+esc(p.img)+'" alt="" loading="lazy">':'<div class="pat"></div><div class="big">'+ic(catIcon(p.cat))+'</div>')+'</div>'+
+ '<div class="nr-body"><div class="nr-meta">'+ndate(p)+'<span class="chip c-'+p.cat+'">'+esc(t("c_"+p.cat))+'</span>'+chipSample(p)+'</div><h3><a class="stretch" href="#post.'+esc(p.id)+'">'+esc(pick(p.title))+'</a></h3><p>'+esc(excerpt(p))+'</p><span class="nr-more">'+esc(t("readOn"))+' →</span></div></article>'}
+function evRow(e){var p=e.date.split("-");return '<div class="ev" style="position:relative">'+ed("events",e.id)+'<div class="evd"><b>'+(+p[2])+'</b><span>'+esc(MONS[LI[st.lang]][+p[1]-1])+'</span></div><div><h4>'+esc(pick(e.title))+' '+chipSample(e)+'</h4><p class="evm">'+(e.time?'<span>'+ic("clock")+esc(e.time)+'</span>':'')+(pick(e.place)?'<span>'+ic("pin")+esc(pick(e.place))+'</span>':'')+'</p></div></div>'}
 function sortedPosts(){return DATA.posts.slice().sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0})}
 function upcomingEvents(){var td=todayISO();return DATA.events.filter(function(e){return e.date>=td}).sort(function(a,b){return a.date<b.date?-1:1})}
 
@@ -422,9 +432,10 @@ function pageHome(){var s=DATA.settings;
  var stats='<section class="stats"><div class="container"><div class="sec-head" style="margin-bottom:26px"><h2 style="color:#fff">'+esc(t("statsT"))+'</h2>'+(st.editing?'<button class="addbtn" data-open="settings">'+esc(t("settings"))+'</button>':'<span class="chip" style="background:rgba(255,255,255,.12);color:#bbf7d0">'+esc(s.year)+'</span>')+'</div><div class="grid">'+
   s.stats.map(function(x){return '<div class="stat"><b class="tnum">'+esc(x.n)+'</b><span>'+esc(pick(x.l))+'</span></div>'}).join("")+'</div>'+(s.statsSample?'<p class="note">'+esc(t("statsNote"))+'</p>':'')+'</div></section>';
  var up=upcomingEvents().slice(0,4);
- var news='<section class="section"><div class="container"><div class="sec-head"><div><span class="eyebrow">'+esc(t("newsE"))+'</span><h2>'+esc(t("newsT"))+'</h2></div><a class="more" href="#news">'+esc(t("allNews"))+' →</a></div>'+
-  '<div class="split"><div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr))">'+sortedPosts().slice(0,4).map(newsCard).join("")+'</div>'+
-  '<aside class="panel"><h3>'+esc(t("upcoming"))+'</h3><div class="evlist">'+(up.length?up.map(evRow).join(""):'<p style="color:var(--muted)">'+esc(t("noEvents"))+'</p>')+'</div><div style="margin-top:14px"><a class="more" href="#events">'+esc(t("calendar"))+' →</a></div></aside></div></div></section>';
+ var hp=sortedPosts().filter(function(p){return p.cat!=="ann"});if(!hp.length)hp=sortedPosts();
+ var news='<section class="section hnews-sec"><div class="container"><div class="sec-head"><div><span class="eyebrow">'+esc(t("newsE"))+'</span><h2>'+esc(t("newsT"))+'</h2><p>'+esc(t("newsD"))+'</p></div><a class="more" href="#news">'+esc(t("allNews"))+' →</a></div>'+
+  '<div class="hnews'+(hp.length<2?' one':'')+'">'+(hp.length?newsFeat(hp[0]):'<div class="empty"><b>'+esc(t("noResults"))+'</b></div>')+(hp.length>1?'<div class="nrows">'+hp.slice(1,3).map(newsRow).join("")+'</div>':'')+
+  '<aside class="panel hev"><div class="hev-h"><h3>'+esc(t("upcoming"))+'</h3><a class="more" href="#events">'+esc(t("allEv"))+' →</a></div><div class="evlist">'+(up.length?up.map(evRow).join(""):'<p style="color:var(--muted)">'+esc(t("noEvents"))+'</p>')+'</div></aside></div>'+addBtn("posts",{date:todayISO(),cat:"life"})+'</div></section>';
  var partners='<section class="section alt"><div class="container"><div class="sec-head"><h2>'+esc(t("partnersT"))+'</h2>'+addBtn("partners")+'</div><div class="partners">'+
   DATA.partners.map(function(p){var inner=ed("partners",p.id)+(p.img?'<img class="plogo" src="'+esc(p.img)+'" alt="" loading="lazy">':'<span class="ico">'+ic("build")+'</span>')+'<span>'+esc(pick(p.title))+'</span>';return p.url&&!st.editing?'<a class="partner" href="'+esc(p.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="partner">'+inner+'</div>'}).join("")+'</div></div></section>';
  return photoStrip()+annTicker()+hero+news+homeProjects()+partners}
