@@ -331,7 +331,7 @@ for(var _k12 in T12)T[_k12]=T12[_k12];
 /* ------------------------------------------------------------ helpers */
 function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
 var st={cls:(function(){try{return localStorage.getItem("gm-cls")||""}catch(e){return""}})(),atab:"dash",perms:[],isAdmin:false,roleName:"",base:{},meta:null,roles:null,fb:null,fbAdmin:null,fbKind:"all",fbShow:6,fbStatus:"pending",fbA:0,fbB:0,fbStart:0,ptab:"me",uq:"",urole:"all",admin:null,profile:null,lang:(function(){var l=store("gm-lang");return LI[l]!==undefined?l:"kk"})(),route:{page:"home",arg:""},grade:"5",
- newsCat:"all",newsQ:"",newsPage:1,progF:"all",year:"all",cal:null,calSel:null,editing:false,canEdit:false,dirty:0,saving:false,sureId:null};
+ newsCat:"all",newsMon:"",newsQ:"",newsPage:1,progF:"all",year:"all",cal:null,calSel:null,editing:false,canEdit:false,dirty:0,saving:false,sureId:null};
 var art=null;
 function t(k){var v=T[k];return v?v[LI[st.lang]]:k}
 function f(s,o){return String(s).replace(/\{(\w+)\}/g,function(_,k){return o[k]})}
@@ -400,8 +400,9 @@ function banner(titleKey,descKey,extraCrumb,titleText){var p=PARENT[st.route.pag
 
 /* ------------------------------------------------------------ cards */
 function catIcon(c){return{events:"cal",achieve:"trophy",life:"users",ann:"mega"}[c]||"book"}
-function newsCard(p){return '<article class="ncard">'+ed("posts",p.id)+'<div class="thumb t-'+p.cat+'">'+(p.img?'<img src="'+p.img+'" alt="" loading="lazy">':'<div class="pat"></div><div class="big">'+ic(catIcon(p.cat))+'</div>')+'<span class="date">'+esc(fmtDate(p.date))+'</span></div>'+
- '<div class="body"><div class="meta"><span class="chip c-'+p.cat+'">'+esc(t("c_"+p.cat))+'</span>'+chipSample(p)+'</div><h3><a class="stretch" href="#post.'+esc(p.id)+'">'+esc(pick(p.title))+'</a></h3><p>'+esc(pick(p.text))+'</p></div></article>'}
+function newsCard(p){return '<article class="ncard">'+ed("posts",p.id)+'<div class="thumb t-'+p.cat+'">'+(p.img?'<img src="'+esc(p.img)+'" alt="" loading="lazy">':'<div class="pat"></div><div class="big">'+ic(catIcon(p.cat))+'</div>')+'<span class="date">'+esc(fmtDate(p.date))+'</span></div>'+
+ '<div class="body"><div class="meta"><span class="chip c-'+p.cat+'">'+esc(t("c_"+p.cat))+'</span>'+chipSample(p)+'</div><h3><a class="stretch" href="#post.'+esc(p.id)+'">'+esc(pick(p.title))+'</a></h3><p>'+esc(excerpt(p))+'</p>'+
+ '<div class="nfoot"><span>'+ic("cal")+esc(fmtDate(p.date))+'</span><span class="narr" aria-hidden="true">'+ic("arrow")+'</span></div></div></article>'}
 /* home page news: one large featured card, two compact cards, events panel */
 var T14={newsD:["Мектебіміздегі маңызды жаңалықтар, іс-шаралар және жетістіктерден хабардар болыңыз.","Будьте в курсе важных новостей, событий и достижений нашей школы.","Stay up to date with our school's news, events and achievements."],readOn:["Толығырақ оқу","Читать подробнее","Read more"],allEv:["Барлық іс-шаралар","Все мероприятия","All events"]};
 for(var _k14 in T14)T[_k14]=T14[_k14];
@@ -455,13 +456,26 @@ function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){ret
   '<section id="base"><h2 class="h2">'+esc(t("baseT"))+' '+addBtn("facilities")+'</h2><div class="grid3">'+DATA.facilities.map(function(x,i){return '<div class="box">'+ed("facilities",x.id)+'<div class="ico">'+ic(["flask","gear","ball","book","star","users"][i%6])+'</div><h4>'+esc(pick(x.title))+' '+chipSample(x)+'</h4><p>'+esc(pick(x.desc))+'</p></div>'}).join("")+'</div></section></div>'}
 function crow(icon,label,val,copy){return '<div class="crow"><span class="ico">'+ic(icon)+'</span><div><small>'+esc(label)+'</small><div class="v"><span class="tnum">'+esc(val)+'</span>'+(copy?'<button class="copy" data-copy="'+esc(copy)+'">'+esc(t("copy"))+'</button>':'')+'</div></div></div>'}
 
+var T16={newsSearch:["Жаңалықтардан іздеу…","Поиск по новостям…","Search news…"],
+ monN:[["Қаңтар","Ақпан","Наурыз","Сәуір","Мамыр","Маусым","Шілде","Тамыз","Қыркүйек","Қазан","Қараша","Желтоқсан"],["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],["January","February","March","April","May","June","July","August","September","October","November","December"]]};
+T.newsSearch=T16.newsSearch;
+/* school year months: September … August of the current academic year */
+function schoolMonths(){var n=nowTZ(),y=n.m>=9?n.y:n.y-1,out=[];for(var i=0;i<12;i++){var m=(8+i)%12+1;out.push((m>=9?y:y+1)+"-"+pad(m))}return out}
+function newsFiltered(){var q=st.newsQ.trim().toLowerCase();
+ return sortedPosts().filter(function(p){return(st.newsCat==="all"||p.cat===st.newsCat)&&(!st.newsMon||String(p.date).slice(0,7)===st.newsMon)&&(!q||(pick(p.title)+" "+pick(p.text)).toLowerCase().indexOf(q)>=0)})}
+function newsArt(){return '<svg class="bart" viewBox="0 0 300 170" aria-hidden="true"><g opacity=".55" fill="#86efac">'+[[30,60],[44,50],[58,60],[44,70],[30,80],[58,80],[44,90]].map(function(c){return '<circle cx="'+c[0]+'" cy="'+c[1]+'" r="5"/>'}).join("")+'</g>'+
+ '<rect x="96" y="96" width="62" height="70" rx="14" fill="#bbf7d0" opacity=".7"/><g transform="rotate(-6 180 90)"><rect x="128" y="20" width="110" height="146" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="3"/>'+
+ '<rect x="144" y="40" width="34" height="5" rx="2" fill="#86efac"/><rect x="184" y="40" width="40" height="26" rx="3" fill="#86efac"/><rect x="144" y="52" width="34" height="5" rx="2" fill="#86efac"/><rect x="144" y="64" width="26" height="5" rx="2" fill="#86efac"/>'+
+ [80,92,104,116,128,140].map(function(y,i){return '<rect x="144" y="'+y+'" width="'+(i%3===2?54:80)+'" height="5" rx="2" fill="#bbf7d0"/>'}).join("")+'</g>'+
+ '<path d="M262 166c0-40 4-70 12-96" stroke="#4ade80" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M266 120c-18-6-26-24-24-40 16 4 26 20 24 40zM270 100c4-22 18-34 30-36 0 18-12 32-30 36zM264 142c-16-2-28-14-30-28 16 0 28 12 30 28z" fill="#86efac"/></svg>'}
 function pageNews(){
- var cats=["all","events","achieve","life","ann"],q=st.newsQ.trim().toLowerCase();
- var list=sortedPosts().filter(function(p){return(st.newsCat==="all"||p.cat===st.newsCat)&&(!q||(pick(p.title)+" "+pick(p.text)).toLowerCase().indexOf(q)>=0)});
+ var cats=["all","events","achieve","life","ann"],months=schoolMonths(),have={};DATA.posts.forEach(function(p){have[String(p.date).slice(0,7)]=1});
+ var list=newsFiltered();
  var per=9,pages=Math.max(1,Math.ceil(list.length/per));if(st.newsPage>pages)st.newsPage=pages;var slice=list.slice((st.newsPage-1)*per,st.newsPage*per);
- return banner("navNews","pd_news")+'<div class="container page"><div style="display:flex;flex-direction:column;gap:22px">'+
-  '<div class="toolbar"><div class="pills" role="group">'+cats.map(function(c){return '<button data-ncat="'+c+'" aria-pressed="'+(st.newsCat===c)+'">'+esc(c==="all"?t("all"):t("c_"+c))+'</button>'}).join("")+'</div>'+
-  '<label class="search">'+ic("search")+'<span class="sr">'+esc(t("search"))+'</span><input id="newsq" type="search" placeholder="'+esc(t("search"))+'" value="'+esc(st.newsQ)+'"></label></div>'+
+ return banner("navNews","pd_news").replace(/<\/div><\/section>$/,newsArt()+'</div></section>')+'<div class="container page"><div style="display:flex;flex-direction:column;gap:18px">'+
+  '<div class="months" role="group">'+months.map(function(ym){var m=+ym.slice(5);return '<button data-nmon="'+ym+'" aria-pressed="'+(st.newsMon===ym)+'"'+(have[ym]?'':' class="dim"')+'>'+esc(T16.monN[LI[st.lang]][m-1])+'</button>'}).join("")+'</div>'+
+  '<div class="nfilters"><div class="pills" role="group">'+cats.map(function(c){return '<button data-ncat="'+c+'" aria-pressed="'+(st.newsCat===c)+'">'+esc(c==="all"?t("all"):t("c_"+c))+'</button>'}).join("")+'</div>'+
+  '<label class="search">'+ic("search")+'<span class="sr">'+esc(t("search"))+'</span><input id="newsq" type="search" placeholder="'+esc(t("newsSearch"))+'" value="'+esc(st.newsQ)+'"></label></div>'+
   (st.editing?'<div>'+addBtn("posts",{date:todayISO(),cat:st.newsCat==="all"?"events":st.newsCat})+'</div>':'')+
   '<div id="newslist">'+newsList(slice,pages)+'</div></div></div>'}
 function newsList(slice,pages){return(slice.length?'<div class="cards">'+slice.map(newsCard).join("")+'</div>':'<div class="empty"><b>'+esc(t("noResults"))+'</b></div>')+
@@ -824,7 +838,7 @@ function shrink(file,M){return new Promise(function(res){var r=new FileReader();
 
 /* ------------------------------------------------------------ events */
 document.addEventListener("click",function(e){
- var el=e.target.closest("[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
+ var el=e.target.closest("[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
  if(!el)return;var d=el.dataset;
  if(d.yt){el.outerHTML='<div class="vframe"><iframe src="https://www.youtube-nocookie.com/embed/'+encodeURIComponent(d.yt)+'?autoplay=1&rel=0" title="YouTube" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>';return}
  if(d.pkind){st.pkind=d.pkind;render(true);return}
@@ -854,6 +868,7 @@ document.addEventListener("click",function(e){
  if(d.act==="discard"){if(st.dirty)location.reload();else{st.editing=false;render(true)}return}
  if(d.act==="save"){publish();return}
  if(d.ncat){st.newsCat=d.ncat;st.newsPage=1;render(true);return}
+ if(d.nmon){st.newsMon=st.newsMon===d.nmon?"":d.nmon;st.newsPage=1;render(true);return}
  if(d.npage){st.newsPage=+d.npage;render();document.getElementById("main").scrollIntoView();return}
  if(d.progf){st.progF=d.progf;render(true);return}
  if(d.prog){openProg(d.prog);return}
@@ -877,8 +892,7 @@ document.addEventListener("click",function(e){
  if(d.clearimg){edImg=null;document.getElementById("edprev").innerHTML="";return}
 });
 function selText(el){var s=el.parentNode.querySelector("span");if(!s)return;var r=document.createRange();r.selectNodeContents(s);var sel=getSelection();sel.removeAllRanges();sel.addRange(r)}
-document.addEventListener("input",function(e){if(e.target.id==="newsq"){st.newsQ=e.target.value;st.newsPage=1;var q=st.newsQ.trim().toLowerCase();
- var list=sortedPosts().filter(function(p){return(st.newsCat==="all"||p.cat===st.newsCat)&&(!q||(pick(p.title)+" "+pick(p.text)).toLowerCase().indexOf(q)>=0)});
+document.addEventListener("input",function(e){if(e.target.id==="newsq"){st.newsQ=e.target.value;st.newsPage=1;var list=newsFiltered();
  document.getElementById("newslist").innerHTML=newsList(list.slice(0,9),Math.max(1,Math.ceil(list.length/9)))}});
 document.addEventListener("change",function(e){var d=e.target.dataset;
  
