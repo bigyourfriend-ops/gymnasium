@@ -1039,3 +1039,14 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 .hproj .hplist::-webkit-scrollbar{width:6px}.hproj .hplist::-webkit-scrollbar-thumb{background:var(--b300);border-radius:3px}
 .hproj .hpc{flex:none}
 @media (max-width:1100px){.hproj{min-height:0}.hproj .hplist{position:static;max-height:460px;display:flex}}
+
+/* home hero: lifted up, wider and lower bell card (all bells in one row) */
+.hero .container{padding-block:36px 44px}
+.hero-card{padding:18px 20px}
+.hc-top{padding:8px 12px;margin-bottom:12px}
+.hc-top .em{width:48px;height:48px}
+.bells{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:6px;margin-top:10px}
+.bells div{padding:6px 4px;text-align:center}
+@media (min-width:901px){.hero .container{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px}}
+@media (min-width:1460px){.hero .container{grid-template-columns:minmax(0,1fr) 504px;gap:24px}.hero-card{margin-right:-120px}}
+@media (max-width:520px){.bells{grid-auto-flow:row;grid-template-columns:repeat(4,1fr)}}
