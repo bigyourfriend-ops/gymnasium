@@ -424,7 +424,7 @@ function pageHome(){var s=DATA.settings;
  var hero='<section class="hero"><canvas id="heroCanvas" aria-hidden="true"></canvas><div class="container"><div>'+
   '<h1>'+esc(t("heroA"))+'<br><span class="grad-text">'+esc(t("heroB"))+'</span></h1><p class="lead">'+esc(t("heroLead"))+'</p>'+
   '</div>'+
-  '<div class="hero-card card"><div class="hc-top">'+emblem()+'<div><small>'+esc(t("emblem"))+'</small><b>'+esc(t("name"))+'</b></div></div><div id="now">'+nowHTML()+'</div></div></div></section>';
+  '<div class="hero-card card"><div id="now">'+nowHTML()+'</div></div></div></section>';
  var quick='<section class="section" style="padding-block:40px"><div class="container"><div class="quick">'+
   [["schedule","cal","q1","q1d"],["https://bilimclass.kz","book","kundelik","q2d"],["contacts.faq","cap","q3","q3d"],["news.ann","mega","q4","q4d"]].map(function(q){var ext=q[0].indexOf("http")===0;
    return '<a class="qcard" href="'+(ext?q[0]:"#"+q[0])+'"'+(ext?' target="_blank" rel="noopener"':'')+'><div class="ico">'+ic(q[1])+'</div><h4>'+esc(t(q[2]))+'</h4><p>'+esc(q[3]==="q2d"?"BilimClass · "+t(q[3]):t(q[3]))+'</p></a>'}).join("")+'</div></div></section>';
