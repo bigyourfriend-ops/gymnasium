@@ -1097,3 +1097,7 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
  .hero-card .bells div b{font-size:14px}
 }
 @media (min-width:901px){.hero-card .now-state .shiftchip{align-self:flex-start}}
+/* during a break: next lesson is outlined in green, the bar shows time left until it */
+.bells div.nx{background:var(--b50);border:2px solid var(--b500);color:var(--b800)}
+.bells div.nx b{color:var(--b800)}
+.pbar.brk i{background:linear-gradient(90deg,#86efac,var(--b500))}

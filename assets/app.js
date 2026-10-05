@@ -353,7 +353,7 @@ function empty(key){return '<div class="empty"><b>'+esc(t(key))+'</b>'+(st.editi
 
 /* ------------------------------------------------------------ live lesson state */
 function shiftState(b,n){for(var i=0;i<b.length;i++){var s=toMin(b[i][0]),e=toMin(b[i][1]);if(n.min>=s&&n.min<e)return{kind:"lesson",i:i,left:e-n.min,pct:Math.round((n.min-s)/(e-s)*100)};
-  if(i+1<b.length&&n.min>=e&&n.min<toMin(b[i+1][0]))return{kind:"break",i:i+1}}
+  if(i+1<b.length&&n.min>=e&&n.min<toMin(b[i+1][0])){var ns=toMin(b[i+1][0]);return{kind:"break",i:i+1,left:ns-n.min,pct:Math.round((n.min-e)/Math.max(1,ns-e)*100)}}}
  if(b.length&&n.min<toMin(b[0][0]))return{kind:"before"};return{kind:"after"}}
 function lessonState(){var n=nowTZ(),b1=DATA.bells,b2=DATA.bells2||[],r;
  if(n.wd===0||n.wd===6)return{kind:"weekend",n:n,shift:1,b:b1};
@@ -361,10 +361,10 @@ function lessonState(){var n=nowTZ(),b1=DATA.bells,b2=DATA.bells2||[],r;
  r=shiftState(b2,n);r.n=n;r.shift=2;r.b=b2;if(r.kind==="before")r.kind="before2";return r}
 function nowHTML(){var s=lessonState(),n=s.n,b=s.b,head,sub="",bar="";
  if(s.kind==="lesson"){head=f(t("lesson"),{n:bellLabel(b[s.i],s.i)});sub=b[s.i][0]+"–"+b[s.i][1]+" · "+f(t("left"),{m:s.left});bar='<div class="pbar"><i style="width:'+s.pct+'%"></i></div>'}
- else if(s.kind==="break"){head=t("brk");sub=f(t("next"),{t:b[s.i][0]})}else if(s.kind==="before"){head=f(t("before"),{t:b[0][0]})}else if(s.kind==="before2"){head=f(t("before2"),{t:b[0][0]})}else if(s.kind==="after"){head=t("after")}else head=t("weekend");
+ else if(s.kind==="break"){head=t("brk");sub=f(t("next"),{t:b[s.i][0]})+" · "+f(t("brkLeft"),{m:s.left});bar='<div class="pbar brk"><i style="width:'+s.pct+'%"></i></div>'}else if(s.kind==="before"){head=f(t("before"),{t:b[0][0]})}else if(s.kind==="before2"){head=f(t("before2"),{t:b[0][0]})}else if(s.kind==="after"){head=t("after")}else head=t("weekend");
  return '<div class="now-row"><div class="now-clock tnum">'+pad(n.h)+':'+pad(n.mi)+'</div><div class="now-date">'+esc(WDL[LI[st.lang]][n.wd])+'<br>'+esc(fmtDate(n.y+"-"+pad(n.m)+"-"+pad(n.d)))+'</div></div>'+
   '<div class="now-state">'+((DATA.bells2||[]).length&&s.kind!=="weekend"?'<span class="shiftchip s'+s.shift+'">'+esc(t("shift"+s.shift))+'</span>':'')+'<b>'+esc(head)+'</b><span>'+esc(sub||t("nowT"))+'</span>'+bar+'</div>'+
-  '<div class="bells">'+b.map(function(x,i){return '<div class="'+(s.kind==="lesson"&&s.i===i?"on":"")+'"><b>'+bellLabel(x,i)+'</b><span class="tnum">'+x[0]+'</span></div>'}).join("")+'</div>'}
+  '<div class="bells">'+b.map(function(x,i){return '<div class="'+(s.kind==="lesson"&&s.i===i?"on":s.kind==="break"&&s.i===i?"nx":"")+'"><b>'+bellLabel(x,i)+'</b><span class="tnum">'+x[0]+'</span></div>'}).join("")+'</div>'}
 
 /* ------------------------------------------------------------ chrome */
 var NAV=[
@@ -535,7 +535,7 @@ function schedArt(){return '<svg class="bart" viewBox="0 0 300 170" aria-hidden=
  [0,1,2,3,4,5,6,7,8,9,10,11].map(function(i){var a=i*Math.PI/6,r1=i%3?31:28;return '<line x1="'+(195+Math.sin(a)*r1).toFixed(1)+'" y1="'+(110-Math.cos(a)*r1).toFixed(1)+'" x2="'+(195+Math.sin(a)*34).toFixed(1)+'" y2="'+(110-Math.cos(a)*34).toFixed(1)+'" stroke="#0f172a" stroke-width="'+(i%3?1.5:2.5)+'"/>'}).join("")+
  '<path d="M195 110V86M195 110l15 9" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round"/><circle cx="195" cy="110" r="3.5" fill="#15803d"/><path d="M188 62h14" stroke="#d4a24c" stroke-width="6" stroke-linecap="round"/></g>'+
  '<rect x="250" y="104" width="38" height="54" rx="6" fill="#fff" stroke="#cbd5e1"/><path d="M258 104l-3-38M268 104l2-44M278 104l6-34" stroke-width="5" stroke-linecap="round" stroke="#16a34a"/><path d="M268 104l2-44" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/><path d="M278 104l6-34" stroke="#0ea5e9" stroke-width="5" stroke-linecap="round"/></svg>'}
-var T15={bellRange:["Сабақтар {a}–{b} аралығында өтеді","Уроки проходят с {a} до {b}","Lessons run from {a} to {b}"],colNo:["№","№","#"],colLesson:["Сабақ уақыты","Время урока","Lesson time"],colBreak:["Үзіліс уақыты","Перемена","Break"],brMin:["{n} минут","{n} минут","{n} min"]};
+var T15={brkLeft:["{m} мин қалды","через {m} мин","in {m} min"],bellRange:["Сабақтар {a}–{b} аралығында өтеді","Уроки проходят с {a} до {b}","Lessons run from {a} to {b}"],colNo:["№","№","#"],colLesson:["Сабақ уақыты","Время урока","Lesson time"],colBreak:["Үзіліс уақыты","Перемена","Break"],brMin:["{n} минут","{n} минут","{n} min"]};
 for(var _k15 in T15)T[_k15]=T15[_k15];
 function bellsSection(arr,key,title,shift){var ed=st.editing&&can("schedule");if(!arr.length&&!ed)return"";
  var rows=arr.map(function(b,i){var nx=arr[i+1],br=nx?toMin(nx[0])-toMin(b[1]):null;
