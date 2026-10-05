@@ -892,7 +892,10 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 .tk-item{display:inline-flex;align-items:center;gap:10px;padding:12px 28px 12px 0;font-size:14.5px;font-weight:600;color:#fff;white-space:nowrap}
 .tk-item::after{content:"";width:6px;height:6px;border-radius:50%;background:#86efac;margin-left:18px}
 .tk-item time{font-size:12px;font-weight:700;color:#bbf7d0;background:rgba(0,0,0,.18);padding:3px 8px;border-radius:6px}
-.tk-item:hover{text-decoration:underline;text-underline-offset:3px}
+.tk-item b{font-weight:800}
+.tk-item span{font-weight:500;color:#dcfce7}
+.tk-item span::before{content:"—";margin-right:10px;color:#86efac}
+.tk-item:hover b{text-decoration:underline;text-underline-offset:3px}
 .tk-empty{font-size:13.5px;color:#dcfce7;padding:12px 0}
 .tk-edit{flex:none;align-self:center;margin-left:12px;width:34px;height:34px;display:grid;place-items:center;border-radius:9px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff}
 .tk-edit:hover{background:#fff;color:var(--b800)}

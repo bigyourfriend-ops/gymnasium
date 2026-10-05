@@ -631,9 +631,10 @@ function photoStrip(){var ph=latestPhotos(16),tiles;
 /* announcements ticker under the photo strip: latest posts of the "ann" category scroll slowly to the left */
 var T13={tkAll:["Барлық хабарландыру","Все объявления","All notices"],tkEdit:["Хабарландыру қосу / өңдеу","Добавить / изменить объявления","Add / edit notices"],tkEmpty:["Әзірге хабарландыру жоқ. Жаңалықтар бөлімінде «Хабарландыру» түрімен жазба қосыңыз.","Объявлений пока нет. Добавьте запись с типом «Объявление» в разделе новостей.","No notices yet. Add a post of type “Notice” in News."]};
 for(var _k13 in T13)T[_k13]=T13[_k13];
+function tkText(p){var x=String(pick(p.text)||"").replace(/\s*\n+\s*/g," · ").replace(/\s+/g," ").trim();return x.length>600?x.slice(0,597).replace(/\s+\S*$/,"")+"…":x}
 function annTicker(){var list=sortedPosts().filter(function(p){return p.cat==="ann"}).slice(0,8),edit=can("news");
  if(!list.length&&!edit)return"";
- var items=list.map(function(p){return '<a class="tk-item" href="#post.'+esc(p.id)+'"><time>'+esc(fmtDate(p.date))+'</time>'+esc(pick(p.title))+'</a>'}).join("");
+ var items=list.map(function(p){return '<a class="tk-item" href="#post.'+esc(p.id)+'"><time>'+esc(fmtDate(p.date))+'</time><b>'+esc(pick(p.title))+'</b>'+(tkText(p)?'<span>'+esc(tkText(p))+'</span>':'')+'</a>'}).join("");
  return '<section class="ticker" aria-label="'+esc(t("q4"))+'"><div class="tk"><a class="tk-badge" href="#news.ann">'+ic("mega")+'<span>'+esc(t("c_ann"))+'</span></a>'+
   '<div class="tk-view">'+(list.length?'<div class="tk-track" id="tktrack"><div class="tk-run">'+items+'</div><div class="tk-run" aria-hidden="true">'+items.replace(/<a /g,'<a tabindex="-1" ')+'</div></div>':'<span class="tk-empty">'+esc(t("tkEmpty"))+'</span>')+'</div>'+
   (edit?'<button class="tk-edit" data-goedit="news.ann" title="'+esc(t("tkEdit"))+'" aria-label="'+esc(t("tkEdit"))+'">'+ic("edit")+'</button>':'')+'</div></section>'}
