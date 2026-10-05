@@ -1017,3 +1017,6 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 .narr{width:40px;height:40px;border-radius:50%;background:var(--b50);color:var(--b700);display:grid;place-items:center;transition:.2s}
 .ncard:hover .narr{background:var(--b700);color:#fff}
 .ncard .thumb .date{display:inline-flex;align-items:center}
+/* about: school building photo next to the history */
+.schoolpic{margin:0;border-radius:20px;overflow:hidden;border:1px solid var(--line);box-shadow:0 14px 34px -18px rgba(20,83,45,.45);aspect-ratio:4/3}
+.schoolpic img{width:100%;height:100%;object-fit:cover;object-position:center 40%;display:block}

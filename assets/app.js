@@ -449,8 +449,7 @@ function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){ret
  return banner("navAbout","pd_about")+'<div class="container page">'+
   '<div class="subnav pills" style="align-self:flex-start">'+[["about","historyT"],["about.admin","adminT"],["about.teachers","teachersT"],["about.base","baseT"]].map(function(x){return '<a class="btn" style="padding:7px 14px;font-size:13px" href="#'+x[0]+'">'+esc(t(x[1]))+'</a>'}).join("")+'</div>'+
   '<section id="history" class="twocol"><div class="prose"><h2 class="h2">'+esc(t("historyT"))+'</h2><p>'+esc(t("about1"))+'</p><p>'+esc(t("about2"))+'</p></div>'+
-   '<div class="panel"><div style="display:flex;gap:14px;align-items:center;margin-bottom:12px">'+emblem("em72")+'<h3 style="margin:0">'+esc(t("name"))+'</h3></div>'+
-   '<div class="clist">'+crow("pin",t("f_addr"),t("addr"))+crow("cap",t("f_lang"),t("grades14").replace("1–4","1–11"))+crow("phone",t("phoneL"),s.phone)+'</div></div></section>'+
+   '<figure class="schoolpic"><img src="assets/school.webp" alt="'+esc(t("name"))+'" loading="lazy" width="1024" height="1024"></figure></section>'+
   '<section id="admin"><h2 class="h2">'+esc(t("adminT"))+' '+addBtn("staff",{group:"admin"})+'</h2><div class="grid3">'+admin.map(person).join("")+'</div></section>'+
   '<section id="teachers"><h2 class="h2">'+esc(t("teachersT"))+' '+addBtn("staff",{group:"teacher"})+'</h2>'+(tea.length?'<div class="grid3">'+tea.map(person).join("")+'</div>':empty("emptyTeachers"))+'</section>'+
   '<section id="base"><h2 class="h2">'+esc(t("baseT"))+' '+addBtn("facilities")+'</h2><div class="grid3">'+DATA.facilities.map(function(x,i){return '<div class="box">'+ed("facilities",x.id)+'<div class="ico">'+ic(["flask","gear","ball","book","star","users"][i%6])+'</div><h4>'+esc(pick(x.title))+' '+chipSample(x)+'</h4><p>'+esc(pick(x.desc))+'</p></div>'}).join("")+'</div></section></div>'}
