@@ -902,4 +902,4 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 .tk-edit svg{width:16px;height:16px}
 @keyframes tkmove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media (prefers-reduced-motion:reduce){.tk-track{animation:none}.tk-view{overflow-x:auto}}
-@media (max-width:600px){.tk-badge span{display:none}.tk-badge{padding-right:10px}.tk-item{font-size:13.5px}}
+@media (max-width:600px){.tk-badge{padding-right:10px;font-size:10.5px;letter-spacing:.04em}.tk-badge span{padding:4px 7px}.tk-item{font-size:13.5px}}
