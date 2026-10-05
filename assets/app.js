@@ -445,13 +445,22 @@ function pageHome(){var s=DATA.settings;
 
 function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"});
  function person(p){var ini=(p.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join("");return '<div class="box person">'+ed("staff",p.id)+'<div class="ava">'+(p.img?'<img src="'+p.img+'" alt="">':esc(ini))+'</div><div><b>'+esc(p.name)+'</b><span>'+esc(pick(p.role))+'</span></div></div>'}
- return banner("navAbout","pd_about")+'<div class="container page">'+
+ return aboutHero()+'<div class="container page">'+
   '<div class="subnav pills" style="align-self:flex-start">'+[["about","historyT"],["about.admin","adminT"],["about.teachers","teachersT"],["about.base","baseT"]].map(function(x){return '<a class="btn" style="padding:7px 14px;font-size:13px" href="#'+x[0]+'">'+esc(t(x[1]))+'</a>'}).join("")+'</div>'+
   '<section id="history" class="twocol"><div class="prose"><h2 class="h2">'+esc(t("historyT"))+'</h2><p>'+esc(t("about1"))+'</p><p>'+esc(t("about2"))+'</p></div>'+
    '<figure class="schoolpic"><img src="assets/school.webp" alt="'+esc(t("name"))+'" loading="lazy" width="1024" height="1024"></figure></section>'+
   '<section id="admin"><h2 class="h2">'+esc(t("adminT"))+' '+addBtn("staff",{group:"admin"})+'</h2><div class="grid3">'+admin.map(person).join("")+'</div></section>'+
   '<section id="teachers"><h2 class="h2">'+esc(t("teachersT"))+' '+addBtn("staff",{group:"teacher"})+'</h2>'+(tea.length?'<div class="grid3">'+tea.map(person).join("")+'</div>':empty("emptyTeachers"))+'</section>'+
   '<section id="base"><h2 class="h2">'+esc(t("baseT"))+' '+addBtn("facilities")+'</h2><div class="grid3">'+DATA.facilities.map(function(x,i){return '<div class="box">'+ed("facilities",x.id)+'<div class="ico">'+ic(["flask","gear","ball","book","star","users"][i%6])+'</div><h4>'+esc(pick(x.title))+' '+chipSample(x)+'</h4><p>'+esc(pick(x.desc))+'</p></div>'}).join("")+'</div></section></div>'}
+/* "About" banner built from the gymnasium's brand elements (assets/brand) */
+var T17={ahE:["Ғани Мұратбаев атындағы","Имени Гани Муратбаева","Gani Muratbayev"],ahF1:["1–11 сынып","1–11 классы","Grades 1–11"],ahF2:["2 ауысым","2 смены","2 shifts"]};
+for(var _k17 in T17)T[_k17]=T17[_k17];
+function aboutHero(){var B="assets/brand/";
+ return '<section class="ahero"><img class="ah-stripe" src="'+B+'pplain.webp" alt="" aria-hidden="true"><img class="ah-bar" src="'+B+'phor.webp" alt="" aria-hidden="true">'+
+  '<div class="container"><div class="ah-text"><nav class="crumbs" aria-label="breadcrumb">'+lnk("home",esc(t("home")))+'<span>/</span><span>'+esc(t("navSchool"))+'</span><span>/</span><span class="cur">'+esc(t("navAbout"))+'</span></nav>'+
+  '<span class="ah-eyebrow">'+esc(t("ahE"))+'</span><h1>'+esc(t("navAbout"))+'</h1><img class="ah-div" src="'+B+'divider.webp" alt="" aria-hidden="true"><p>'+esc(t("pd_about"))+'</p>'+
+  '<ul class="ah-facts"><li>'+ic("cap")+esc(t("ahF1"))+'</li><li>'+ic("clock")+esc(t("ahF2"))+'</li><li>'+ic("pin")+esc(t("region"))+'</li></ul></div>'+
+  '<div class="ah-art" aria-hidden="true"><img class="ah-panel" src="'+B+'pvert.webp" alt=""><div class="ah-logo"><img src="'+B+'logo.webp" alt=""><b>'+esc(t("name"))+'</b></div></div></div></section>'}
 function crow(icon,label,val,copy){return '<div class="crow"><span class="ico">'+ic(icon)+'</span><div><small>'+esc(label)+'</small><div class="v"><span class="tnum">'+esc(val)+'</span>'+(copy?'<button class="copy" data-copy="'+esc(copy)+'">'+esc(t("copy"))+'</button>':'')+'</div></div></div>'}
 
 var T16={newsSearch:["Жаңалықтардан іздеу…","Поиск по новостям…","Search news…"],
