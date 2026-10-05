@@ -408,9 +408,8 @@ var T14={newsD:["Мектебіміздегі маңызды жаңалықта�
 for(var _k14 in T14)T[_k14]=T14[_k14];
 function excerpt(p){return String(pick(p.text)||"").replace(/\s*\n+\s*/g," ").trim()}
 function ndate(p){return '<span class="ndate">'+ic("cal")+esc(fmtDate(p.date))+'</span>'}
-function homeProjPanel(){var P=(DATA.projects||[]).slice(0,4);
- return '<aside class="panel hev hproj">'+(P.length?'<div class="hplist">'+P.map(function(p){return '<a class="hpc" href="#project.'+esc(p.id)+'"><span class="pl"><img src="'+esc(projLogo(p))+'" alt="" loading="lazy"></span><span class="hpt"><b>'+esc(pick(p.title))+'</b><small>'+esc(pick(p.desc))+'</small></span></a>'}).join("")+'</div>':'<p style="color:var(--muted)">'+esc(t("pEmpty"))+'</p>')+
-  '<a class="more hpall" href="#projects">'+esc(t("allProj"))+' →</a></aside>'}
+function homeProjPanel(){var P=DATA.projects||[];
+ return '<aside class="panel hev hproj">'+(P.length?'<div class="hplist">'+P.map(function(p){return '<a class="hpc" href="#project.'+esc(p.id)+'"><span class="pl"><img src="'+esc(projLogo(p))+'" alt="" loading="lazy"></span><span class="hpt"><b>'+esc(pick(p.title))+'</b><small>'+esc(pick(p.desc))+'</small></span></a>'}).join("")+'</div>':'<p style="color:var(--muted)">'+esc(t("pEmpty"))+'</p>')+'</aside>'}
 function newsFeat(p){return '<article class="nfeat t-'+p.cat+'">'+ed("posts",p.id)+(p.img?'<img src="'+esc(p.img)+'" alt="" loading="lazy">':'<div class="pat"></div>')+
  '<div class="nf-top">'+ndate(p)+'<span class="chip c-'+p.cat+'">'+esc(t("c_"+p.cat))+'</span>'+chipSample(p)+'</div>'+
  '<div class="nf-body"><h3><a class="stretch" href="#post.'+esc(p.id)+'">'+esc(pick(p.title))+'</a></h3><p>'+esc(excerpt(p))+'</p><span class="btn btn-primary nf-btn">'+esc(t("readOn"))+' →</span></div></article>'}
