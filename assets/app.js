@@ -626,7 +626,7 @@ function latestPhotos(n){var out=[];for(var a=DATA.albums.length-1;a>=0&&out.len
 function photoStrip(){var ph=latestPhotos(16),tiles;
  if(ph.length){tiles=ph.map(function(p){return '<button class="stile" data-lb="'+esc(p.aid)+':'+p.i+'" aria-label="'+esc(p.cap)+'"><img src="'+esc(p.src)+'" alt="" loading="lazy"><span>'+esc(p.cap)+'</span></button>'}).join("")}
  else{tiles=[["ph1","cal","g1"],["ph2","book","g2"],["ph3","ball","g4"],["ph4","book","g6"],["ph5","star","g5"],["ph6","users","g3"],["ph7","trophy","g2"],["ph8","bell","g1"]].map(function(x){return '<a class="stile ph '+x[2]+'" href="#gallery"><span class="big">'+ic(x[1])+'</span><span>'+esc(t(x[0]))+'<small>'+esc(t("noPhotos"))+'</small></span></a>'}).join("")}
- return '<section class="strip" aria-label="'+esc(t("stripT"))+'"><div class="container"><div class="sview"><div class="strack" id="strack">'+tiles+'</div></div></div><div class="shead"><span>'+ic("image")+esc(t("stripT"))+'</span><a href="#gallery">'+esc(st.editing?t("stripAdd"):t("allPhotos"))+' →</a></div></section>'}
+ return '<section class="strip" aria-label="'+esc(t("stripT"))+'"><div class="swrap"><div class="sview"><div class="strack" id="strack">'+tiles+'</div></div></div><div class="shead"><span>'+ic("image")+esc(t("stripT"))+'</span><a href="#gallery">'+esc(st.editing?t("stripAdd"):t("allPhotos"))+' →</a></div></section>'}
 /* photo strip: pages of 3 photos (2 on tablets, 1 on phones); each page stays ~2.5 s, then slides left quickly */
 var stripTimer=0,stripPage=0;
 function stripPer(){var w=window.innerWidth;return w<600?1:w<900?2:3}

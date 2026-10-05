@@ -534,10 +534,11 @@ a.partner:hover{border-color:var(--b300)}
 
 /* photo strip above hero */
 .strip{position:relative;background:linear-gradient(180deg,#fff,var(--b50));border-bottom:1px solid var(--b100);padding-block:14px 12px}
+.swrap{max-width:1680px;margin:0 auto;padding-inline:20px}
 .sview{overflow:hidden}
 .strack{display:flex;gap:12px;transition:transform .45s cubic-bezier(.75,0,.25,1);will-change:transform}
 .spage{flex:0 0 100%;display:grid;grid-template-columns:repeat(var(--per,3),minmax(0,1fr));gap:12px}
-.stile{position:relative;width:100%;height:auto;aspect-ratio:2/1;border-radius:0;overflow:hidden;border:0;padding:0;background:var(--b100);cursor:pointer;display:block;color:#fff;text-align:left;box-shadow:0 6px 18px -8px rgba(20,83,45,.35)}
+.stile{position:relative;width:100%;height:auto;aspect-ratio:5/3;border-radius:0;overflow:hidden;border:0;padding:0;background:var(--b100);cursor:pointer;display:block;color:#fff;text-align:left;box-shadow:0 6px 18px -8px rgba(20,83,45,.35)}
 .stile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
 .stile:hover img{transform:scale(1.05)}
 .stile>span:last-child{position:absolute;inset:auto 0 0;padding:28px 12px 10px;font-size:13px;font-weight:700;background:linear-gradient(transparent,rgba(0,0,0,.62));overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -546,7 +547,7 @@ a.partner:hover{border-color:var(--b300)}
 .stile .big{position:absolute;right:14px;top:14px;width:54px;height:54px;color:rgba(255,255,255,.55)}
 .stile .big svg{width:100%;height:100%}
 .stile.ph::before{content:"";position:absolute;inset:0;opacity:.16;background-image:radial-gradient(#fff 1.3px,transparent 1.3px);background-size:16px 16px}
-.shead{max-width:1200px;margin:10px auto 0;padding-inline:20px;display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:700;color:var(--b800)}
+.shead{max-width:1680px;margin:10px auto 0;padding-inline:20px;display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:700;color:var(--b800)}
 .shead span{display:inline-flex;gap:6px;align-items:center;text-transform:uppercase;letter-spacing:.08em;font-size:11.5px}
 .shead svg{width:15px;height:15px}
 .shead a{color:var(--b700)}
