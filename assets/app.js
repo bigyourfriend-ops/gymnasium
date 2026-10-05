@@ -385,9 +385,7 @@ function header(){
  return '<header class="header"><div class="container"><a class="logo" href="#home">'+emblem()+'<span><b>'+esc(t("name"))+'</b><small>Ğani Muratbaev atyndağy gimnaziasy</small></span></a>'+
   '<nav class="nav" aria-label="Main">'+nav+'</nav><div class="hactions">'+(st.canEdit?'<a class="btn btn-outline hadm" href="#admin" title="'+esc(t("adminPanel"))+'">'+ic("star")+'<span>'+esc(t("adminShort"))+'</span></a>':'')+'<button class="btn btn-primary" data-open="'+(st.user?"account":"login")+'">'+(st.user?hava():ic("user"))+'<span>'+esc(st.user?t("cabinet"):t("login"))+'</span></button><button class="burger" data-open="drawer" aria-label="'+esc(t("menu"))+'">'+ic("menu")+'</button></div></div></header>'}
 function footer(){var s=DATA.settings,y=nowTZ().y;
- return '<footer class="footer"><div class="container"><div class="fgrid"><div><div class="fbrand">'+emblem()+'<b>'+esc(t("name"))+'</b></div><p>'+esc(t("fdesc"))+'</p>'+social()+'</div>'+
-  '<div><h5>'+esc(t("navSchool"))+'</h5><ul>'+NAV[0].items.map(function(x){return '<li>'+lnk(x[0],esc(t(x[1])))+'</li>'}).join("")+'</ul></div>'+
-  '<div><h5>'+esc(t("navEdu"))+'</h5><ul>'+NAV[1].items.concat([["events","navEvents"],["news","navNews"]]).map(function(x){return '<li>'+lnk(x[0],esc(t(x[1])))+'</li>'}).join("")+'</ul></div>'+
+ return '<footer class="footer"><div class="container"><div class="fgrid"><div><div class="fbrand">'+emblem()+'<b>'+esc(t("name"))+'</b></div>'+social()+'</div>'+
   '<div><h5>'+esc(t("navContacts"))+'</h5><ul><li>'+ic("pin")+'<span>'+esc(t("addr"))+'</span></li><li>'+ic("phone")+'<span class="tnum">'+esc(s.phone)+'</span></li><li>'+ic("mail")+'<span style="overflow-wrap:anywhere">'+esc(s.email)+'</span></li><li>'+ic("clock")+'<span>'+esc(pick(s.hours))+'</span></li></ul></div></div>'+
   '<div class="fbottom"><span>© '+y+' '+esc(t("name"))+'. '+esc(t("rights"))+'</span><span>'+lnk("docs",esc(t("navRes")))+'</span></div></div></footer>'}
 function social(){var s=DATA.settings,out="";

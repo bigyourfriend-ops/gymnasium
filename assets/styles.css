@@ -358,8 +358,8 @@ a.partner:hover{border-color:var(--b300)}
 
 /* footer */
 .footer{background:#020617;color:#cbd5e1;padding-top:56px;border-top:1px solid #1e293b}
-.fgrid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1.2fr;gap:32px;padding-bottom:40px;border-bottom:1px solid #1e293b}
-@media (max-width:900px){.fgrid{grid-template-columns:1fr 1fr}}
+.fgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,auto);gap:32px;padding-bottom:40px;border-bottom:1px solid #1e293b}
+
 @media (max-width:520px){.fgrid{grid-template-columns:1fr}}
 .fbrand{display:flex;gap:12px;align-items:center;margin-bottom:14px}
 .fbrand .em{width:48px;height:48px;flex:none}
