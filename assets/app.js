@@ -259,7 +259,7 @@ var T6={
  perm_users:["Пайдаланушылар мен рөлдер (толық әкімші)","Пользователи и роли (полный администратор)","Users and roles (full admin)"]
 };
 for(var _k6 in T6)T[_k6]=T6[_k6];
-var PERMS=["news","events","gallery","schedule","about","life","docs","settings","feedback","users"];
+var PERMS=["news","gallery","schedule","about","life","docs","settings","feedback","users"];
 var COLPERM={posts:"news",events:"events",albums:"gallery",docs:"docs",staff:"about",facilities:"about",partners:"about",faq:"about",clubs:"life",achievements:"life",alumni:"life"};
 var SECS={settings:["settings"],posts:["posts"],events:["events"],albums:["albums"],schedule:["classes","bells","bells2"],docs:["docs"],staff:["staff"],facilities:["facilities"],partners:["partners"],faq:["faq"],clubs:["clubs"],achievements:["achievements"],alumni:["alumni"]};
 var SECPERM={settings:"settings",posts:"news",events:"events",albums:"gallery",schedule:"schedule",docs:"docs",staff:"about",facilities:"about",partners:"about",faq:"about",clubs:"life",achievements:"life",alumni:"life"};
@@ -370,7 +370,7 @@ function nowHTML(){var s=lessonState(),n=s.n,b=s.b,head,sub="",bar="";
 var NAV=[
  {k:"navSchool",items:[["about","navAbout"],["about.admin","navAdmin"],["about.teachers","navTeachers"],["about.base","navBase"],["docs","navRes"]]},
  {k:"navEdu",items:[["schedule","navSched"],["tests","navGT"],["olympiad","navOlymp"]]},
- {k:"navLife",items:[["events","navEvents"],["clubs","navClubs"],["gallery","navGallery"],["alumni","navAlumni"]]},
+ {k:"navLife",items:[["clubs","navClubs"],["gallery","navGallery"],["alumni","navAlumni"]]},
  {k:"navProj",proj:1,items:[]},{k:"navNews",href:"news"},{k:"navContacts",href:"contacts"}];
 function syncNav(){NAV.forEach(function(g){if(g.proj)g.items=[["projects","allProj"]].concat((DATA.projects||[]).map(function(p){return["project."+p.id,"",pick(p.title)]}))})}
 var PARENT={projects:null,project:null,admin:null,profile:null,feedback:"navLife",about:"navSchool",docs:"navSchool",programs:"navEdu",schedule:"navEdu",olympiad:"navEdu",events:"navLife",clubs:"navLife",gallery:"navLife",album:"navLife",alumni:"navLife",news:null,post:null,contacts:null};
@@ -407,6 +407,9 @@ var T14={newsD:["Мектебіміздегі маңызды жаңалықта�
 for(var _k14 in T14)T[_k14]=T14[_k14];
 function excerpt(p){return String(pick(p.text)||"").replace(/\s*\n+\s*/g," ").trim()}
 function ndate(p){return '<span class="ndate">'+ic("cal")+esc(fmtDate(p.date))+'</span>'}
+function homeProjPanel(){var P=DATA.projects||[];
+ return '<aside class="panel hev hproj"><div class="hev-h"><h3>'+esc(t("navProj"))+'</h3><a class="more" href="#projects">'+esc(t("allProj"))+' →</a></div>'+
+  (P.length?'<div class="hpgrid">'+P.map(function(p){return '<a class="hpi" href="#project.'+esc(p.id)+'" title="'+esc(pick(p.title))+'"><span class="pl"><img src="'+esc(projLogo(p))+'" alt="" loading="lazy"></span><span class="pn">'+esc(pick(p.title))+'</span></a>'}).join("")+'</div>':'<p style="color:var(--muted)">'+esc(t("pEmpty"))+'</p>')+'</aside>'}
 function newsFeat(p){return '<article class="nfeat t-'+p.cat+'">'+ed("posts",p.id)+(p.img?'<img src="'+esc(p.img)+'" alt="" loading="lazy">':'<div class="pat"></div>')+
  '<div class="nf-top">'+ndate(p)+'<span class="chip c-'+p.cat+'">'+esc(t("c_"+p.cat))+'</span>'+chipSample(p)+'</div>'+
  '<div class="nf-body"><h3><a class="stretch" href="#post.'+esc(p.id)+'">'+esc(pick(p.title))+'</a></h3><p>'+esc(excerpt(p))+'</p><span class="btn btn-primary nf-btn">'+esc(t("readOn"))+' →</span></div></article>'}
@@ -435,10 +438,10 @@ function pageHome(){var s=DATA.settings;
  var hp=sortedPosts().filter(function(p){return p.cat!=="ann"});if(!hp.length)hp=sortedPosts();
  var news='<section class="section hnews-sec"><div class="container"><div class="sec-head"><div><span class="eyebrow">'+esc(t("newsE"))+'</span><h2>'+esc(t("newsT"))+'</h2><p>'+esc(t("newsD"))+'</p></div><a class="more" href="#news">'+esc(t("allNews"))+' →</a></div>'+
   '<div class="hnews'+(hp.length<2?' one':'')+'">'+(hp.length?newsFeat(hp[0]):'<div class="empty"><b>'+esc(t("noResults"))+'</b></div>')+(hp.length>1?'<div class="nrows">'+hp.slice(1,4).map(newsRow).join("")+'</div>':'')+
-  '<aside class="panel hev"><div class="hev-h"><h3>'+esc(t("upcoming"))+'</h3><a class="more" href="#events">'+esc(t("allEv"))+' →</a></div><div class="evlist">'+(up.length?up.map(evRow).join(""):'<p style="color:var(--muted)">'+esc(t("noEvents"))+'</p>')+'</div></aside></div>'+addBtn("posts",{date:todayISO(),cat:"life"})+'</div></section>';
+  homeProjPanel()+'</div>'+addBtn("posts",{date:todayISO(),cat:"life"})+'</div></section>';
  var partners='<section class="section alt"><div class="container"><div class="sec-head"><h2>'+esc(t("partnersT"))+'</h2>'+addBtn("partners")+'</div><div class="partners">'+
   DATA.partners.map(function(p){var inner=ed("partners",p.id)+(p.img?'<img class="plogo" src="'+esc(p.img)+'" alt="" loading="lazy">':'<span class="ico">'+ic("build")+'</span>')+'<span>'+esc(pick(p.title))+'</span>';return p.url&&!st.editing?'<a class="partner" href="'+esc(p.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="partner">'+inner+'</div>'}).join("")+'</div></div></section>';
- return photoStrip()+annTicker()+hero+news+homeProjects()+partners}
+ return photoStrip()+annTicker()+hero+news+partners}
 
 function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"});
  function person(p){var ini=(p.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join("");return '<div class="box person">'+ed("staff",p.id)+'<div class="ava">'+(p.img?'<img src="'+p.img+'" alt="">':esc(ini))+'</div><div><b>'+esc(p.name)+'</b><span>'+esc(pick(p.role))+'</span></div></div>'}
@@ -599,7 +602,7 @@ function homeProjects(){var P=DATA.projects||[];if(!P.length)return"";var all=[]
  return '<section class="section"><div class="container"><div class="sec-head"><div><span class="eyebrow">'+esc(t("projE"))+'</span><h2>'+esc(t("navProj"))+'</h2></div><a class="btn btn-soft" href="#projects">'+esc(t("allProj"))+' →</a></div>'+projLogos()+
   (all.length?'<h3 class="psub">'+esc(t("projNew"))+'</h3><div class="pitems mix">'+all.slice(0,4).map(function(x){return itemCard(x.i,"pi_"+x.p.id,x.p,true)}).join("")+'</div>':'')+'</div></section>'}
 
-var PAGES={projects:pageProjects,project:pageProject,admin:pageAdmin,profile:pageProfile,home:pageHome,about:pageAbout,news:pageNews,post:pagePost,schedule:pageSchedule,olympiad:pageOlympiad,events:pageEvents,clubs:pageClubs,gallery:pageGallery,album:pageAlbum,alumni:pageAlumni,docs:pageDocs,contacts:pageContacts};
+var PAGES={projects:pageProjects,project:pageProject,admin:pageAdmin,profile:pageProfile,home:pageHome,about:pageAbout,news:pageNews,post:pagePost,schedule:pageSchedule,olympiad:pageOlympiad,clubs:pageClubs,gallery:pageGallery,album:pageAlbum,alumni:pageAlumni,docs:pageDocs,contacts:pageContacts};
 
 /* ------------------------------------------------------------ render */
 var app=document.getElementById("app"),layer=document.getElementById("layer");
@@ -918,8 +921,8 @@ function tabDash(){var A=st.admin;if(!A&&st.isAdmin){loadAdmin();return '<div cl
  var photos=DATA.albums.reduce(function(s,a){return s+a.photos.length},0),up=upcomingEvents().length;
  var who=st.meta&&st.meta.updated_by?(users.filter(function(u){return u.id===st.meta.updated_by})[0]||{}).full_name:"";
  var tl=[];if(can("feedback")){if(!st.fbAdmin)loadFbAdmin();tl.push(["msg",(st.fbAdmin||[]).filter(function(x){return x.status==="pending"}).length,"d_fb"])}
- if(st.isAdmin)tl.push(["users",users.length,"d_users"]);tl.push(["mega",DATA.posts.length,"d_posts"],["cal",up,"d_events"],["image",photos,"d_photos"]);
- var qa=[["post","mega","qa_post","news"],["event","cal","qa_event","events"],["album","image","qa_album","gallery"],["sched","cal","qa_sched","schedule"],["edit","edit","enterEdit",""],["settings","gear","settings","settings"]].filter(function(x){return !x[3]||can(x[3])});
+ if(st.isAdmin)tl.push(["users",users.length,"d_users"]);tl.push(["mega",DATA.posts.length,"d_posts"],["image",photos,"d_photos"]);
+ var qa=[["post","mega","qa_post","news"],["album","image","qa_album","gallery"],["sched","cal","qa_sched","schedule"],["edit","edit","enterEdit",""],["settings","gear","settings","settings"]].filter(function(x){return !x[3]||can(x[3])});
  var out='<div class="tiles'+(tl.length>=5?' five':'')+'">'+tl.map(function(x){return '<div class="tile"><span class="ico">'+ic(x[0])+'</span><b class="tnum">'+x[1]+'</b><span>'+esc(t(x[2]))+'</span></div>'}).join("")+'</div>'+
   '<div class="panel"><h3>'+esc(t("qaT"))+'</h3><div class="qa">'+qa.map(function(x){return '<button class="lnk" data-qa="'+x[0]+'"><span class="ico">'+ic(x[1])+'</span><b>'+esc(t(x[2]))+'</b></button>'}).join("")+'</div>'+
   '<p class="hint" style="text-align:left;margin-top:14px">'+esc(t("lastPub"))+': '+esc(st.meta?fmtDate(String(st.meta.updated_at).slice(0,10))+(who?" · "+who:""):t("never"))+'</p></div>';
@@ -992,7 +995,7 @@ function pageAdmin(){
  var title=(tabs.filter(function(x){return x[0]===st.atab})[0]||tabs[0])[1];
  return '<div class="adminwrap"><div class="container"><div class="adm">'+side+'<section class="amain"><div class="atop"><div><span class="eyebrow">'+esc(t("adminPanel"))+'</span><h1>'+esc(t(title))+'</h1></div>'+(st.dirty?'<span class="chip sample">'+esc(f(t("unsaved"),{n:st.dirty}))+'</span>':'')+'</div>'+body+'</section></div></div></div>'}
 function tabContent(){var photos=DATA.albums.reduce(function(s,a){return s+a.photos.length},0);
- var cards=[["news","mega","navNews","news",DATA.posts.length],["events","cal","navEvents","events",DATA.events.length],["gallery","image","navGallery","gallery",photos],
+ var cards=[["news","mega","navNews","news",DATA.posts.length],["gallery","image","navGallery","gallery",photos],
   ["schedule","cal","navSched","schedule",f(t("nClasses"),{n:Object.keys(DATA.classes).length})],["about","build","navAbout","about",DATA.staff.length+DATA.facilities.length],["about","users","navTeachers","about.teachers",DATA.staff.filter(function(x){return x.group==="teacher"}).length],
   ["life","star","navClubs","clubs",DATA.clubs.length],["life","trophy","navOlymp","olympiad",DATA.achievements.length],["life","cap","navAlumni","alumni",DATA.alumni.length],
   ["docs","link","navRes","docs",DATA.docs.length],["about","msg","faqT","contacts.faq",DATA.faq.length],["about","build","partnersT","home",DATA.partners.length],["projects","star","navProj","projects",DATA.projects.length]].filter(function(c){return can(c[0])});
