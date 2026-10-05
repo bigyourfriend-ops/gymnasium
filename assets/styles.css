@@ -1081,3 +1081,19 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 
 /* bell card stays inside the page width */
 .hero-card{width:100%;max-width:100%;margin:0}
+/* bell card fills the full height of the hero text column */
+@media (min-width:901px){
+ .hero .container{align-items:stretch}
+ .hero-card{display:flex;flex-direction:column;padding:26px 26px}
+ .hero-card #now{flex:1;display:flex;flex-direction:column;gap:16px}
+ .hero-card .now-state{margin-top:0;flex:1;display:flex;flex-direction:column;justify-content:center;padding:18px 20px}
+ .hero-card .now-state b{font-size:19px;margin-top:6px}
+ .hero-card .now-state span{font-size:14px}
+ .hero-card .now-clock{font-size:54px}
+ .hero-card .now-date{font-size:14px}
+ .hero-card .pbar{height:8px;margin-top:14px}
+ .hero-card .bells{margin-top:0}
+ .hero-card .bells div{padding:10px 4px;font-size:12.5px}
+ .hero-card .bells div b{font-size:14px}
+}
+@media (min-width:901px){.hero-card .now-state .shiftchip{align-self:flex-start}}
