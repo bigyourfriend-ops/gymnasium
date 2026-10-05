@@ -54,7 +54,7 @@ p{margin:0}
 .hactions{display:flex;gap:8px;align-items:center}
 .burger{display:none;background:none;border:1px solid var(--line);border-radius:10px;width:42px;height:42px;align-items:center;justify-content:center}
 .burger svg{width:20px;height:20px;color:var(--b800)}
-@media (max-width:1100px){.nav{display:none}.burger{display:inline-flex}}
+@media (max-width:1240px){.nav{display:none}.burger{display:inline-flex}}
 @media (max-width:520px){.logo small{display:none}.logo b{font-size:13.5px}.hactions .btn span{display:none}}
 
 /* buttons */
@@ -600,7 +600,7 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 .acard .btn{margin-left:auto;padding:8px 12px;font-size:12.5px}
 .hadm{padding:8px 14px}
 @media (max-width:760px){.hadm span{display:none}}
-@media (max-width:1360px){.hadm span{display:none}.hadm{padding:9px 11px}}
+.hadm span{display:none}.hadm{padding:9px 11px}
 @media (max-width:520px){.hactions .btn span.hava{display:inline-flex}}
 .acard{flex-wrap:wrap}
 .acard>div{flex:1 1 150px}
@@ -700,8 +700,8 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 .reader .rimg{width:100%;border-radius:14px;margin-bottom:14px;max-height:320px;object-fit:cover}
 .reader h3{margin:4px 0 10px}
 .rtext p{margin-bottom:10px;line-height:1.6;color:var(--text)}
-@media (max-width:1380px){.logo small{display:none}.nav-link{padding-inline:9px}.logo>span{min-width:190px}}
-@media (max-width:1100px){.logo>span{min-width:0}}
+@media (min-width:1241px){.logo small{display:none}.nav-link{padding-inline:9px}.logo>span{min-width:190px}}
+@media (max-width:1240px){.logo>span{min-width:0}}
 .pitems.mix .pitem.issue .cover{aspect-ratio:16/9}
 .pitems.mix .pitem.issue .cover img{object-position:top}
 .pcard .pjlogo{background:radial-gradient(circle at 50% 45%,var(--b50),#fff 72%)}

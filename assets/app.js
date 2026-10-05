@@ -381,6 +381,7 @@ function header(){
  var nav=NAV.map(function(g){ if(g.href)return '<div class="nav-item"><a class="nav-link'+(isOn(g.href)?" on":"")+'" href="#'+g.href+'">'+esc(t(g.k))+'</a></div>';
   var on=g.items.some(function(x){return isOn(x[0])});
   return '<div class="nav-item"><button class="nav-link'+(on?" on":"")+'" aria-haspopup="true">'+esc(t(g.k))+ic("chev")+'</button><div class="dropdown">'+g.items.map(function(x){return '<a href="#'+x[0]+'">'+esc(x[2]||t(x[1]))+'</a>'}).join("")+'</div></div>'}).join("");
+ nav='<div class="nav-item"><a class="nav-link'+(st.route.page==="home"?" on":"")+'" href="#home">'+esc(t("home"))+'</a></div>'+nav;
  return '<header class="header"><div class="container"><a class="logo" href="#home">'+emblem()+'<span><b>'+esc(t("name"))+'</b><small>Ğani Muratbaev atyndağy gimnaziasy</small></span></a>'+
   '<nav class="nav" aria-label="Main">'+nav+'</nav><div class="hactions">'+(st.canEdit?'<a class="btn btn-outline hadm" href="#admin" title="'+esc(t("adminPanel"))+'">'+ic("star")+'<span>'+esc(t("adminShort"))+'</span></a>':'')+'<button class="btn btn-primary" data-open="'+(st.user?"account":"login")+'">'+(st.user?hava():ic("user"))+'<span>'+esc(st.user?t("cabinet"):t("login"))+'</span></button><button class="burger" data-open="drawer" aria-label="'+esc(t("menu"))+'">'+ic("menu")+'</button></div></div></header>'}
 function footer(){var s=DATA.settings,y=nowTZ().y;
