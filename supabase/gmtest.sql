@@ -75,6 +75,9 @@ create table if not exists public.gt_answers (
 create index if not exists gt_answers_question on public.gt_answers (question_id);
 create index if not exists gt_answers_topic on public.gt_answers (topic_id);
 
+create schema if not exists private;
+revoke all on schema private from public, anon, authenticated;
+
 -- ---------- Кім басқара алады / кто управляет тестом ----------
 create or replace function public.gt_can_manage(p_test uuid)
 returns boolean language sql stable security definer set search_path = public as $$
@@ -85,7 +88,7 @@ revoke all on function public.gt_can_manage(uuid) from public, anon;
 grant execute on function public.gt_can_manage(uuid) to authenticated;
 
 -- Автор мен уақыт: автор өзгермейді, аты профильден алынады
-create or replace function public.gt_tests_touch()
+create or replace function private.gt_tests_touch()
 returns trigger language plpgsql security definer set search_path = public as $$
 begin
   if tg_op = 'INSERT' then
@@ -101,9 +104,8 @@ begin
   return new;
 end;
 $$;
-revoke all on function public.gt_tests_touch() from public, anon, authenticated;
 drop trigger if exists gt_tests_touch on public.gt_tests;
-create trigger gt_tests_touch before insert or update on public.gt_tests for each row execute function public.gt_tests_touch();
+create trigger gt_tests_touch before insert or update on public.gt_tests for each row execute function private.gt_tests_touch();
 
 -- ---------- RLS ----------
 alter table public.gt_tests     enable row level security;
@@ -146,36 +148,35 @@ create policy "gt answers read" on public.gt_answers for select to authenticated
 
 -- ---------- Тексеру (ішкі) / проверка ответов (внутренняя) ----------
 -- Бір жауапты: толық балл немесе 0. Көп жауапты: (дұрыс таңдалған − қате таңдалған) / дұрыстар саны, 0-ден төмен емес.
-create or replace function public.gt_grade(p_attempt uuid, p_answers jsonb)
+create or replace function private.gt_grade(p_attempt uuid, p_answers jsonb)
 returns void language plpgsql security definer set search_path = public as $$
 declare
   v_test uuid; q record; v_ch text[]; v_hit int; v_miss int; v_pts numeric; v_tot numeric := 0; v_max numeric := 0;
   v_ans jsonb := case when jsonb_typeof(p_answers) = 'object' then p_answers else '{}'::jsonb end;
 begin
   select test_id into v_test from gt_attempts where id = p_attempt for update;
-  delete from gt_answers where attempt_id = p_attempt;
   for q in select * from gt_questions where test_id = v_test and cardinality(correct) > 0 order by pos loop
-    select coalesce(array_agg(distinct x), '{}') into v_ch
-      from jsonb_array_elements_text(case when jsonb_typeof(v_ans -> q.id::text) = 'array' then v_ans -> q.id::text else '[]'::jsonb end) x
-      where x in (select o ->> 'id' from jsonb_array_elements(q.options) o);
+    select coalesce(array_agg(distinct x.v), '{}') into v_ch
+      from jsonb_array_elements_text(case when jsonb_typeof(v_ans -> q.id::text) = 'array' then v_ans -> q.id::text else '[]'::jsonb end) as x(v)
+      where x.v in (select o ->> 'id' from jsonb_array_elements(q.options) o);
     if q.kind = 'single' then
       v_pts := case when cardinality(v_ch) = 1 and v_ch[1] = any(q.correct) then q.points else 0 end;
     else
-      v_hit  := (select count(*) from unnest(v_ch) c where c = any(q.correct));
+      v_hit  := (select count(*) from unnest(v_ch) as c(v) where c.v = any(q.correct));
       v_miss := cardinality(v_ch) - v_hit;
       v_pts  := round(greatest(0, (v_hit - v_miss)::numeric / cardinality(q.correct)) * q.points, 2);
     end if;
     insert into gt_answers (attempt_id, question_id, topic_id, chosen, points, max_points)
-    values (p_attempt, q.id, q.topic_id, v_ch, v_pts, q.points);
+    values (p_attempt, q.id, q.topic_id, v_ch, v_pts, q.points)
+    on conflict (attempt_id, question_id) do update set topic_id = excluded.topic_id, chosen = excluded.chosen, points = excluded.points, max_points = excluded.max_points;
     v_tot := v_tot + v_pts; v_max := v_max + q.points;
   end loop;
   update gt_attempts set finished_at = now(), answers = v_ans, score = v_tot, max_score = v_max where id = p_attempt;
 end;
 $$;
-revoke all on function public.gt_grade(uuid, jsonb) from public, anon, authenticated;
 
 -- Оқушыға берілетін тест (дұрыс жауаптарсыз)
-create or replace function public.gt_payload(p_attempt uuid)
+create or replace function private.gt_payload(p_attempt uuid)
 returns jsonb language sql stable security definer set search_path = public as $$
   select jsonb_build_object(
     'attempt', jsonb_build_object('id', a.id, 'started_at', a.started_at, 'now', now(), 'answers', coalesce(a.answers, '{}'::jsonb), 'attempt_no', a.attempt_no),
@@ -187,7 +188,6 @@ returns jsonb language sql stable security definer set search_path = public as $
                            from gt_questions q where q.test_id = t.id and cardinality(q.correct) > 0), '[]'::jsonb))
   from gt_attempts a join gt_tests t on t.id = a.test_id where a.id = p_attempt;
 $$;
-revoke all on function public.gt_payload(uuid) from public, anon, authenticated;
 
 -- Тестті бастау немесе жалғастыру
 create or replace function public.gt_start(p_test uuid)
@@ -200,9 +200,9 @@ begin
   select * into a from gt_attempts where test_id = p_test and user_id = v_uid and finished_at is null order by started_at desc limit 1;
   if found then
     if t.time_limit is null or now() <= a.started_at + make_interval(mins => t.time_limit) + interval '1 minute' then
-      return public.gt_payload(a.id);
+      return private.gt_payload(a.id);
     end if;
-    perform public.gt_grade(a.id, coalesce(a.answers, '{}'::jsonb));   -- уақыт бітті: сақталған жауаптармен аяқтау
+    perform private.gt_grade(a.id, coalesce(a.answers, '{}'::jsonb));   -- уақыт бітті: сақталған жауаптармен аяқтау
   end if;
   select count(*) into v_done from gt_attempts where test_id = p_test and user_id = v_uid and finished_at is not null;
   if v_done >= t.max_attempts then raise exception 'no_attempts'; end if;
@@ -210,7 +210,7 @@ begin
   insert into gt_attempts (test_id, user_id, attempt_no, student_name, student_grade)
   values (p_test, v_uid, v_done + 1, coalesce(nullif(p.full_name, ''), p.email, (select email from auth.users where id = v_uid)), nullif(p.grade, ''))
   returning * into a;
-  return public.gt_payload(a.id);
+  return private.gt_payload(a.id);
 end;
 $$;
 
@@ -231,11 +231,12 @@ begin
   select * into a from gt_attempts where id = p_attempt;
   if not found then raise exception 'not_found'; end if;
   v_mgr := public.gt_can_manage(a.test_id);
-  if a.user_id <> auth.uid() and not v_mgr then raise exception 'not_allowed'; end if;
+  if a.user_id is distinct from auth.uid() and not v_mgr then raise exception 'not_allowed'; end if;
   if a.finished_at is null then raise exception 'not_finished'; end if;
   select * into t from gt_tests where id = a.test_id;
   v_reveal := t.show_answers or v_mgr;
   return jsonb_build_object(
+    'mine', a.user_id = auth.uid(),
     'attempt', jsonb_build_object('id', a.id, 'score', a.score, 'max', a.max_score, 'started_at', a.started_at, 'finished_at', a.finished_at,
                                   'attempt_no', a.attempt_no, 'name', a.student_name, 'grade', a.student_grade),
     'test', jsonb_build_object('id', t.id, 'title', t.title, 'subject', t.subject, 'show_answers', t.show_answers, 'max_attempts', t.max_attempts, 'status', t.status,
@@ -257,7 +258,7 @@ declare a gt_attempts;
 begin
   select * into a from gt_attempts where id = p_attempt and user_id = auth.uid();
   if not found then raise exception 'not_found'; end if;
-  if a.finished_at is null then perform public.gt_grade(p_attempt, p_answers); end if;
+  if a.finished_at is null then perform private.gt_grade(p_attempt, p_answers); end if;
   return public.gt_result(p_attempt);
 end;
 $$;
@@ -347,8 +348,6 @@ update public.roles set perms = array(select distinct unnest(perms || array['tes
 --  • 30 күннен бері аяқталмаған тест талпыныстары
 -- ============================================================
 create extension if not exists pg_cron;
-create schema if not exists private;
-revoke all on schema private from public, anon, authenticated;
 create or replace function private.cleanup_old_data()
 returns void language plpgsql security definer set search_path = '' as $$
 begin
