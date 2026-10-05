@@ -533,7 +533,7 @@ a.partner:hover{border-color:var(--b300)}
 .fbcard .form{width:100%}
 
 /* photo strip above hero */
-.strip{position:relative;background:linear-gradient(180deg,#fff,var(--b50));border-bottom:1px solid var(--b100);padding-block:14px 12px}
+.strip{position:relative;background:linear-gradient(180deg,#fff,var(--b50));padding-block:8px 0}
 .swrap{max-width:1680px;margin:0 auto;padding-inline:20px}
 .sview{overflow:hidden}
 .strack{display:flex;gap:12px;transition:transform .45s cubic-bezier(.75,0,.25,1);will-change:transform}
@@ -547,7 +547,7 @@ a.partner:hover{border-color:var(--b300)}
 .stile .big{position:absolute;right:14px;top:14px;width:54px;height:54px;color:rgba(255,255,255,.55)}
 .stile .big svg{width:100%;height:100%}
 .stile.ph::before{content:"";position:absolute;inset:0;opacity:.16;background-image:radial-gradient(#fff 1.3px,transparent 1.3px);background-size:16px 16px}
-.shead{max-width:1680px;margin:10px auto 0;padding-inline:20px;display:flex;justify-content:flex-end;align-items:center;font-size:12.5px;font-weight:700;color:var(--b800)}
+.shead{max-width:1680px;margin:0 auto 8px;padding-inline:20px;display:flex;justify-content:flex-end;align-items:center;font-size:12.5px;font-weight:700;color:var(--b800)}
 .shead span{display:inline-flex;gap:6px;align-items:center;text-transform:uppercase;letter-spacing:.08em;font-size:11.5px}
 .shead svg{width:15px;height:15px}
 .shead a{color:var(--b700)}
