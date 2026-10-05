@@ -533,7 +533,7 @@ a.partner:hover{border-color:var(--b300)}
 .fbcard .form{width:100%}
 
 /* photo strip above hero */
-.strip{position:relative;background:linear-gradient(180deg,#fff,var(--b50));padding-block:8px 0}
+.strip{position:relative;background:linear-gradient(180deg,#fff,var(--b50));padding-block:8px 8px}
 .swrap{max-width:1680px;margin:0 auto;padding-inline:20px}
 .sview{overflow:hidden}
 .strack{display:flex;gap:12px;transition:transform .45s cubic-bezier(.75,0,.25,1);will-change:transform}
