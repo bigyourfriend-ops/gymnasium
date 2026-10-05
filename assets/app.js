@@ -429,7 +429,7 @@ function pageHome(){var s=DATA.settings;
   '<aside class="panel"><h3>'+esc(t("upcoming"))+'</h3><div class="evlist">'+(up.length?up.map(evRow).join(""):'<p style="color:var(--muted)">'+esc(t("noEvents"))+'</p>')+'</div><div style="margin-top:14px"><a class="more" href="#events">'+esc(t("calendar"))+' →</a></div></aside></div></div></section>';
  var partners='<section class="section alt"><div class="container"><div class="sec-head"><h2>'+esc(t("partnersT"))+'</h2>'+addBtn("partners")+'</div><div class="partners">'+
   DATA.partners.map(function(p){var inner=ed("partners",p.id)+(p.img?'<img class="plogo" src="'+esc(p.img)+'" alt="" loading="lazy">':'<span class="ico">'+ic("build")+'</span>')+'<span>'+esc(pick(p.title))+'</span>';return p.url&&!st.editing?'<a class="partner" href="'+esc(p.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="partner">'+inner+'</div>'}).join("")+'</div></div></section>';
- return photoStrip()+hero+news+homeProjects()+partners}
+ return photoStrip()+annTicker()+hero+news+homeProjects()+partners}
 
 function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"});
  function person(p){var ini=(p.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join("");return '<div class="box person">'+ed("staff",p.id)+'<div class="ava">'+(p.img?'<img src="'+p.img+'" alt="">':esc(ini))+'</div><div><b>'+esc(p.name)+'</b><span>'+esc(pick(p.role))+'</span></div></div>'}
@@ -598,7 +598,7 @@ function render(keepScroll){document.documentElement.lang=st.lang;syncNav();var 
  var fn=PAGES[st.route.page]||pageHome;
  app.innerHTML=topbar()+header()+'<main id="main">'+fn()+'</main>'+footer()+editbar();
  document.title=(st.route.page==="home"?"":titleFor()+" · ")+t("name");
- if(keepScroll)window.scrollTo(0,y);startHero();startStrip()}
+ if(keepScroll)window.scrollTo(0,y);startHero();startStrip();startTicker()}
 function titleFor(){if(EXTRA_TITLES[st.route.page])return EXTRA_TITLES[st.route.page]();var m={projects:"navProj",admin:"adminPanel",feedback:"navFeedback",profile:"cabinet",about:"navAbout",news:"navNews",programs:"navProg",schedule:"navSched",olympiad:"navOlymp",events:"navEvents",clubs:"navClubs",gallery:"navGallery",alumni:"navAlumni",docs:"navRes",contacts:"navContacts"}[st.route.page];
  if(m)return t(m);if(st.route.page==="project"){var pj=(DATA.projects||[]).filter(function(x){return x.id===st.route.arg})[0];return pj?pick(pj.title):""}if(st.route.page==="post"){var p=DATA.posts.filter(function(x){return x.id===st.route.arg})[0];return p?pick(p.title):""}
  if(st.route.page==="album"){var a=DATA.albums.filter(function(x){return x.id===st.route.arg})[0];return a?pick(a.title):""}return""}
@@ -628,6 +628,19 @@ function photoStrip(){var ph=latestPhotos(16),tiles;
  else{tiles=[["ph1","cal","g1"],["ph2","book","g2"],["ph3","ball","g4"],["ph4","book","g6"],["ph5","star","g5"],["ph6","users","g3"],["ph7","trophy","g2"],["ph8","bell","g1"]].map(function(x){return '<a class="stile ph '+x[2]+'" href="#gallery"><span class="big">'+ic(x[1])+'</span><span>'+esc(t(x[0]))+'<small>'+esc(t("noPhotos"))+'</small></span></a>'}).join("")}
  return '<section class="strip" aria-label="'+esc(t("stripT"))+'"><div class="swrap"><div class="sview"><div class="strack" id="strack">'+tiles+'</div></div></div><div class="shead"><span>'+ic("image")+esc(t("stripT"))+'</span><a href="#gallery">'+esc(st.editing?t("stripAdd"):t("allPhotos"))+' →</a></div></section>'}
 /* photo strip: pages of 3 photos (2 on tablets, 1 on phones); each page stays ~2.5 s, then slides left quickly */
+/* announcements ticker under the photo strip: latest posts of the "ann" category scroll slowly to the left */
+var T13={tkAll:["Барлық хабарландыру","Все объявления","All notices"],tkEdit:["Хабарландыру қосу / өңдеу","Добавить / изменить объявления","Add / edit notices"],tkEmpty:["Әзірге хабарландыру жоқ. Жаңалықтар бөлімінде «Хабарландыру» түрімен жазба қосыңыз.","Объявлений пока нет. Добавьте запись с типом «Объявление» в разделе новостей.","No notices yet. Add a post of type “Notice” in News."]};
+for(var _k13 in T13)T[_k13]=T13[_k13];
+function annTicker(){var list=sortedPosts().filter(function(p){return p.cat==="ann"}).slice(0,8),edit=can("news");
+ if(!list.length&&!edit)return"";
+ var items=list.map(function(p){return '<a class="tk-item" href="#post.'+esc(p.id)+'"><time>'+esc(fmtDate(p.date))+'</time>'+esc(pick(p.title))+'</a>'}).join("");
+ return '<section class="ticker" aria-label="'+esc(t("q4"))+'"><div class="tk"><a class="tk-badge" href="#news.ann">'+ic("mega")+'<span>'+esc(t("c_ann"))+'</span></a>'+
+  '<div class="tk-view">'+(list.length?'<div class="tk-track" id="tktrack"><div class="tk-run">'+items+'</div><div class="tk-run" aria-hidden="true">'+items.replace(/<a /g,'<a tabindex="-1" ')+'</div></div>':'<span class="tk-empty">'+esc(t("tkEmpty"))+'</span>')+'</div>'+
+  (edit?'<button class="tk-edit" data-goedit="news.ann" title="'+esc(t("tkEdit"))+'" aria-label="'+esc(t("tkEdit"))+'">'+ic("edit")+'</button>':'')+'</div></section>'}
+function startTicker(){var tr=document.getElementById("tktrack");if(!tr)return;var runs=tr.children,view=tr.parentNode,base=runs[0].innerHTML,n=0;
+ // repeat short lists so each half is at least as wide as the band (no empty gap while scrolling)
+ while(runs[0].scrollWidth<view.clientWidth&&n++<20){runs[0].insertAdjacentHTML("beforeend",base.replace(/<a /g,'<a tabindex="-1" aria-hidden="true" '));runs[1].innerHTML=runs[0].innerHTML.replace(/<a (?!tabindex)/g,'<a tabindex="-1" ')}
+ tr.style.animationDuration=Math.max(20,runs[0].scrollWidth/45)+"s"}
 var stripTimer=0,stripPage=0;
 function stripPer(){var w=window.innerWidth;return w<600?1:w<900?2:3}
 function startStrip(){clearTimeout(stripTimer);var tr=document.getElementById("strack");if(!tr)return;

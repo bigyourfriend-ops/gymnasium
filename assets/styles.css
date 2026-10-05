@@ -878,3 +878,25 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
  .gt-row .gt-btns{width:100%}
 }
 @media (max-width:600px){.stile{aspect-ratio:16/10}}
+
+/* announcements ticker */
+.ticker{background:linear-gradient(90deg,var(--b800),var(--b600));color:#fff;border-bottom:1px solid var(--b900)}
+.tk{max-width:1680px;margin:0 auto;padding-inline:20px;display:flex;align-items:stretch;gap:0;min-height:48px}
+.tk-badge{display:flex;align-items:center;gap:8px;padding:0 18px 0 0;font:800 12px var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:#fff;white-space:nowrap;flex:none;position:relative;z-index:1}
+.tk-badge svg{width:20px;height:20px;color:#bbf7d0}
+.tk-badge span{background:rgba(255,255,255,.16);padding:5px 10px;border-radius:6px}
+.tk-view{flex:1;min-width:0;overflow:hidden;display:flex;align-items:center;-webkit-mask-image:linear-gradient(90deg,transparent,#000 32px,#000 calc(100% - 32px),transparent);mask-image:linear-gradient(90deg,transparent,#000 32px,#000 calc(100% - 32px),transparent)}
+.tk-track{display:flex;width:max-content;animation:tkmove 60s linear infinite}
+.tk-view:hover .tk-track,.tk-view:focus-within .tk-track{animation-play-state:paused}
+.tk-run{display:flex;flex:none}
+.tk-item{display:inline-flex;align-items:center;gap:10px;padding:12px 28px 12px 0;font-size:14.5px;font-weight:600;color:#fff;white-space:nowrap}
+.tk-item::after{content:"";width:6px;height:6px;border-radius:50%;background:#86efac;margin-left:18px}
+.tk-item time{font-size:12px;font-weight:700;color:#bbf7d0;background:rgba(0,0,0,.18);padding:3px 8px;border-radius:6px}
+.tk-item:hover{text-decoration:underline;text-underline-offset:3px}
+.tk-empty{font-size:13.5px;color:#dcfce7;padding:12px 0}
+.tk-edit{flex:none;align-self:center;margin-left:12px;width:34px;height:34px;display:grid;place-items:center;border-radius:9px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff}
+.tk-edit:hover{background:#fff;color:var(--b800)}
+.tk-edit svg{width:16px;height:16px}
+@keyframes tkmove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.tk-track{animation:none}.tk-view{overflow-x:auto}}
+@media (max-width:600px){.tk-badge span{display:none}.tk-badge{padding-right:10px}.tk-item{font-size:13.5px}}
