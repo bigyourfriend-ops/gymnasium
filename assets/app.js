@@ -506,11 +506,11 @@ function pageNews(){
 function newsList(slice,pages){return(slice.length?'<div class="cards">'+slice.map(newsCard).join("")+'</div>':'<div class="empty"><b>'+esc(t("noResults"))+'</b></div>')+
  (pages>1?'<div class="pager">'+Array.apply(null,{length:pages}).map(function(_,i){return '<button data-npage="'+(i+1)+'" aria-current="'+(st.newsPage===i+1)+'">'+(i+1)+'</button>'}).join("")+'</div>':'')}
 function pagePost(){var p=DATA.posts.filter(function(x){return x.id===st.route.arg})[0];if(!p){location.hash="news";return""}
- var others=sortedPosts().filter(function(x){return x.id!==p.id}).slice(0,3);
- return banner(null,null,lnk("news",esc(t("navNews")))+'<span>/</span>',pick(p.title))+'<div class="container page"><article class="article" style="position:relative">'+ed("posts",p.id)+
+ var others=sortedPosts().filter(function(x){return x.id!==p.id}).slice(0,6);
+ var side=others.length?'<aside class="pside-news"><h2>'+esc(t("newsT"))+'</h2><div class="psn">'+others.map(function(x){return '<a class="psn-i" href="#post.'+esc(x.id)+'"><span class="psn-t t-'+x.cat+'">'+(x.img?'<img src="'+esc(x.img)+'" alt="" loading="lazy">':ic(catIcon(x.cat)))+'</span><span class="psn-b"><b>'+esc(pick(x.title))+'</b><small>'+esc(fmtDate(x.date))+'</small></span></a>'}).join("")+'</div><a class="more" href="#news">'+esc(t("allNews"))+' →</a></aside>':'';
+ return banner(null,null,lnk("news",esc(t("navNews")))+'<span>/</span>',pick(p.title))+'<div class="container page"><div class="postgrid"><article class="article" style="position:relative">'+ed("posts",p.id)+
   '<div class="meta" style="display:flex;gap:8px;align-items:center;margin-bottom:18px;flex-wrap:wrap"><span class="chip c-'+p.cat+'">'+esc(t("c_"+p.cat))+'</span><span style="color:var(--muted);font-size:14px">'+esc(fmtDate(p.date))+'</span>'+chipSample(p)+'</div>'+
-  (p.img?'<div class="cover"><img src="'+p.img+'" alt=""></div>':'')+'<div class="txt">'+esc(pick(p.text))+'</div><p style="margin-top:28px"><a class="more" href="#news">← '+esc(t("toNews"))+'</a></p></article>'+
-  (others.length?'<section><h2 class="h2">'+esc(t("newsT"))+'</h2><div class="cards">'+others.map(newsCard).join("")+'</div></section>':'')+'</div>'}
+  (p.img?'<div class="cover"><img src="'+p.img+'" alt=""></div>':'')+'<div class="txt">'+esc(pick(p.text))+'</div><p style="margin-top:28px"><a class="more" href="#news">← '+esc(t("toNews"))+'</a></p></article>'+side+'</div></div>'}
 
 function pagePrograms(){var keys=["primary","basic","senior","extra"],L=LI[st.lang];
  var cards=keys.filter(function(k){return st.progF==="all"||st.progF===k}).map(function(k){var p=PROG[k];
