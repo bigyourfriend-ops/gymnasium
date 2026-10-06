@@ -382,11 +382,11 @@ function header(){
   return '<div class="nav-item"><button class="nav-link'+(on?" on":"")+'" aria-haspopup="true">'+esc(t(g.k))+ic("chev")+'</button><div class="dropdown">'+g.items.map(function(x){return '<a href="#'+x[0]+'">'+esc(x[2]||t(x[1]))+'</a>'}).join("")+'</div></div>'}).join("");
  nav='<div class="nav-item"><a class="nav-link'+(st.route.page==="home"?" on":"")+'" href="#home">'+esc(t("home"))+'</a></div>'+nav;
  return '<header class="header"><div class="container"><a class="logo" href="#home">'+emblem()+'<span><b>'+esc(t("name"))+'</b><small>Ğani Muratbaev atyndağy gimnaziasy</small></span></a>'+
-  '<nav class="nav" aria-label="Main">'+nav+'</nav><div class="hactions">'+(st.canEdit?'<a class="btn btn-outline hadm" href="#admin" title="'+esc(t("adminPanel"))+'">'+ic("star")+'<span>'+esc(t("adminShort"))+'</span></a>':'')+'<button class="btn btn-primary" data-open="'+(st.user?"account":"login")+'">'+(st.user?hava():ic("user"))+'<span>'+esc(st.user?t("cabinet"):t("login"))+'</span></button><button class="burger" data-open="drawer" aria-label="'+esc(t("menu"))+'">'+ic("menu")+'</button></div></div></header>'}
+  '<nav class="nav" aria-label="Main">'+nav+'</nav><div class="hactions">'+(PAGES.help?'<a class="btn hhelp'+(st.route.page==="help"?" on":"")+'" href="#help" title="'+esc(t("helpT"))+'">'+ic("shield")+'<span>'+esc(t("navHelp"))+'</span></a>':'')+(st.canEdit?'<a class="btn btn-outline hadm" href="#admin" title="'+esc(t("adminPanel"))+'">'+ic("star")+'<span>'+esc(t("adminShort"))+'</span></a>':'')+'<button class="btn btn-primary" data-open="'+(st.user?"account":"login")+'">'+(st.user?hava():ic("user"))+'<span>'+esc(st.user?t("cabinet"):t("login"))+'</span></button><button class="burger" data-open="drawer" aria-label="'+esc(t("menu"))+'">'+ic("menu")+'</button></div></div></header>'}
 function footer(){var s=DATA.settings,y=nowTZ().y;
  return '<footer class="footer"><div class="container"><div class="fgrid"><div><div class="fbrand">'+emblem()+'<b>'+esc(t("name"))+'</b></div>'+social()+'</div>'+
   '<div><h5>'+esc(t("navContacts"))+'</h5><ul><li>'+ic("pin")+'<span>'+esc(t("addr"))+'</span></li><li>'+ic("phone")+'<span class="tnum">'+esc(s.phone)+'</span></li><li>'+ic("mail")+'<span style="overflow-wrap:anywhere">'+esc(s.email)+'</span></li><li>'+ic("clock")+'<span>'+esc(pick(s.hours))+'</span></li></ul></div></div>'+
-  '<div class="fbottom"><span>© '+y+' '+esc(t("name"))+'. '+esc(t("rights"))+'</span><span>'+lnk("docs",esc(t("navRes")))+'</span></div></div></footer>'}
+  '<div class="fbottom"><span>© '+y+' '+esc(t("name"))+'. '+esc(t("rights"))+'</span><span>'+(PAGES.help?lnk("help",esc(t("helpT")))+' · ':'')+lnk("docs",esc(t("navRes")))+'</span></div></div></footer>'}
 function social(){var s=DATA.settings,out="";
  if(s.instagram)out+='<a href="'+esc(s.instagram)+'" target="_blank" rel="noopener" aria-label="Instagram">'+ic("insta")+'</a>';
  if(s.telegram)out+='<a href="'+esc(s.telegram)+'" target="_blank" rel="noopener" aria-label="Telegram">'+ic("tg")+'</a>';
@@ -440,7 +440,7 @@ function pageHome(){var s=DATA.settings;
   homeProjPanel()+'</div>'+addBtn("posts",{date:todayISO(),cat:"life"})+'</div></section>';
  var partners='<section class="section alt"><div class="container"><div class="sec-head"><h2>'+esc(t("partnersT"))+'</h2>'+addBtn("partners")+'</div>'+(st.editing?'<div class="partners">':'<div class="pview"><div class="partners ptrack" id="ptrack">')+
   DATA.partners.map(function(p){var inner=ed("partners",p.id)+(p.img?'<img class="plogo" src="'+esc(p.img)+'" alt="" loading="lazy">':'<span class="ico">'+ic("build")+'</span>')+'<span>'+esc(pick(p.title))+'</span>';return p.url&&!st.editing?'<a class="partner" href="'+esc(p.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="partner">'+inner+'</div>'}).join("")+'</div>'+(st.editing?'':'</div>')+'</div></section>';
- return photoStrip()+annTicker()+hero+news+partners}
+ return photoStrip()+annTicker()+hero+news+(window.GMHelp?GMHelp.home():"")+partners}
 
 function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"});
  function person(p){var ini=(p.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join("");return '<div class="box person">'+ed("staff",p.id)+'<div class="ava">'+(p.img?'<img src="'+p.img+'" alt="">':esc(ini))+'</div><div><b>'+esc(p.name)+'</b><span>'+esc(pick(p.role))+'</span></div></div>'}
@@ -782,7 +782,7 @@ function openLayer(html,drawer){layer.innerHTML=drawer?'<div class="overlay" dat
 function openDrawer(){openLayer('<aside class="drawer" role="dialog" aria-label="'+esc(t("menu"))+'"><div class="dh"><b>'+esc(t("menu"))+'</b><button class="xbtn" data-close="1">×</button></div><a href="#home">'+esc(t("home"))+'</a>'+
  NAV.map(function(g){return g.href?'<a href="#'+g.href+'">'+esc(t(g.k))+'</a>':'<details'+(g.items.some(function(x){return isOn(x[0])})?" open":"")+'><summary>'+esc(t(g.k))+'</summary>'+g.items.map(function(x){return '<a href="#'+x[0]+'">'+esc(x[2]||t(x[1]))+'</a>'}).join("")+'</details>'}).join("")+
  '<div style="margin-top:18px" class="lang" role="group">'+LANGS.map(function(l){return '<button data-lang="'+l+'" aria-pressed="'+(st.lang===l)+'" style="color:'+(st.lang===l?"#14532d":"#475569")+'">'+["Қаз","Рус","Eng"][LI[l]]+'</button>'}).join("")+'</div>'+
- '<button class="btn btn-primary" style="width:100%;margin-top:16px" data-open="'+(st.user?"account":"login")+'">'+esc(st.user?t("cabinet"):t("login"))+'</button></aside>',true)}
+ (PAGES.help?'<a href="#help" class="dhelp">'+ic("shield")+esc(t("helpT"))+'</a>':'')+'<button class="btn btn-primary" style="width:100%;margin-top:16px" data-open="'+(st.user?"account":"login")+'">'+esc(st.user?t("cabinet"):t("login"))+'</button></aside>',true)}
 function msgBox(){return '<p class="formmsg" id="fmsg" hidden></p>'}
 function showMsg(k,ok,extra){var m=document.getElementById("fmsg");if(!m)return;m.hidden=false;m.className="formmsg "+(ok?"ok":"err");m.textContent=t(k)+(extra?" ("+extra+")":"")}
 function authErr(e){var s=(e&&e.message)||"";if(/invalid login/i.test(s))return["e_cred"];if(/not confirmed/i.test(s))return["e_confirm"];if(/already|exists/i.test(s))return["e_exists"];if(/rate|too many|security purposes/i.test(s))return["e_rate"];if(/password/i.test(s))return["e_short"];return["e_generic",s]}
@@ -1006,7 +1006,7 @@ function tabDash(){var A=st.admin;if(!A&&st.isAdmin){loadAdmin();return '<div cl
  var users=A.users,by={student:0,parent:0,teacher:0};users.forEach(function(u){if(by[u.role]!==undefined)by[u.role]++});
  var photos=DATA.albums.reduce(function(s,a){return s+a.photos.length},0),up=upcomingEvents().length;
  var who=st.meta&&st.meta.updated_by?(users.filter(function(u){return u.id===st.meta.updated_by})[0]||{}).full_name:"";
- var tl=[];if(can("feedback")){if(!st.fbAdmin)loadFbAdmin();tl.push(["msg",(st.fbAdmin||[]).filter(function(x){return x.status==="pending"}).length,"d_fb"])}
+ var tl=[];if(can("feedback")){if(!st.fbAdmin)loadFbAdmin();tl.push(["msg",(st.fbAdmin||[]).filter(function(x){return x.status==="pending"}).length,"d_fb"])}if(can("help")&&window.GMHelp){GMHelp.preload();tl.push(["shield",GMHelp.badge(),"d_help"])}
  if(st.isAdmin)tl.push(["users",users.length,"d_users"]);tl.push(["mega",DATA.posts.length,"d_posts"],["image",photos,"d_photos"]);
  var qa=[["post","mega","qa_post","news"],["album","image","qa_album","gallery"],["sched","cal","qa_sched","schedule"],["edit","edit","enterEdit",""],["settings","gear","settings","settings"]].filter(function(x){return !x[3]||can(x[3])});
  var out='<div class="tiles'+(tl.length>=5?' five':'')+'">'+tl.map(function(x){return '<div class="tile"><span class="ico">'+ic(x[0])+'</span><b class="tnum">'+x[1]+'</b><span>'+esc(t(x[2]))+'</span></div>'}).join("")+'</div>'+
@@ -1067,7 +1067,7 @@ function quickAction(k){if(!st.canEdit)return;st.editing=true;var need={post:"ne
 
 
 /* ------------------------------------------------------------ admin page (#admin) */
-function adminTabs(){var tb=[["dash","p_dash","star"],["content","a_content","book"]];if(can("feedback"))tb.push(["feedback","p_fb","msg"]);if(can("settings"))tb.push(["settings","settings","gear"]);if(st.isAdmin)tb.push(["users","p_users","users"],["roles","p_roles","user"]);return tb}
+function adminTabs(){var tb=[["dash","p_dash","star"],["content","a_content","book"]];if(can("feedback"))tb.push(["feedback","p_fb","msg"]);if(can("help")&&window.GMHelp)tb.push(["help","p_help","shield"]);if(can("settings"))tb.push(["settings","settings","gear"]);if(st.isAdmin)tb.push(["users","p_users","users"],["roles","p_roles","user"]);return tb}
 function pageAdmin(){
  if(!sb)return banner("adminPanel","pd_admin")+'<div class="container page"><div class="empty"><b>'+esc(t("noAuth"))+'</b></div></div>';
  if(!st.user)return pageProfile();
@@ -1075,9 +1075,9 @@ function pageAdmin(){
  var tabs=adminTabs();if(!tabs.some(function(x){return x[0]===st.atab}))st.atab="dash";
  var side='<aside class="aside"><div class="ahead">'+emblem()+'<div><b>'+esc(t("adminPanel"))+'</b><span>'+esc(uname())+'</span></div></div>'+
   (st.roleName?'<span class="arole">'+esc(st.roleName)+'</span>':'')+
-  '<nav class="anav">'+tabs.map(function(x){var badge=x[0]==="feedback"&&st.fbAdmin?st.fbAdmin.filter(function(f){return f.status==="pending"}).length:0;return '<button data-atab="'+x[0]+'" aria-pressed="'+(st.atab===x[0])+'">'+ic(x[2])+'<span>'+esc(t(x[1]))+'</span>'+(badge?'<i class="abadge">'+badge+'</i>':'')+'</button>'}).join("")+'</nav>'+
+  '<nav class="anav">'+tabs.map(function(x){var badge=x[0]==="feedback"&&st.fbAdmin?st.fbAdmin.filter(function(f){return f.status==="pending"}).length:x[0]==="help"&&window.GMHelp?GMHelp.badge():0;return '<button data-atab="'+x[0]+'" aria-pressed="'+(st.atab===x[0])+'">'+ic(x[2])+'<span>'+esc(t(x[1]))+'</span>'+(badge?'<i class="abadge">'+badge+'</i>':'')+'</button>'}).join("")+'</nav>'+
   '<div class="afoot"><a href="#home">'+ic("left")+esc(t("backSite"))+'</a><a href="#profile">'+ic("user")+esc(t("cabinet"))+'</a></div></aside>';
- var body={dash:tabDash,content:tabContent,feedback:tabFb,settings:tabSettings,users:tabUsers,roles:tabRoles}[st.atab]();
+ var body={dash:tabDash,content:tabContent,feedback:tabFb,help:function(){return GMHelp.adminTab()},settings:tabSettings,users:tabUsers,roles:tabRoles}[st.atab]();
  var title=(tabs.filter(function(x){return x[0]===st.atab})[0]||tabs[0])[1];
  return '<div class="adminwrap"><div class="container"><div class="adm">'+side+'<section class="amain"><div class="atop"><div><span class="eyebrow">'+esc(t("adminPanel"))+'</span><h1>'+esc(t(title))+'</h1></div>'+(st.dirty?'<span class="chip sample">'+esc(f(t("unsaved"),{n:st.dirty}))+'</span>':'')+'</div>'+body+'</section></div></div></div>'}
 function tabContent(){var photos=DATA.albums.reduce(function(s,a){return s+a.photos.length},0);

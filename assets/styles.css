@@ -1167,3 +1167,102 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 .pr-dots button.on{width:26px;background:var(--b600)}
 @media (max-width:640px){.pring{height:270px;overflow:hidden;margin-inline:-16px}.pr-card{top:39%}.pr-card .pr-name{font-size:13px;padding:8px 10px 10px}.pr-nav{width:38px;height:38px;top:auto;bottom:0;transform:none}.pr-nav.prev{left:calc(50% - 46px)}.pr-nav.next{right:calc(50% - 46px)}
  .pr-info{grid-template-columns:1fr;padding:18px}.pr-act{align-items:stretch}.pr-act .btn{justify-content:center}}
+
+/* ---------- Маған көмек керек / Мне нужна помощь (#help) ---------- */
+.hhelp{background:#fff7ed;color:#9a3412;border:2px solid #fed7aa;padding:8px 14px}
+.hhelp:hover,.hhelp.on{background:#ffedd5;border-color:#fb923c}
+.drawer .dhelp{display:flex;align-items:center;gap:8px;color:#9a3412;font-weight:700}
+.drawer .dhelp svg{width:18px;height:18px}
+.hlhero{background:linear-gradient(180deg,#fff7ed,#f3faf5);border-bottom:1px solid #fde7d1}
+.hlhero .container{padding-block:30px 40px}
+.hlhero-in{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:start;margin-top:18px}
+.hlhero h1{font:900 clamp(28px,4vw,44px)/1.12 var(--f-display)}
+.hlhero p{color:#475569;margin:12px 0 22px;max-width:62ch;font-size:16px;font-weight:500}
+.hlbadge{width:64px;height:64px;border-radius:20px;background:linear-gradient(135deg,#fb923c,#ea580c);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px -10px rgba(234,88,12,.6);flex:none}
+.hlbadge svg{width:32px;height:32px}
+@media (max-width:560px){.hlhero-in{grid-template-columns:1fr}.hlbadge{width:52px;height:52px;border-radius:16px}.hlhero .btns .btn{width:100%}}
+.hlpage{gap:40px}
+.hlurg{background:#fef2f2;border:1px solid #fecaca;border-radius:20px;padding:18px 20px}
+.hlurg-h{display:flex;gap:10px;align-items:center;margin-bottom:14px}
+.hlurg-h svg{width:22px;height:22px;color:#dc2626;flex:none}
+.hlurg h2{font:800 16px/1.35 var(--f-display);color:#7f1d1d}
+.hlphones{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.hlphone{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #fecaca;border-radius:14px;padding:10px 14px;min-width:0;transition:.2s}
+.hlphone:hover{border-color:#f87171;transform:translateY(-1px)}
+.hlphone b{font:900 26px/1 var(--f-display);color:#b91c1c;flex:none}
+.hlphone span{font-size:12.5px;line-height:1.35;color:#475569;font-weight:600}
+@media (max-width:760px){.hlphones{grid-template-columns:1fr}}
+.hlwhat{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:10px}
+.hlwhat li{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-weight:600;font-size:14px;color:var(--ink);position:relative;padding-left:34px}
+.hlwhat li::before{content:"";position:absolute;left:15px;top:21px;width:8px;height:8px;border-radius:50%;background:#fb923c}
+.hlnote{display:flex;gap:10px;align-items:flex-start;margin-top:14px;background:var(--b50);border:1px solid var(--b200);border-radius:14px;padding:12px 16px;color:var(--b900);font-weight:600}
+.hlnote svg{width:20px;height:20px;color:var(--b600);flex:none;margin-top:2px}
+.hlgrid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:900px){.hlgrid{grid-template-columns:1fr}}
+.hlform{scroll-margin-top:96px}
+.hlwho{border:0;padding:0;margin:0;display:flex;gap:8px;flex-wrap:wrap}
+.hlwho legend{font-size:12.5px;font-weight:700;color:#475569;margin-bottom:6px;padding:0}
+.form label.hlradio{flex-direction:row;align-items:center;gap:8px;border:1px solid #cbd5e1;border-radius:10px;padding:8px 12px;background:#f8fafc;cursor:pointer;font-size:13.5px;color:var(--ink)}
+.form label.hlradio input{width:auto}
+.form label.hlradio:has(input:checked){border-color:var(--b600);background:var(--b50);color:var(--b900)}
+.form label.hlcheck{flex-direction:row;align-items:center;gap:10px;font-size:14px;color:var(--ink);cursor:pointer}
+.form label.hlcheck input{width:18px;height:18px;flex:none}
+.hlsend{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:4px}
+.hlsend .hint{margin:0;display:inline-flex;gap:6px;align-items:center;text-align:left}
+.hlsend .hint svg{width:15px;height:15px;color:var(--b600)}
+@media (max-width:560px){.hlsend .btn{width:100%}}
+.hlsent{text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;padding:30px 22px}
+.hlok{width:56px;height:56px;border-radius:50%;background:var(--b100);color:var(--b700);display:flex;align-items:center;justify-content:center}
+.hlok svg{width:28px;height:28px}
+.hlcode-l{font-size:12.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:6px}
+.hlcode{display:flex;gap:10px;align-items:center;background:var(--b50);border:2px dashed var(--b300);border-radius:14px;padding:12px 18px}
+.hlcode span{font:900 clamp(24px,5vw,32px)/1 var(--f-display);letter-spacing:.06em;color:var(--b900)}
+.hlcodenote{max-width:46ch;color:#475569;font-weight:500;margin:6px 0 10px}
+.hlside{display:flex;flex-direction:column;gap:16px}
+.hlsteps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:14px}
+.hlsteps li::marker{font-weight:800;color:var(--b600)}
+.hlwit h3{display:flex;gap:8px;align-items:center}
+.hlwit h3 svg{width:18px;height:18px;color:var(--b600)}
+.hlwit p{font-size:14px;color:#475569}
+.hlcodebox{scroll-margin-top:96px}
+.hlcodeform{flex-direction:row;align-items:end;margin-top:0;max-width:480px}
+.hlcodeform label{flex:1}
+.hlcodeform input{text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.hlthread-h{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.hlthread{display:flex;flex-direction:column;gap:10px;width:100%}
+.hlbub{max-width:min(88%,560px);border-radius:16px;padding:10px 14px;background:#f1f5f9;align-self:flex-start}
+.hlbub.me{align-self:flex-end;background:var(--b50);border:1px solid var(--b200)}
+.hlbub small{display:block;font-size:11.5px;font-weight:700;color:var(--muted);margin-bottom:3px}
+.hlbub p{white-space:pre-line;overflow-wrap:anywhere;font-size:14.5px;color:var(--ink)}
+.chip.hls-new{background:#fef3c7;color:#92400e}
+.chip.hls-in_progress{background:#e0f2fe;color:#075985}
+.chip.hls-closed{background:#f1f5f9;color:#475569}
+.hlother .panel{display:flex;flex-direction:column;gap:6px;font-size:14px}
+.hlother .panel h3{margin-bottom:4px}
+.hlico{width:42px;height:42px;border-radius:12px;background:var(--b50);color:var(--b700);display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+.hlico svg{width:21px;height:21px}
+.hlsoon{color:#94a3b8;font-style:italic;font-weight:500}
+.hltel{font-weight:800;color:var(--b700);font-size:16px}
+.hlpriv{display:flex;flex-direction:column;gap:12px}
+.hlpriv h3{display:flex;gap:8px;align-items:center}
+.hlpriv h3 svg{width:18px;height:18px;color:var(--b600)}
+.hlpriv p{font-size:14px;color:#475569}
+.hlpar summary{font:800 16px/1.3 var(--f-display);cursor:pointer;color:var(--ink)}
+.hlpar[open] summary{margin-bottom:10px}
+.hlhome{display:flex;align-items:center;gap:18px;background:linear-gradient(135deg,#fff7ed,#fff);border:1px solid #fed7aa;border-radius:22px;padding:20px 24px;transition:.2s}
+.hlhome:hover{border-color:#fb923c;box-shadow:0 14px 30px -18px rgba(234,88,12,.5)}
+.hlhome h3{font:800 19px/1.3 var(--f-display)}
+.hlhome p{color:#475569;margin-top:4px}
+.hlhome>div{flex:1;min-width:0}
+@media (max-width:640px){.hlhome{flex-wrap:wrap}.hlhome .btn{width:100%}}
+/* панель психолога */
+.hladm{display:flex;flex-direction:column;gap:14px}
+.hlcard{border-left-color:#fb923c}
+.hlcard.unread{box-shadow:0 0 0 2px #fed7aa}
+.hldot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ea580c;vertical-align:middle;margin-left:4px}
+.hlmeta{display:flex;gap:6px;flex-wrap:wrap}
+.hlinv{font-size:14px}
+.hltalk{display:flex;gap:6px;align-items:center;background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:8px 12px;font-size:14px;color:#9a3412;width:100%}
+.hltalk svg{width:16px;height:16px;flex:none}
+.hlstaff{margin-top:4px}
+.form label[hidden]{display:none}
