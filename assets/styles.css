@@ -1118,3 +1118,21 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 .pview{overflow:hidden;margin:-6px;padding:6px}
 .partners.ptrack{display:flex;gap:14px;transition:transform .6s cubic-bezier(.65,0,.35,1);will-change:transform}
 .ptrack>.partner{flex:0 0 calc((100% - (var(--per,4) - 1) * 14px) / var(--per,4));min-width:0}
+
+/* About hero: compact version (no location chip) */
+.ahero .container{min-height:300px;padding-block:22px 40px}
+.ah-text .crumbs{margin-bottom:14px}
+.ah-eyebrow{margin-bottom:8px}
+.ahero h1{font-size:clamp(32px,4.2vw,50px)}
+.ah-div{width:min(340px,80%);margin:10px 0 12px -6px}
+.ahero p{font-size:16px}
+.ah-facts{margin-top:16px}
+.ah-facts li{padding:7px 12px;font-size:13px}
+.ah-art{min-height:240px}
+.ah-panel{bottom:-40px;height:calc(100% + 80px);max-height:360px}
+.ah-logo{width:190px;padding:18px 16px 14px;border-radius:22px}
+.ah-logo b{font-size:12.5px;margin-top:10px;padding-top:9px}
+.ah-stripe{width:min(420px,32vw);top:20px}
+.ah-bar{width:min(440px,32vw);bottom:-34px}
+@media (max-width:1100px){.ah-logo{width:170px}}
+@media (max-width:860px){.ahero .container{padding-block:20px 44px}.ah-bar{width:220px;bottom:-26px}}

@@ -478,7 +478,7 @@ function aboutHero(){var B="assets/brand/";
  return '<section class="ahero"><img class="ah-stripe" src="'+B+'pplain.webp" alt="" aria-hidden="true"><img class="ah-bar" src="'+B+'phor.webp" alt="" aria-hidden="true">'+
   '<div class="container"><div class="ah-text"><nav class="crumbs" aria-label="breadcrumb">'+lnk("home",esc(t("home")))+'<span>/</span><span>'+esc(t("navSchool"))+'</span><span>/</span><span class="cur">'+esc(t("navAbout"))+'</span></nav>'+
   '<span class="ah-eyebrow">'+esc(t("ahE"))+'</span><h1>'+esc(t("navAbout"))+'</h1><img class="ah-div" src="'+B+'divider.webp" alt="" aria-hidden="true"><p>'+esc(t("pd_about"))+'</p>'+
-  '<ul class="ah-facts"><li>'+ic("cap")+esc(t("ahF1"))+'</li><li>'+ic("clock")+esc(t("ahF2"))+'</li><li>'+ic("pin")+esc(t("region"))+'</li></ul></div>'+
+  '<ul class="ah-facts"><li>'+ic("cap")+esc(t("ahF1"))+'</li><li>'+ic("clock")+esc(t("ahF2"))+'</li></ul></div>'+
   '<div class="ah-art" aria-hidden="true"><img class="ah-panel" src="'+B+'pvert.webp" alt=""><div class="ah-logo"><img src="'+B+'logo.webp" alt=""><b>'+esc(t("name"))+'</b></div></div></div></section>'}
 function crow(icon,label,val,copy){return '<div class="crow"><span class="ico">'+ic(icon)+'</span><div><small>'+esc(label)+'</small><div class="v"><span class="tnum">'+esc(val)+'</span>'+(copy?'<button class="copy" data-copy="'+esc(copy)+'">'+esc(t("copy"))+'</button>':'')+'</div></div></div>'}
 
