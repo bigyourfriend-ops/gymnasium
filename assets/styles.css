@@ -1138,13 +1138,13 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 @media (max-width:860px){.ahero .container{padding-block:20px 44px}.ah-bar{width:220px;bottom:-26px}}
 
 /* projects: rotating ring */
-.pring{position:relative;height:clamp(400px,48vw,560px);--cw:300px;outline:none;margin-top:6px}
+.pring{position:relative;height:clamp(330px,34vw,420px);--cw:300px;outline:none;margin-top:6px}
 .pr-stage{position:absolute;inset:0}
-.pr-card{position:absolute;left:50%;top:47%;width:var(--cw);aspect-ratio:16/10.5;border:1px solid var(--line);border-radius:22px;background:#fff;padding:0;cursor:pointer;display:flex;flex-direction:column;overflow:hidden;
+.pr-card{position:absolute;left:50%;top:47%;width:var(--cw);aspect-ratio:4/3;border:1px solid var(--line);border-radius:22px;background:#fff;padding:0;cursor:pointer;display:flex;flex-direction:column;overflow:hidden;
  transition:transform .75s cubic-bezier(.45,.05,.25,1),box-shadow .4s,border-color .4s,filter .6s,opacity .6s;
  filter:saturate(calc(.55 + var(--k,1) * .45));box-shadow:0 10px 26px -18px rgba(20,83,45,.35)}
 .pring.noanim .pr-card{transition:none}
-.pr-card .pr-logo{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:14% 14% 4%;background:radial-gradient(circle at 50% 45%,var(--b50),#fff 72%)}
+.pr-card .pr-logo{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:9%;background:radial-gradient(circle at 50% 45%,var(--b50),#fff 72%)}
 .pr-card .pr-logo img{max-width:100%;max-height:100%;object-fit:contain}
 .pr-card .pr-name{padding:10px 14px 14px;font:800 15px/1.25 var(--f-display);color:var(--ink);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pr-card::after{content:"";position:absolute;inset:0;background:#e6eef0;opacity:calc((1 - var(--k,1)) * .62);transition:opacity .6s;pointer-events:none}
@@ -1165,5 +1165,5 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 .pr-dots{grid-column:1/-1;display:flex;justify-content:center;gap:7px;flex-wrap:wrap}
 .pr-dots button{width:8px;height:8px;border-radius:99px;border:0;padding:0;background:#cbd5e1;cursor:pointer;transition:.3s}
 .pr-dots button.on{width:26px;background:var(--b600)}
-@media (max-width:640px){.pring{height:310px;overflow:hidden;margin-inline:-16px}.pr-card{top:41%}.pr-card .pr-name{font-size:13px;padding:8px 10px 10px}.pr-nav{width:38px;height:38px;top:auto;bottom:0;transform:none}.pr-nav.prev{left:calc(50% - 46px)}.pr-nav.next{right:calc(50% - 46px)}
+@media (max-width:640px){.pring{height:270px;overflow:hidden;margin-inline:-16px}.pr-card{top:39%}.pr-card .pr-name{font-size:13px;padding:8px 10px 10px}.pr-nav{width:38px;height:38px;top:auto;bottom:0;transform:none}.pr-nav.prev{left:calc(50% - 46px)}.pr-nav.next{right:calc(50% - 46px)}
  .pr-info{grid-template-columns:1fr;padding:18px}.pr-act{align-items:stretch}.pr-act .btn{justify-content:center}}

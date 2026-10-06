@@ -643,14 +643,14 @@ function pageProjects(){var P=DATA.projects||[];
 /* projects page: a rotating ring of cards (front card large and bright, back ones small and pale) with a details panel underneath */
 function projRing(P){var a=ic("arrow");
  return '<div class="pring" id="pring" tabindex="0" aria-roledescription="carousel" aria-label="'+esc(t("navProj"))+'"><div class="pr-stage" id="prstage">'+
-  P.map(function(p,i){return '<button class="pr-card" data-pr="'+i+'" aria-label="'+esc(pick(p.title))+'"><span class="pr-logo"><img src="'+esc(projLogo(p))+'" alt="" loading="lazy"></span><span class="pr-name">'+esc(pick(p.title))+'</span></button>'}).join("")+
+  P.map(function(p,i){return '<button class="pr-card" data-pr="'+i+'" aria-label="'+esc(pick(p.title))+'"><span class="pr-logo"><img src="'+esc(projLogo(p))+'" alt="" loading="lazy"></span></button>'}).join("")+
   '</div><button class="pr-nav prev" data-prstep="-1" aria-label="←">'+a+'</button><button class="pr-nav next" data-prstep="1" aria-label="→">'+a+'</button></div>'+
   '<div class="pr-info" id="prinfo" aria-live="polite"></div>'}
 var ringRot=0,ringTimer=0;
 function startProjRing(){clearInterval(ringTimer);var ring=document.getElementById("pring");if(!ring)return;
  var P=DATA.projects||[],N=P.length,cards=[].slice.call(ring.querySelectorAll(".pr-card")),info=document.getElementById("prinfo"),paused=false,step=2*Math.PI/N;
  function cur(){return ((ringRot%N)+N)%N}
- function layout(){var W=ring.clientWidth,mob=W<640,cw=mob?Math.min(230,W*.6):Math.min(320,W*.27),Rx=mob?W*.4:(W-cw)/2*.96,Ry=mob?62:Math.min(150,W*.11);
+ function layout(){var W=ring.clientWidth,mob=W<640,cw=mob?Math.min(200,W*.52):Math.min(270,W*.22),Rx=mob?W*.4:(W-cw)/2*.96,Ry=mob?48:Math.min(105,W*.08);
   ring.style.setProperty("--cw",cw+"px");
   cards.forEach(function(c,i){var ang=(i-ringRot)*step;ang=Math.atan2(Math.sin(ang),Math.cos(ang));var co=Math.cos(ang),k=(co+1)/2,sc=.48+.52*Math.pow(k,1.6);
    c.style.transform="translate(-50%,-50%) translate("+(Math.sin(ang)*Rx).toFixed(1)+"px,"+(co*Ry).toFixed(1)+"px) scale("+sc.toFixed(3)+")";
