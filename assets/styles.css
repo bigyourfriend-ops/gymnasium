@@ -1101,3 +1101,15 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 .bells div.nx{background:var(--b50);border:2px solid var(--b500);color:var(--b800)}
 .bells div.nx b{color:var(--b800)}
 .pbar.brk i{background:linear-gradient(90deg,#86efac,var(--b500))}
+
+/* About page: tabbed slider (history / administration / teachers / facilities) */
+.ab-tabs{position:relative;align-self:flex-start;max-width:100%;overflow-x:auto;flex-wrap:nowrap;scroll-margin-top:90px}
+.ab-tabs a{padding:8px 16px;font-size:13.5px;font-weight:700;border-radius:10px;color:#334155;text-decoration:none;white-space:nowrap;transition:background .2s,color .2s}
+.ab-tabs a:hover{background:#fff}
+.ab-tabs a[aria-current="page"]{background:var(--b700);color:#fff;box-shadow:0 2px 6px rgba(21,128,61,.3)}
+.about-page{gap:28px}
+.ab-view{overflow:hidden;margin:-12px -18px -36px;touch-action:pan-y}
+.ab-view.anim{transition:height .45s cubic-bezier(.4,0,.2,1)}
+.ab-track{display:flex;align-items:flex-start}
+.ab-track.anim{transition:transform .45s cubic-bezier(.4,0,.2,1)}
+.ab-panel{flex:0 0 100%;min-width:0;padding:12px 18px 36px}

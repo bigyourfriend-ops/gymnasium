@@ -445,13 +445,31 @@ function pageHome(){var s=DATA.settings;
 
 function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"});
  function person(p){var ini=(p.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join("");return '<div class="box person">'+ed("staff",p.id)+'<div class="ava">'+(p.img?'<img src="'+p.img+'" alt="">':esc(ini))+'</div><div><b>'+esc(p.name)+'</b><span>'+esc(pick(p.role))+'</span></div></div>'}
- return aboutHero()+'<div class="container page">'+
-  '<div class="subnav pills" style="align-self:flex-start">'+[["about","historyT"],["about.admin","adminT"],["about.teachers","teachersT"],["about.base","baseT"]].map(function(x){return '<a class="btn" style="padding:7px 14px;font-size:13px" href="#'+x[0]+'">'+esc(t(x[1]))+'</a>'}).join("")+'</div>'+
-  '<section id="history" class="twocol"><div class="prose"><h2 class="h2">'+esc(t("historyT"))+'</h2><p>'+esc(t("about1"))+'</p><p>'+esc(t("about2"))+'</p></div>'+
-   '<figure class="schoolpic"><img src="assets/school.webp" alt="'+esc(t("name"))+'" loading="lazy" width="1024" height="1024"></figure></section>'+
-  '<section id="admin"><h2 class="h2">'+esc(t("adminT"))+' '+addBtn("staff",{group:"admin"})+'</h2><div class="grid3">'+admin.map(person).join("")+'</div></section>'+
-  '<section id="teachers"><h2 class="h2">'+esc(t("teachersT"))+' '+addBtn("staff",{group:"teacher"})+'</h2>'+(tea.length?'<div class="grid3">'+tea.map(person).join("")+'</div>':empty("emptyTeachers"))+'</section>'+
-  '<section id="base"><h2 class="h2">'+esc(t("baseT"))+' '+addBtn("facilities")+'</h2><div class="grid3">'+DATA.facilities.map(function(x,i){return '<div class="box">'+ed("facilities",x.id)+'<div class="ico">'+ic(["flask","gear","ball","book","star","users"][i%6])+'</div><h4>'+esc(pick(x.title))+' '+chipSample(x)+'</h4><p>'+esc(pick(x.desc))+'</p></div>'}).join("")+'</div></section></div>'}
+ var tabs=[["history","historyT"],["admin","adminT"],["teachers","teachersT"],["base","baseT"]],cur=ABOUT_TABS.indexOf(st.route.arg);if(cur<0)cur=0;
+ var shown=st.aboutAnim?st.aboutIdx:cur;
+ var panels=[
+  '<div class="twocol"><div class="prose"><h2 class="h2">'+esc(t("historyT"))+'</h2><p>'+esc(t("about1"))+'</p><p>'+esc(t("about2"))+'</p></div>'+
+   '<figure class="schoolpic"><img src="assets/school.webp" alt="'+esc(t("name"))+'" loading="lazy" width="1024" height="1024"></figure></div>',
+  '<h2 class="h2">'+esc(t("adminT"))+' '+addBtn("staff",{group:"admin"})+'</h2><div class="grid3">'+admin.map(person).join("")+'</div>',
+  '<h2 class="h2">'+esc(t("teachersT"))+' '+addBtn("staff",{group:"teacher"})+'</h2>'+(tea.length?'<div class="grid3">'+tea.map(person).join("")+'</div>':empty("emptyTeachers")),
+  '<h2 class="h2">'+esc(t("baseT"))+' '+addBtn("facilities")+'</h2><div class="grid3">'+DATA.facilities.map(function(x,i){return '<div class="box">'+ed("facilities",x.id)+'<div class="ico">'+ic(["flask","gear","ball","book","star","users"][i%6])+'</div><h4>'+esc(pick(x.title))+' '+chipSample(x)+'</h4><p>'+esc(pick(x.desc))+'</p></div>'}).join("")+'</div>'];
+ return aboutHero()+'<div class="container page about-page">'+
+  '<nav class="subnav pills ab-tabs" id="abtabs">'+tabs.map(function(x,i){return '<a href="#about'+(i?'.'+x[0]:'')+'" data-abi="'+i+'"'+(i===cur?' aria-current="page"':'')+'>'+esc(t(x[1]))+'</a>'}).join("")+'</nav>'+
+  '<div class="ab-view" id="abview"><div class="ab-track" id="abtrack" style="transform:translateX('+(-100*shown)+'%)">'+
+   panels.map(function(h,i){return '<section id="'+tabs[i][0]+'" class="ab-panel"'+(i!==cur?' inert aria-hidden="true"':'')+'>'+h+'</section>'}).join("")+
+  '</div></div></div>'}
+var ABOUT_TABS=["history","admin","teachers","base"];
+/* About tabs: the four blocks sit side by side; switching slides left (forward) or right (back) */
+function aboutSlide(){var tr=document.getElementById("abtrack"),vw=document.getElementById("abview");if(!tr)return;
+ var cur=ABOUT_TABS.indexOf(st.route.arg);if(cur<0)cur=0;var from=st.aboutAnim?st.aboutIdx:cur,ps=tr.children;st.aboutAnim=false;st.aboutIdx=cur;
+ vw.style.height=ps[from].offsetHeight+"px";
+ if(from!==cur){void tr.offsetWidth;tr.classList.add("anim");vw.classList.add("anim");tr.style.transform="translateX("+(-100*cur)+"%)";vw.style.height=ps[cur].offsetHeight+"px";
+  setTimeout(function(){tr.classList.remove("anim");vw.classList.remove("anim");vw.style.height="auto"},480)}
+ else vw.style.height="auto";
+ var tb=document.getElementById("abtabs"),ta=tb&&tb.children[cur];if(ta&&tb.scrollWidth>tb.clientWidth)tb.scrollLeft=ta.offsetLeft-(tb.clientWidth-ta.offsetWidth)/2;
+ var x0=0,y0=0;vw.addEventListener("touchstart",function(e){x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
+ vw.addEventListener("touchend",function(e){var dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;if(Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.5)return;
+  var n=cur+(dx<0?1:-1);if(n>=0&&n<ABOUT_TABS.length)location.hash="about"+(n?"."+ABOUT_TABS[n]:"")},{passive:true})}
 /* "About" banner built from the gymnasium's brand elements (assets/brand) */
 var T17={ahE:["Ғани Мұратбаев атындағы","Имени Гани Муратбаева","Gani Muratbayev"],ahF1:["1–11 сынып","1–11 классы","Grades 1–11"],ahF2:["2 ауысым","2 смены","2 shifts"]};
 for(var _k17 in T17)T[_k17]=T17[_k17];
@@ -644,7 +662,7 @@ function render(keepScroll){document.documentElement.lang=st.lang;syncNav();var 
  var fn=PAGES[st.route.page]||pageHome;
  app.innerHTML=topbar()+header()+'<main id="main">'+fn()+'</main>'+footer()+editbar();
  document.title=(st.route.page==="home"?"":titleFor()+" · ")+t("name");
- if(keepScroll)window.scrollTo(0,y);startHero();startStrip();startTicker()}
+ if(keepScroll)window.scrollTo(0,y);aboutSlide();startHero();startStrip();startTicker()}
 function titleFor(){if(EXTRA_TITLES[st.route.page])return EXTRA_TITLES[st.route.page]();var m={projects:"navProj",admin:"adminPanel",feedback:"navFeedback",profile:"cabinet",about:"navAbout",news:"navNews",programs:"navProg",schedule:"navSched",olympiad:"navOlymp",events:"navEvents",clubs:"navClubs",gallery:"navGallery",alumni:"navAlumni",docs:"navRes",contacts:"navContacts"}[st.route.page];
  if(m)return t(m);if(st.route.page==="project"){var pj=(DATA.projects||[]).filter(function(x){return x.id===st.route.arg})[0];return pj?pick(pj.title):""}if(st.route.page==="post"){var p=DATA.posts.filter(function(x){return x.id===st.route.arg})[0];return p?pick(p.title):""}
  if(st.route.page==="album"){var a=DATA.albums.filter(function(x){return x.id===st.route.arg})[0];return a?pick(a.title):""}return""}
@@ -659,8 +677,9 @@ function parseHash(){var h=(location.hash||"").replace(/^#/,""),parts=h.split(".
  if(!PAGES[page]){page="home";arg=""}
  if(page==="news"&&arg&&["events","achieve","life","ann"].indexOf(arg)>=0){st.newsCat=arg;st.newsPage=1;arg=""}
  if(page==="programs"&&PROG[arg]){st.progF=arg;arg=""}
- var prev=st.route.page+"."+st.route.arg;st.route={page:page,arg:arg};closeLayer();render();
- var sec=(page==="about"||page==="docs"||page==="contacts")&&arg?document.getElementById(arg):null;
+ var prevPage=st.route.page,prev=prevPage+"."+st.route.arg;if(page==="about"&&ABOUT_TABS.indexOf(arg)<0)arg="";st.aboutAnim=page==="about"&&prevPage==="about";st.route={page:page,arg:arg};closeLayer();render();
+ if(page==="about"){var tb=document.getElementById("abtabs");if(st.aboutAnim){if(tb&&tb.getBoundingClientRect().top<70)tb.scrollIntoView({behavior:"smooth"})}else if(arg&&tb)tb.scrollIntoView();else window.scrollTo(0,0);return}
+ var sec=(page==="docs"||page==="contacts")&&arg?document.getElementById(arg):null;
  if(sec)sec.scrollIntoView();else if(prev!==page+"."+arg)window.scrollTo(0,0)}
 window.addEventListener("hashchange",parseHash);
 
