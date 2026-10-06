@@ -368,12 +368,12 @@ function nowHTML(){var s=lessonState(),n=s.n,b=s.b,head,sub="",bar="";
 
 /* ------------------------------------------------------------ chrome */
 var NAV=[
- {k:"navSchool",items:[["about","navAbout"],["about.admin","navAdmin"],["about.teachers","navTeachers"],["about.base","navBase"],["docs","navRes"]]},
+ {k:"navSchool",items:[["about","navAbout"],["about.admin","navAdmin"],["about.teachers","navTeachers"],["about.base","navBase"],["about.clubs","navClubs"],["docs","navRes"]]},
  {k:"navEdu",items:[["schedule","navSched"],["tests","navGT"],["olympiad","navOlymp"]]},
- {k:"navLife",items:[["clubs","navClubs"],["gallery","navGallery"],["alumni","navAlumni"]]},
+ {k:"navLife",items:[["gallery","navGallery"],["alumni","navAlumni"]]},
  {k:"navProj",proj:1,items:[]},{k:"navNews",href:"news"},{k:"navContacts",href:"contacts"}];
 function syncNav(){NAV.forEach(function(g){if(g.proj)g.items=[["projects","allProj"]].concat((DATA.projects||[]).map(function(p){return["project."+p.id,"",pick(p.title)]}))})}
-var PARENT={projects:null,project:null,admin:null,profile:null,feedback:"navLife",about:"navSchool",docs:"navSchool",programs:"navEdu",schedule:"navEdu",olympiad:"navEdu",events:"navLife",clubs:"navLife",gallery:"navLife",album:"navLife",alumni:"navLife",news:null,post:null,contacts:null};
+var PARENT={projects:null,project:null,admin:null,profile:null,feedback:"navLife",about:"navSchool",docs:"navSchool",programs:"navEdu",schedule:"navEdu",olympiad:"navEdu",events:"navLife",clubs:"navSchool",gallery:"navLife",album:"navLife",alumni:"navLife",news:null,post:null,contacts:null};
 function isOn(route){var p=route.split(".")[0];return st.route.page===p||(p==="gallery"&&st.route.page==="album")||(p==="news"&&st.route.page==="post")}
 function topbar(){var s=DATA.settings;return '<div class="topbar"><div class="container"><div class="info"><span>'+ic("pin")+esc(t("region"))+'</span><span>'+ic("phone")+'<span class="tnum">'+esc(s.phone)+'</span></span><span class="opt">'+ic("mail")+esc(s.email)+'</span></div>'+
  '<div class="lang" role="group" aria-label="Language">'+LANGS.map(function(l){return '<button data-lang="'+l+'" aria-pressed="'+(st.lang===l)+'">'+["Қаз","Рус","Eng"][LI[l]]+'</button>'}).join("")+'</div></div></div>'}
@@ -429,7 +429,7 @@ function pageHome(){var s=DATA.settings;
   [["schedule","cal","q1","q1d"],["https://bilimclass.kz","book","kundelik","q2d"],["contacts.faq","cap","q3","q3d"],["news.ann","mega","q4","q4d"]].map(function(q){var ext=q[0].indexOf("http")===0;
    return '<a class="qcard" href="'+(ext?q[0]:"#"+q[0])+'"'+(ext?' target="_blank" rel="noopener"':'')+'><div class="ico">'+ic(q[1])+'</div><h4>'+esc(t(q[2]))+'</h4><p>'+esc(q[3]==="q2d"?"BilimClass · "+t(q[3]):t(q[3]))+'</p></a>'}).join("")+'</div></div></section>';
  var motto='<section class="section"><div class="container"><div class="quote">'+emblem()+'<div><blockquote>«'+esc(pick(s.motto))+'»</blockquote><cite>'+esc(t("name"))+'</cite></div></div></div></section>';
- var dirs=[["programs.primary","g1","grades14","d1","d1d"],["programs.basic","g2","grades59","d2","d2d"],["programs.senior","g3","grades1011","d3","d3d"],["clubs","g4","allGrades","d4","d4d"],["olympiad","g5","allGrades","d5","d5d"],["alumni","g6","navAlumni","d6","d6d"]];
+ var dirs=[["programs.primary","g1","grades14","d1","d1d"],["programs.basic","g2","grades59","d2","d2d"],["programs.senior","g3","grades1011","d3","d3d"],["about.clubs","g4","allGrades","d4","d4d"],["olympiad","g5","allGrades","d5","d5d"],["alumni","g6","navAlumni","d6","d6d"]];
  var dirsH='<section class="section alt"><div class="container"><div class="sec-head"><div><span class="eyebrow">'+esc(t("dirE"))+'</span><h2>'+esc(t("dirT"))+'</h2></div></div><div class="dirs">'+
   dirs.map(function(d){return '<a class="dir '+d[1]+'" href="#'+d[0]+'"><div><span class="tag">'+esc(t(d[2]))+'</span><h3>'+esc(t(d[3]))+'</h3><p>'+esc(t(d[4]))+'</p></div><span class="go">'+esc(t("open"))+ic("arrow").replace('<svg','<svg width="15" height="15"')+'</span></a>'}).join("")+'</div></div></section>';
  var stats='<section class="stats"><div class="container"><div class="sec-head" style="margin-bottom:26px"><h2 style="color:#fff">'+esc(t("statsT"))+'</h2>'+(st.editing?'<button class="addbtn" data-open="settings">'+esc(t("settings"))+'</button>':'<span class="chip" style="background:rgba(255,255,255,.12);color:#bbf7d0">'+esc(s.year)+'</span>')+'</div><div class="grid">'+
@@ -445,20 +445,21 @@ function pageHome(){var s=DATA.settings;
 
 function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"});
  function person(p){var ini=(p.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join("");return '<div class="box person">'+ed("staff",p.id)+'<div class="ava">'+(p.img?'<img src="'+p.img+'" alt="">':esc(ini))+'</div><div><b>'+esc(p.name)+'</b><span>'+esc(pick(p.role))+'</span></div></div>'}
- var tabs=[["history","historyT"],["admin","adminT"],["teachers","teachersT"],["base","baseT"]],cur=ABOUT_TABS.indexOf(st.route.arg);if(cur<0)cur=0;
+ var tabs=[["history","historyT"],["admin","adminT"],["teachers","teachersT"],["base","baseT"],["clubs","navClubs"]],cur=ABOUT_TABS.indexOf(st.route.arg);if(cur<0)cur=0;
  var shown=st.aboutAnim?st.aboutIdx:cur;
  var panels=[
   '<div class="twocol"><div class="prose"><h2 class="h2">'+esc(t("historyT"))+'</h2><p>'+esc(t("about1"))+'</p><p>'+esc(t("about2"))+'</p></div>'+
    '<figure class="schoolpic"><img src="assets/school.webp" alt="'+esc(t("name"))+'" loading="lazy" width="1024" height="1024"></figure></div>',
   '<h2 class="h2">'+esc(t("adminT"))+' '+addBtn("staff",{group:"admin"})+'</h2><div class="grid3">'+admin.map(person).join("")+'</div>',
   '<h2 class="h2">'+esc(t("teachersT"))+' '+addBtn("staff",{group:"teacher"})+'</h2>'+(tea.length?'<div class="grid3">'+tea.map(person).join("")+'</div>':empty("emptyTeachers")),
-  '<h2 class="h2">'+esc(t("baseT"))+' '+addBtn("facilities")+'</h2><div class="grid3">'+DATA.facilities.map(function(x,i){return '<div class="box">'+ed("facilities",x.id)+'<div class="ico">'+ic(["flask","gear","ball","book","star","users"][i%6])+'</div><h4>'+esc(pick(x.title))+' '+chipSample(x)+'</h4><p>'+esc(pick(x.desc))+'</p></div>'}).join("")+'</div>'];
+  '<h2 class="h2">'+esc(t("baseT"))+' '+addBtn("facilities")+'</h2><div class="grid3">'+DATA.facilities.map(function(x,i){return '<div class="box">'+ed("facilities",x.id)+'<div class="ico">'+ic(["flask","gear","ball","book","star","users"][i%6])+'</div><h4>'+esc(pick(x.title))+' '+chipSample(x)+'</h4><p>'+esc(pick(x.desc))+'</p></div>'}).join("")+'</div>',
+  clubsBlock()];
  return aboutHero()+'<div class="container page about-page">'+
   '<nav class="subnav pills ab-tabs" id="abtabs">'+tabs.map(function(x,i){return '<a href="#about'+(i?'.'+x[0]:'')+'" data-abi="'+i+'"'+(i===cur?' aria-current="page"':'')+'>'+esc(t(x[1]))+'</a>'}).join("")+'</nav>'+
   '<div class="ab-view" id="abview"><div class="ab-track" id="abtrack" style="transform:translateX('+(-100*shown)+'%)">'+
    panels.map(function(h,i){return '<section id="'+tabs[i][0]+'" class="ab-panel"'+(i!==cur?' inert aria-hidden="true"':'')+'>'+h+'</section>'}).join("")+
   '</div></div></div>'}
-var ABOUT_TABS=["history","admin","teachers","base"];
+var ABOUT_TABS=["history","admin","teachers","base","clubs"];
 /* About tabs: the four blocks sit side by side; switching slides left (forward) or right (back) */
 function aboutSlide(){var tr=document.getElementById("abtrack"),vw=document.getElementById("abview");if(!tr)return;
  var cur=ABOUT_TABS.indexOf(st.route.arg);if(cur<0)cur=0;var from=st.aboutAnim?st.aboutIdx:cur,ps=tr.children;st.aboutAnim=false;st.aboutIdx=cur;
@@ -564,7 +565,7 @@ function bellsSection(arr,key,title,shift){var ed=st.editing&&can("schedule");if
 
 function pageOlympiad(){var byYear={};DATA.achievements.forEach(function(a){(byYear[a.year]=byYear[a.year]||[]).push(a)});var years=Object.keys(byYear).sort().reverse();
  var lvCls={district:"c-life",region:"c-events",republic:"c-achieve",intl:"c-ann"};
- return banner("navOlymp","pd_olympiad")+'<div class="container page"><section class="twocol"><div class="prose"><h2 class="h2">'+esc(t("d5"))+'</h2><p>'+esc(t("olympText"))+'</p><p><a class="more" href="#clubs">'+esc(t("navClubs"))+' →</a></p></div>'+
+ return banner("navOlymp","pd_olympiad")+'<div class="container page"><section class="twocol"><div class="prose"><h2 class="h2">'+esc(t("d5"))+'</h2><p>'+esc(t("olympText"))+'</p><p><a class="more" href="#about.clubs">'+esc(t("navClubs"))+' →</a></p></div>'+
   '<div class="panel"><h3>'+esc(t("c_achieve"))+' · '+esc(t("navNews"))+'</h3><div class="evlist">'+sortedPosts().filter(function(p){return p.cat==="achieve"}).slice(0,3).map(function(p){return '<div class="ev" style="grid-template-columns:1fr"><div><h4>'+lnk("post."+p.id,esc(pick(p.title)))+'</h4><p>'+esc(fmtDate(p.date))+'</p></div></div>'}).join("")+'</div></div></section>'+
   '<section><h2 class="h2">'+esc(t("achT"))+' '+addBtn("achievements",{year:DATA.settings.year,level:"district"})+'</h2>'+(years.length?years.map(function(y){return '<h3 style="font:800 16px var(--f-display);margin:18px 0 10px;color:var(--b800)">'+esc(y)+'</h3><div class="links">'+byYear[y].map(function(a){return '<div class="lnk">'+ed("achievements",a.id)+'<span class="ico">'+ic("trophy")+'</span><div style="min-width:0"><b>'+esc(pick(a.title))+'</b><span class="chip '+(lvCls[a.level]||"")+'">'+esc(t("lv_"+a.level))+'</span></div></div>'}).join("")+'</div>'}).join(""):empty("emptyAch"))+'</section></div>'}
 
@@ -579,9 +580,10 @@ function pageEvents(){var n=nowTZ();if(!st.cal)st.cal={y:n.y,m:n.m};var y=st.cal
   '<div class="panel"><h3>'+esc(sel?f(t("eventsOn"),{d:fmtDate(st.calSel)}):t("upcomingAll"))+' '+addBtn("events",{date:st.calSel||td,time:"10:00"})+'</h3><div class="evlist">'+((sel||up).length?(sel||up).map(evRow).join(""):'<p style="color:var(--muted)">'+esc(t("noEvents"))+'</p>')+'</div></div></section>'+
   (past.length?'<section><h2 class="h2">'+esc(t("past"))+'</h2><div class="panel"><div class="evlist">'+past.slice(0,8).map(evRow).join("")+'</div></div></section>':'')+'</div>'}
 
-function pageClubs(){return banner("navClubs","pd_clubs")+'<div class="container page"><section><h2 class="h2">'+esc(t("navClubs"))+' '+addBtn("clubs")+'</h2><div class="grid3">'+DATA.clubs.map(function(c,i){
+function clubsBlock(){return '<h2 class="h2">'+esc(t("navClubs"))+' '+addBtn("clubs")+'</h2><div class="grid3">'+DATA.clubs.map(function(c,i){
   return '<div class="box">'+ed("clubs",c.id)+'<div class="ico">'+ic(["star","gear","ball","music"in IC?"music":"users","file","trophy"][i%6])+'</div><h4>'+esc(pick(c.title))+' '+chipSample(c)+'</h4><p>'+esc(pick(c.desc))+'</p>'+
-  '<div class="tags" style="margin-top:12px"><span>'+esc(t("gradesL"))+': '+esc(c.grades)+'</span><span>'+esc(pick(c.when))+'</span></div></div>'}).join("")+'</div></section></div>'}
+  '<div class="tags" style="margin-top:12px"><span>'+esc(t("gradesL"))+': '+esc(c.grades)+'</span><span>'+esc(pick(c.when))+'</span></div></div>'}).join("")+'</div>'}
+function pageClubs(){return pageAbout()}
 
 function pageGallery(){var years=[];DATA.albums.forEach(function(a){if(years.indexOf(a.year)<0)years.push(a.year)});years.sort().reverse();
  var list=DATA.albums.filter(function(a){return st.year==="all"||a.year===st.year});
@@ -673,7 +675,7 @@ function toast(msg){var d=document.createElement("div");d.className="toast";d.se
 function dirty(){st.dirty++}
 
 /* routing: plain #token or #page.arg */
-function parseHash(){var h=(location.hash||"").replace(/^#/,""),parts=h.split("."),page=parts[0]||"home",arg=parts.slice(1).join(".");if(page==="feedback"){page="contacts";arg="feedback"}
+function parseHash(){var h=(location.hash||"").replace(/^#/,""),parts=h.split("."),page=parts[0]||"home",arg=parts.slice(1).join(".");if(page==="feedback"){page="contacts";arg="feedback"}if(page==="clubs"){page="about";arg="clubs";try{history.replaceState(null,"","#about.clubs")}catch(e){}}
  if(!PAGES[page]){page="home";arg=""}
  if(page==="news"&&arg&&["events","achieve","life","ann"].indexOf(arg)>=0){st.newsCat=arg;st.newsPage=1;arg=""}
  if(page==="programs"&&PROG[arg]){st.progF=arg;arg=""}
@@ -802,7 +804,7 @@ function submitAuth(form){var id=form.id,v=function(x){return document.getElemen
 function openProg(k){var p=PROG[k],L=LI[st.lang];var list=k==="extra"?DATA.clubs.map(function(c){return pick(c.title)}):p.subj.map(subj);
  openLayer('<span class="eyebrow">'+esc(p.sub[L])+' · '+esc(p.g)+'</span><h3>'+esc(p.title[L])+'</h3><p style="color:var(--muted);margin-top:10px;font-size:14px">'+esc(p.desc[L])+'</p>'+
  '<h4 style="margin-top:18px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8">'+esc(k==="extra"?t("navClubs"):t("subjT"))+'</h4><div class="subjlist">'+list.map(function(s){return '<div>'+esc(s)+'</div>'}).join("")+'</div>'+
- '<div class="callout">'+esc(p.out[L])+'</div><div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap"><a class="btn btn-primary" href="#'+(k==="extra"?"clubs":"schedule")+'">'+esc(k==="extra"?t("navClubs"):t("navSched"))+'</a><button class="btn btn-soft" data-close="1">'+esc(t("close"))+'</button></div>')}
+ '<div class="callout">'+esc(p.out[L])+'</div><div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap"><a class="btn btn-primary" href="#'+(k==="extra"?"about.clubs":"schedule")+'">'+esc(k==="extra"?t("navClubs"):t("navSched"))+'</a><button class="btn btn-soft" data-close="1">'+esc(t("close"))+'</button></div>')}
 function lightbox(aid,i){var a=DATA.albums.filter(function(x){return x.id===aid})[0];if(!a)return;var p=a.photos[i];
  layer.innerHTML='<div class="lightbox" data-close="1" role="dialog"><button class="xbtn" data-close="1" aria-label="×">×</button><img src="'+p.src+'" alt=""><p></p></div>';layer.querySelector("p").textContent=pick(p.cap);document.addEventListener("keydown",escKey)}
 
@@ -1050,7 +1052,7 @@ function pageAdmin(){
 function tabContent(){var photos=DATA.albums.reduce(function(s,a){return s+a.photos.length},0);
  var cards=[["news","mega","navNews","news",DATA.posts.length],["gallery","image","navGallery","gallery",photos],
   ["schedule","cal","navSched","schedule",f(t("nClasses"),{n:Object.keys(DATA.classes).length})],["about","build","navAbout","about",DATA.staff.length+DATA.facilities.length],["about","users","navTeachers","about.teachers",DATA.staff.filter(function(x){return x.group==="teacher"}).length],
-  ["life","star","navClubs","clubs",DATA.clubs.length],["life","trophy","navOlymp","olympiad",DATA.achievements.length],["life","cap","navAlumni","alumni",DATA.alumni.length],
+  ["life","star","navClubs","about.clubs",DATA.clubs.length],["life","trophy","navOlymp","olympiad",DATA.achievements.length],["life","cap","navAlumni","alumni",DATA.alumni.length],
   ["docs","link","navRes","docs",DATA.docs.length],["about","msg","faqT","contacts.faq",DATA.faq.length],["about","build","partnersT","home",DATA.partners.length],["projects","star","navProj","projects",DATA.projects.length]].filter(function(c){return can(c[0])});
  if(!can("projects"))DATA.projects.forEach(function(p){if(can("p_"+p.id))cards.push(["p_"+p.id,"star","","project."+p.id,(DATA["pi_"+p.id]||[]).length,pick(p.title)])});
  return '<p class="hint" style="text-align:left;margin:0 0 16px">'+esc(t("a_contentHint"))+'</p><div class="acards">'+cards.map(function(c){
