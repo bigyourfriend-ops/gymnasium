@@ -1113,3 +1113,8 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 .ab-track{display:flex;align-items:flex-start}
 .ab-track.anim{transition:transform .45s cubic-bezier(.4,0,.2,1)}
 .ab-panel{flex:0 0 100%;min-width:0;padding:12px 18px 36px}
+
+/* home partners carousel */
+.pview{overflow:hidden;margin:-6px;padding:6px}
+.partners.ptrack{display:flex;gap:14px;transition:transform .6s cubic-bezier(.65,0,.35,1);will-change:transform}
+.ptrack>.partner{flex:0 0 calc((100% - (var(--per,4) - 1) * 14px) / var(--per,4));min-width:0}
