@@ -368,7 +368,7 @@ function nowHTML(){var s=lessonState(),n=s.n,b=s.b,head,sub="",bar="";
 
 /* ------------------------------------------------------------ chrome */
 var NAV=[
- {k:"navSchool",items:[["about","navAbout"],["about.admin","navAdmin"],["about.teachers","navTeachers"],["about.base","navBase"],["about.clubs","navClubs"],["docs","navRes"]]},
+ {k:"navSchool",items:[["about","navAbout"],["docs","navRes"]]},
  {k:"navEdu",items:[["schedule","navSched"],["tests","navGT"],["olympiad","navOlymp"]]},
  {k:"navLife",items:[["gallery","navGallery"],["alumni","navAlumni"]]},
  {k:"navProj",proj:1,items:[]},{k:"navNews",href:"news"},{k:"navContacts",href:"contacts"}];
