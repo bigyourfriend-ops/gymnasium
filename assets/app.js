@@ -368,12 +368,11 @@ function nowHTML(){var s=lessonState(),n=s.n,b=s.b,head,sub="",bar="";
 
 /* ------------------------------------------------------------ chrome */
 var NAV=[
- {k:"navSchool",items:[["about","navAbout"],["docs","navRes"]]},
- {k:"navEdu",items:[["schedule","navSched"],["tests","navGT"],["olympiad","navOlymp"]]},
- {k:"navLife",items:[["gallery","navGallery"],["alumni","navAlumni"]]},
+ {k:"navSchool",items:[["about","navAbout"],["alumni","navAlumni"],["docs","navRes"]]},
+ {k:"navEdu",items:[["schedule","navSched"],["olympiad","navOlymp"]]},
  {k:"navProj",href:"projects"},{k:"navNews",href:"news"},{k:"navContacts",href:"contacts"}];
 function syncNav(){NAV.forEach(function(g){if(g.proj)g.items=[["projects","allProj"]].concat((DATA.projects||[]).map(function(p){return["project."+p.id,"",pick(p.title)]}))})}
-var PARENT={projects:null,project:null,admin:null,profile:null,feedback:"navLife",about:"navSchool",docs:"navSchool",programs:"navEdu",schedule:"navEdu",olympiad:"navEdu",events:"navLife",clubs:"navSchool",gallery:"navLife",album:"navLife",alumni:"navLife",news:null,post:null,contacts:null};
+var PARENT={projects:null,project:null,admin:null,profile:null,feedback:null,about:"navSchool",docs:"navSchool",programs:"navEdu",schedule:"navEdu",olympiad:"navEdu",events:null,clubs:"navSchool",gallery:null,album:null,alumni:"navSchool",news:null,post:null,contacts:null};
 function isOn(route){var p=route.split(".")[0];return st.route.page===p||(p==="gallery"&&st.route.page==="album")||(p==="news"&&st.route.page==="post")||(p==="projects"&&st.route.page==="project")}
 function topbar(){var s=DATA.settings;return '<div class="topbar"><div class="container"><div class="info"><span>'+ic("pin")+esc(t("region"))+'</span><span>'+ic("phone")+'<span class="tnum">'+esc(s.phone)+'</span></span><span class="opt">'+ic("mail")+esc(s.email)+'</span></div>'+
  '<div class="lang" role="group" aria-label="Language">'+LANGS.map(function(l){return '<button data-lang="'+l+'" aria-pressed="'+(st.lang===l)+'">'+["Қаз","Рус","Eng"][LI[l]]+'</button>'}).join("")+'</div></div></div>'}
