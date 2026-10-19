@@ -314,7 +314,7 @@ var T12={navProj:["Жобалар","Проекты","Projects"],
  pd_proj:["Гимназияның цифрлық жобалары: газет, телеарна, бейнесабақтар және тағы басқа.","Цифровые проекты гимназии: газета, телеканал, видеоуроки и многое другое.","The gymnasium's digital projects: newspaper, TV channel, video lessons and more."],
  allProj:["Барлық жобалар","Все проекты","All projects"], projE:["Цифрлық жобалар","Цифровые проекты","Digital projects"],
  projNew:["Жобалардағы жаңа материалдар","Новое в проектах","New in projects"],
- pt_video:["Бейне","Видео","Video"],pt_paper:["Газет","Газета","Newspaper"],pt_blog:["Блог","Блог","Blog"],pt_articles:["Мақалалар","Статьи","Articles"],pt_tests:["Тесттер","Тесты","Tests"],pt_mixed:["Тәжірибе","Опыт","Practice"],
+ pt_video:["Бейне","Видео","Video"],pt_paper:["Газет","Газета","Newspaper"],pt_news:["Жаңалықтар","Новости","News"],pt_blog:["Блог","Блог","Blog"],pt_articles:["Мақалалар","Статьи","Articles"],pt_tests:["Тесттер","Тесты","Tests"],pt_mixed:["Тәжірибе","Опыт","Practice"],
  pk_video:["Бейне (YouTube)","Видео (YouTube)","Video (YouTube)"],pk_issue:["Шығарылым (PDF)","Выпуск (PDF)","Issue (PDF)"],pk_post:["Жазба","Запись","Post"],pk_link:["Сілтеме / файл","Ссылка / файл","Link / file"],
  pk_videos:["Бейнелер","Видео","Videos"],pk_issues:["Шығарылымдар","Выпуски","Issues"],pk_posts:["Жазбалар","Записи","Posts"],pk_links:["Материалдар","Материалы","Materials"],
  allK:["Барлығы","Все","All"], pEmpty:["Материал әлі жоқ","Пока нет материалов","No materials yet"],
@@ -854,7 +854,7 @@ var SCHEMA={
  albums:[["year","text"],["title","ml"]],
  alumni:[["name","text"],["year","text"],["text","mlarea"]],
  partners:[["title","ml"],["url","url"],["img","logo"]],
- projects:[["title","ml"],["desc","mlarea"],["kind","select",["video","paper","blog","articles","tests","mixed"],"pt_"],["curator","text"],["url","url"],["img","logo"]],
+ projects:[["title","ml"],["desc","mlarea"],["kind","select",["video","news","paper","blog","articles","tests","mixed"],"pt_"],["curator","text"],["url","url"],["img","logo"]],
  pitem:[["kind","select",["video","issue","post","link"],"pk_"],["date","date"],["title","ml"],["text","mlarea"],["url","urlfile"],["img","image"]]};
 var LBL={kind:"f_kind",curator:"f_curator",cat:"f_cat",date:"f_date",title:"f_title",text:"f_text",img:"f_img",time:"f_time",place:"f_place",group:"f_group",name:"f_name",role:"f_role",desc:"f_desc",when:"f_when",grades:"f_grades",level:"f_level",year:"f_year",url:"f_url",q:"f_q",a:"f_a"};
 var edImg=null;

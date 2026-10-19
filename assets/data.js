@@ -2,8 +2,8 @@ window.DEFAULT_DATA={"settings": {"phone": "+7 (72637) 2-19-37", "email": "sh-g.
 
 /* Цифрлық жобалар / Digital projects */
 window.DEFAULT_DATA.projects = [
- {"id":"news","kind":"paper","logo":"assets/projects/news.webp","title":{"kk":"Мұратбаев News","ru":"Мұратбаев News","en":"Muratbaev News"},
-  "desc":{"kk":"Гимназияның электронды газеті. Барлық шығарылымдарды осы жерден оқуға болады.","ru":"Электронная газета гимназии. Здесь можно прочитать все выпуски.","en":"The gymnasium's e-newspaper. Read every issue here."}},
+ {"id":"news","kind":"news","logo":"assets/projects/news.webp","title":{"kk":"Мұратбаев News","ru":"Мұратбаев News","en":"Muratbaev News"},
+  "desc":{"kk":"Оқушылардың өздері дайындап, жариялайтын жаңалықтар: мектеп өмірі, іс-шаралар мен жетістіктер оқушы көзімен.","ru":"Новости, которые готовят и публикуют сами ученики: школьная жизнь, события и успехи глазами учеников.","en":"News written and published by the students themselves: school life, events and achievements through their eyes."}},
  {"id":"arna","kind":"video","logo":"assets/projects/arna.webp","title":{"kk":"GM Арнасы","ru":"GM Арнасы","en":"GM Arnasy"},
   "desc":{"kk":"Мектеп телеарнасы: репортаждар, сұхбаттар және іс-шаралардан бейнежазбалар.","ru":"Школьный телеканал: репортажи, интервью и видео с мероприятий.","en":"The school TV channel: reports, interviews and event videos."}},
  {"id":"anim","kind":"video","logo":"assets/projects/anim.webp","title":{"kk":"GM Анимация","ru":"GM Анимация","en":"GM Animation"},
