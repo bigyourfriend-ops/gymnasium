@@ -650,9 +650,9 @@ var ringRot=0,ringTimer=0;
 function startProjRing(){clearInterval(ringTimer);var ring=document.getElementById("pring");if(!ring)return;
  var P=DATA.projects||[],N=P.length,cards=[].slice.call(ring.querySelectorAll(".pr-card")),info=document.getElementById("prinfo"),paused=false,step=2*Math.PI/N;
  function cur(){return ((ringRot%N)+N)%N}
- function layout(){var W=ring.clientWidth,mob=W<640,cw=mob?Math.min(200,W*.52):Math.min(270,W*.22),Rx=mob?W*.4:(W-cw)/2*.96,Ry=mob?48:Math.min(105,W*.08);
+ function layout(){var W=ring.clientWidth,mob=W<640,cw=mob?Math.min(250,W*.62):Math.min(500,W*.35),Rx=mob?W*.4:(W-cw*.5)/2*.97,Ry=mob?40:Math.min(80,W*.055);
   ring.style.setProperty("--cw",cw+"px");
-  cards.forEach(function(c,i){var ang=(i-ringRot)*step;ang=Math.atan2(Math.sin(ang),Math.cos(ang));var co=Math.cos(ang),k=(co+1)/2,sc=.48+.52*Math.pow(k,1.6);
+  cards.forEach(function(c,i){var ang=(i-ringRot)*step;ang=Math.atan2(Math.sin(ang),Math.cos(ang));var co=Math.cos(ang),k=(co+1)/2,sc=.4+.6*Math.pow(k,2);
    c.style.transform="translate(-50%,-50%) translate("+(Math.sin(ang)*Rx).toFixed(1)+"px,"+(co*Ry).toFixed(1)+"px) scale("+sc.toFixed(3)+")";
    c.style.zIndex=Math.round(k*100);c.style.setProperty("--k",k.toFixed(3));var front=i===cur();c.classList.toggle("on",front);c.tabIndex=front?0:-1;c.setAttribute("aria-current",front?"true":"false")})
   var p=P[cur()],n=(DATA["pi_"+p.id]||[]).length;
