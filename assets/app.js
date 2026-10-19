@@ -393,9 +393,9 @@ function social(){var s=DATA.settings,out="";
  if(s.facebook)out+='<a href="'+esc(s.facebook)+'" target="_blank" rel="noopener" aria-label="Facebook">'+ic("fb")+'</a>';
  if(s.whatsapp)out+='<a href="https://wa.me/'+esc(s.whatsapp.replace(/\D/g,""))+'" target="_blank" rel="noopener" aria-label="WhatsApp">'+ic("msg")+'</a>';
  return out?'<div class="social">'+out+'</div>':''}
-function banner(titleKey,descKey,extraCrumb,titleText){var p=PARENT[st.route.page];
+function banner(titleKey,descKey,extraCrumb,titleText,noH1){var p=PARENT[st.route.page];
  var cr='<nav class="crumbs" aria-label="breadcrumb">'+lnk("home",esc(t("home")))+'<span>/</span>'+(p?'<span>'+esc(t(p))+'</span><span>/</span>':'')+(extraCrumb||'')+'<span class="cur">'+esc(titleText||t(titleKey))+'</span></nav>';
- return '<section class="banner"><div class="container">'+cr+'<h1>'+esc(titleText||t(titleKey))+'</h1>'+(descKey?'<p>'+esc(t(descKey))+'</p>':'')+'</div></section>'}
+ return '<section class="banner'+(noH1?' slim':'')+'"><div class="container">'+cr+(noH1?'':'<h1>'+esc(titleText||t(titleKey))+'</h1>')+(descKey?'<p>'+esc(t(descKey))+'</p>':'')+'</div></section>'}
 
 /* ------------------------------------------------------------ cards */
 function catIcon(c){return{events:"cal",achieve:"trophy",life:"users",ann:"mega"}[c]||"book"}
@@ -677,12 +677,12 @@ function pageProject(){var p=(DATA.projects||[]).filter(function(x){return x.id=
  var col="pi_"+p.id,items=projItems(p.id),kinds=[];items.forEach(function(i){if(kinds.indexOf(i.kind)<0)kinds.push(i.kind)});
  var pf=kinds.indexOf(st.pkind)>=0?st.pkind:"all",list=items.filter(function(i){return pf==="all"||i.kind===pf});
  var link=p.url?'<a class="btn btn-outline"'+ext(p.url)+'>'+ic(/youtu/i.test(p.url)?"play":/instagram/i.test(p.url)?"insta":"link")+esc(/youtu/i.test(p.url)?t("ytCh"):/instagram/i.test(p.url)?"Instagram":t("projSite"))+'</a>':'';
- var head='<div class="phead">'+ed("projects",p.id)+'<div class="pjlogo big"><img src="'+esc(projLogo(p))+'" alt=""></div><div class="phtext"><span class="chip">'+esc(t("pt_"+p.kind))+'</span><p class="pdesc">'+esc(pick(p.desc))+'</p>'+
+ var head='<div class="phead">'+ed("projects",p.id)+'<div class="pjlogo big"><img src="'+esc(projLogo(p))+'" alt=""></div><div class="phtext"><h1 class="ptitle">'+esc(pick(p.title))+'</h1><span class="chip">'+esc(t("pt_"+p.kind))+'</span><p class="pdesc">'+esc(pick(p.desc))+'</p>'+
   (p.curator?'<p class="pcur">'+ic("user")+'<span>'+esc(t("curatorL"))+': <b>'+esc(p.curator)+'</b></span></p>':'')+(link?'<div class="pacts">'+link+'</div>':'')+'</div></div>';
  var tools='<div class="toolbar ptools">'+(kinds.length>1?'<div class="pills">'+["all"].concat(kinds).map(function(k){return '<button data-pkind="'+k+'" aria-pressed="'+(pf===k)+'">'+esc(t(k==="all"?"allK":"pk_"+k+"s"))+'</button>'}).join("")+'</div>':'<span></span>')+addBtn(col,{kind:defKind(p.kind),date:todayISO()})+'</div>';
  var body=list.length?'<div class="pitems'+(list.every(function(i){return i.kind==="issue"})?" issues":"")+'">'+list.map(function(i){return itemCard(i,col,p)}).join("")+'</div>':'<div class="empty"><b>'+esc(t("pNoItems"))+'</b>'+(st.editing&&can("p_"+p.id)?'<p style="margin-top:8px">'+esc(t("pNoItemsEd"))+'</p>':'')+'</div>';
  var crumb=lnk("projects",esc(t("navProj")))+'<span>/</span>';
- return banner(null,null,crumb,pick(p.title))+'<div class="container page"><section>'+head+tools+body+'</section><section><h2 class="h2">'+esc(t("otherProj"))+'</h2>'+projLogos(p.id)+'</section></div>'}
+ return banner(null,null,crumb,pick(p.title),true)+'<div class="container page pjpage"><section>'+head+tools+body+'</section><section><h2 class="h2">'+esc(t("otherProj"))+'</h2>'+projLogos(p.id)+'</section></div>'}
 function homeProjects(){var P=DATA.projects||[];if(!P.length)return"";var all=[];
  P.forEach(function(p){projItems(p.id).forEach(function(i){all.push({i:i,p:p})})});all.sort(function(a,b){return (a.i.date||"")<(b.i.date||"")?1:-1});
  return '<section class="section"><div class="container"><div class="sec-head"><div><span class="eyebrow">'+esc(t("projE"))+'</span><h2>'+esc(t("navProj"))+'</h2></div><a class="btn btn-soft" href="#projects">'+esc(t("allProj"))+' →</a></div>'+projLogos()+
