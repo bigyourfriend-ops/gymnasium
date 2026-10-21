@@ -308,7 +308,7 @@ function subjSelect(di,idx,cur){var key=di+":"+idx;st.ttCustom=st.ttCustom||{};
  if(st.ttCustom[key])return '<input class="tts" data-tts="'+key+'" value="" placeholder="'+esc(t("newSubjPh"))+'">';
  var subs=allSubjects();return '<select class="tts" data-ttsel="'+key+'"><option value="">'+esc(t("pickSubj"))+'</option>'+subs.map(function(s){return '<option'+(s===cur?" selected":"")+'>'+esc(s)+'</option>'}).join("")+'<option value="__new__">'+esc(t("otherSubj"))+'</option></select>'}
 function bellLabel(x,i){return x[2]!=null?x[2]:i+1}
-function bellFor(shift,n){var arr=shift===2?(DATA.bells2||[]):DATA.bells;for(var i=0;i<arr.length;i++)if(bellLabel(arr[i],i)===n)return arr[i];return null}
+function bellFor(shift,n,c){var arr=c&&c.bells&&c.bells.length?c.bells:shift===2?(DATA.bells2||[]):DATA.bells;for(var i=0;i<arr.length;i++)if(bellLabel(arr[i],i)===n)return arr[i];return null}
 
 var T12={navProj:["Жобалар","Проекты","Projects"],
  pd_proj:["Гимназияның цифрлық жобалары: газет, телеарна, бейнесабақтар және тағы басқа.","Цифровые проекты гимназии: газета, телеканал, видеоуроки и многое другое.","The gymnasium's digital projects: newspaper, TV channel, video lessons and more."],
@@ -555,12 +555,12 @@ function pageSchedule(){var C=DATA.classes||{},names=Object.keys(C).sort(clsSort
   '<div class="ttrow"><span class="ttlab">'+esc(t("letterL"))+'</span><div class="grades">'+letters.map(function(n){return '<button data-ttcls="'+esc(n)+'" aria-pressed="'+(n===st.cls)+'">'+esc(n.slice(String(g).length))+'</button>'}).join("")+'</div></div></div>';
  var c=C[st.cls],s=lessonState(),ti=(s.n.wd>=1&&s.n.wd<=5)?s.n.wd-1:-1;
  var body='';
- if(c){var curN=(s.kind==="lesson"&&s.shift===c.shift)?bellLabel(s.b[s.i],s.i):null;
+ if(c){var curN=null;if(c.bells&&c.bells.length){c.bells.forEach(function(b,i){if(s.n.min>=toMin(b[0])&&s.n.min<toMin(b[1]))curN=bellLabel(b,i)})}else if(s.kind==="lesson"&&s.shift===c.shift)curN=bellLabel(s.b[s.i],s.i);
   body='<div class="tthead"><h2 class="h2" style="margin:0">'+esc(f(t("clsTitle"),{c:st.cls}))+'</h2><span class="shiftchip s'+c.shift+'">'+esc(t("shift"+c.shift))+'</span>'+
    (ed?'<label class="ttshift">'+esc(t("shiftL"))+' <select data-ttshift="1"><option value="1"'+(c.shift===1?" selected":"")+'>1</option><option value="2"'+(c.shift===2?" selected":"")+'>2</option></select></label><button class="btn btn-danger" data-ttdelcls="1" style="padding:6px 12px;font-size:12.5px">'+esc(st.sureId==="cls"+st.cls?t("sure"):t("delClass"))+'</button>':'')+'</div>'+
    '<div class="days">'+c.days.map(function(ls,di){var isT=di===ti;var sorted=ls.map(function(l,idx){return{l:l,idx:idx}}).sort(function(x,y){return x.l.n-y.l.n});
     return '<div class="day'+(isT?" today":"")+'"><h4>'+esc(T.days[L][di])+(isT?'<span class="chip">'+esc(t("today"))+'</span>':'')+'</h4>'+
-     (sorted.length?'<ol>'+sorted.map(function(o){var l=o.l,bb=bellFor(c.shift,l.n),cur=isT&&curN===l.n;
+     (sorted.length?'<ol>'+sorted.map(function(o){var l=o.l,bb=bellFor(c.shift,l.n,c),cur=isT&&curN===l.n;
       if(ed)return '<li class="tted"><span class="n">'+l.n+'</span><span><span class="t tnum">'+(bb?bb[0]+'–'+bb[1]:'')+'</span><span class="ttr2">'+subjSelect(di,o.idx,l.s)+'<button class="copy" data-ttdel="'+di+':'+o.idx+'" aria-label="'+esc(t("del"))+'">×</button></span></span></li>';
       return '<li class="'+(cur?"cur":"")+'"><span class="n">'+l.n+'</span><span><span class="t tnum">'+(bb?bb[0]+'–'+bb[1]:'')+'</span><span class="s">'+esc(l.s)+'</span></span></li>'}).join("")+'</ol>':'<p class="hint" style="text-align:left">'+esc(t("noLessons"))+'</p>')+
      (ed?'<button class="copy" data-ttadd="'+di+'" style="margin-top:8px">'+esc(t("addLessonB"))+'</button>':'')+'</div>'}).join("")+'</div>'+
