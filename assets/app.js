@@ -440,7 +440,7 @@ function platBanner(){var ck='<svg viewBox="0 0 24 24" width="15" height="15" fi
   '<circle cx="170" cy="140" r="30" fill="#facc15"/><text x="170" y="150" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="28" font-weight="900" fill="#14532d">5</text></svg>';
  return '<section class="plban"><div class="container"><a class="pl-card" href="'+esc(PLATFORM_URL)+'" target="_blank" rel="noopener"><div class="pl-txt"><span class="pl-eye">'+esc(t("plE"))+'</span><h2>'+esc(t("plT"))+'</h2><p>'+esc(t("plD"))+'</p>'+
   '<ul class="pl-f">'+["plF1","plF2","plF3"].map(function(k){return '<li>'+ck+esc(t(k))+'</li>'}).join("")+'</ul></div>'+
-  '<div class="pl-act">'+art+'<span class="pl-btn">'+esc(t("plGo"))+' <span aria-hidden="true">→</span></span><small>'+esc(t("plLogin"))+'</small></div></a></div></section>'}
+  '<div class="pl-act">'+art+'<span class="pl-btn">'+esc(t("plGo"))+' <span aria-hidden="true">→</span></span></div></a></div></section>'}
 function pageHome(){var s=DATA.settings;
  var hero='<section class="hero"><canvas id="heroCanvas" aria-hidden="true"></canvas><div class="container"><div>'+
   '<h1>'+esc(t("heroA"))+'<br><span class="grad-text">'+esc(t("heroB"))+'</span></h1><p class="lead">'+esc(t("heroLead"))+'</p>'+
