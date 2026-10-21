@@ -429,7 +429,7 @@ function upcomingEvents(){var td=todayISO();return DATA.events.filter(function(e
 
 /* ------------------------------------------------------------ pages */
 var PLATFORM_URL=(window.SITE_CONFIG&&SITE_CONFIG.platformUrl)||"https://platform.gmonline.kz";
-var TPL={plE:["Онлайн тест платформасы","Онлайн-платформа тестов","Online test platform"],plT:["GM Platform — гимназиялық бақылау","GM Platform — гимназический контроль","GM Platform — gymnasium control tests"],
+var TPL={plE:["Онлайн тест платформасы","Онлайн-платформа тестов","Online test platform"],plT:["Гимназиялық бақылау — GM Platform","Гимназический контроль — GM Platform","Gymnasium control tests — GM Platform"],
  plD:["Пәндер бойынша тест тапсырып, нәтижеңді бірден көр және қай бөлімдерді қайталау керек екенін біл.","Сдавай тесты по предметам, сразу смотри результат и узнай, какие разделы нужно повторить.","Take subject tests, see your result right away and find out which sections to review."],
  plF1:["Пәндер бойынша тест","Тесты по предметам","Subject tests"],plF2:["Нәтиже бірден","Результат сразу","Instant results"],plF3:["Қайталайтын бөлімдер","Разделы для повторения","Sections to review"],
  plGo:["Тест тапсыру","Пройти тест","Take a test"],plLogin:["Логин мен құпиясөзді сынып жетекшісінен алыңыз","Логин и пароль выдаёт классный руководитель","Your login and password come from your class teacher"],plFoot:["Тест платформасы","Платформа тестов","Test platform"]};
