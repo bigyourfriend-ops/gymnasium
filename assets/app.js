@@ -320,6 +320,7 @@ var T12={navProj:["Жобалар","Проекты","Projects"],
  allK:["Барлығы","Все","All"], pEmpty:["Материал әлі жоқ","Пока нет материалов","No materials yet"],
  pNoItems:["Бұл жобада әлі материал жоқ","В этом проекте пока нет материалов","No materials in this project yet"],
  addVideo:["Бейне қосу","Добавить видео","Add video"], addMat:["Материал қосу","Добавить материал","Add material"], ytOk:["YouTube бейнесі табылды — сайтта осылай ойнатылады","Видео YouTube найдено — на сайте будет проигрываться так","YouTube video found — it will play on the site like this"], ytBad:["YouTube сілтемесі танылмады. Бейненің сілтемесін қойыңыз (youtu.be/… немесе youtube.com/watch?v=…)","Ссылка YouTube не распознана. Вставьте ссылку на видео (youtu.be/… или youtube.com/watch?v=…)","Not a YouTube link. Paste a video link (youtu.be/… or youtube.com/watch?v=…)"],
+ f_media:["Сурет немесе бейне","Изображение или видео","Image or video"], f_urlL:["Сілтеме немесе PDF (міндетті емес)","Ссылка или PDF (необязательно)","Link or PDF (optional)"], ytHint:["YouTube-тегі бейненің сілтемесін қойыңыз: youtu.be/… немесе youtube.com/watch?v=…","Вставьте ссылку на видео YouTube: youtu.be/… или youtube.com/watch?v=…","Paste a YouTube video link: youtu.be/… or youtube.com/watch?v=…"],
  pNoItemsEd:["«Қосу» батырмасын басып, алғашқы материалды жариялаңыз.","Нажмите «Добавить», чтобы опубликовать первый материал.","Press “Add” to publish the first material."],
  curatorL:["Жетекші","Руководитель","Curator"], readIssue:["Оқу","Читать","Read"], readMore:["Толығырақ","Подробнее","Read more"], openLink:["Ашу","Открыть","Open"],
  otherProj:["Басқа жобалар","Другие проекты","Other projects"], ytCh:["YouTube арнасы","YouTube-канал","YouTube channel"], projSite:["Жоба сілтемесі","Ссылка проекта","Project link"],
@@ -405,7 +406,9 @@ function banner(titleKey,descKey,extraCrumb,titleText,noH1){var p=PARENT[st.rout
 
 /* ------------------------------------------------------------ cards */
 function catIcon(c){return{events:"cal",achieve:"trophy",life:"users",ann:"mega"}[c]||"book"}
-function newsCard(p){return '<article class="ncard">'+ed("posts",p.id)+'<div class="thumb t-'+p.cat+'">'+(p.img?'<img src="'+esc(p.img)+'" alt="" loading="lazy">':'<div class="pat"></div><div class="big">'+ic(catIcon(p.cat))+'</div>')+'<span class="date">'+esc(fmtDate(p.date))+'</span></div>'+
+function pThumb(p){var y=ytId(p.video);return p.img||(y?"https://i.ytimg.com/vi/"+y+"/hqdefault.jpg":"")}
+function vBadge(p){return ytId(p.video)?'<span class="vbadge">'+ic("play")+'</span>':''}
+function newsCard(p){return '<article class="ncard">'+ed("posts",p.id)+'<div class="thumb t-'+p.cat+'">'+vBadge(p)+(pThumb(p)?'<img src="'+esc(pThumb(p))+'" alt="" loading="lazy">':'<div class="pat"></div><div class="big">'+ic(catIcon(p.cat))+'</div>')+'<span class="date">'+esc(fmtDate(p.date))+'</span></div>'+
  '<div class="body"><div class="meta"><span class="chip c-'+p.cat+'">'+esc(t("c_"+p.cat))+'</span>'+chipSample(p)+'</div><h3><a class="stretch" href="#post.'+esc(p.id)+'">'+esc(pick(p.title))+'</a></h3><p>'+esc(excerpt(p))+'</p>'+
  '<div class="nfoot"><span>'+ic("cal")+esc(fmtDate(p.date))+'</span><span class="narr" aria-hidden="true">'+ic("arrow")+'</span></div></div></article>'}
 /* home page news: one large featured card, two compact cards, events panel */
@@ -415,10 +418,10 @@ function excerpt(p){return String(pick(p.text)||"").replace(/\s*\n+\s*/g," ").tr
 function ndate(p){return '<span class="ndate">'+ic("cal")+esc(fmtDate(p.date))+'</span>'}
 function homeProjPanel(){var P=DATA.projects||[];
  return '<aside class="panel hev hproj">'+(P.length?'<div class="hplist">'+P.map(function(p){return '<a class="hpc" href="#project.'+esc(p.id)+'"><span class="pl"><img src="'+esc(projLogo(p))+'" alt="" loading="lazy"></span><span class="hpt"><b>'+esc(pick(p.title))+'</b><small>'+esc(pick(p.desc))+'</small></span></a>'}).join("")+'</div>':'<p style="color:var(--muted)">'+esc(t("pEmpty"))+'</p>')+'</aside>'}
-function newsFeat(p){return '<article class="nfeat t-'+p.cat+'">'+ed("posts",p.id)+(p.img?'<img src="'+esc(p.img)+'" alt="" loading="lazy">':'<div class="pat"></div>')+
+function newsFeat(p){return '<article class="nfeat t-'+p.cat+'">'+ed("posts",p.id)+vBadge(p)+(pThumb(p)?'<img src="'+esc(pThumb(p))+'" alt="" loading="lazy">':'<div class="pat"></div>')+
  '<div class="nf-top">'+ndate(p)+'<span class="chip c-'+p.cat+'">'+esc(t("c_"+p.cat))+'</span>'+chipSample(p)+'</div>'+
  '<div class="nf-body"><h3><a class="stretch" href="#post.'+esc(p.id)+'">'+esc(pick(p.title))+'</a></h3><p>'+esc(excerpt(p))+'</p><span class="btn btn-primary nf-btn">'+esc(t("readOn"))+' →</span></div></article>'}
-function newsRow(p){return '<article class="nrow">'+ed("posts",p.id)+'<div class="thumb t-'+p.cat+'">'+(p.img?'<img src="'+esc(p.img)+'" alt="" loading="lazy">':'<div class="pat"></div><div class="big">'+ic(catIcon(p.cat))+'</div>')+'</div>'+
+function newsRow(p){return '<article class="nrow">'+ed("posts",p.id)+'<div class="thumb t-'+p.cat+'">'+vBadge(p)+(pThumb(p)?'<img src="'+esc(pThumb(p))+'" alt="" loading="lazy">':'<div class="pat"></div><div class="big">'+ic(catIcon(p.cat))+'</div>')+'</div>'+
  '<div class="nr-body"><div class="nr-meta">'+ndate(p)+'<span class="chip c-'+p.cat+'">'+esc(t("c_"+p.cat))+'</span>'+chipSample(p)+'</div><h3><a class="stretch" href="#post.'+esc(p.id)+'">'+esc(pick(p.title))+'</a></h3><p>'+esc(excerpt(p))+'</p><span class="nr-more">'+esc(t("readOn"))+' →</span></div></article>'}
 function evRow(e){var p=e.date.split("-");return '<div class="ev" style="position:relative">'+ed("events",e.id)+'<div class="evd"><b>'+(+p[2])+'</b><span>'+esc(MONS[LI[st.lang]][+p[1]-1])+'</span></div><div><h4>'+esc(pick(e.title))+' '+chipSample(e)+'</h4><p class="evm">'+(e.time?'<span>'+ic("clock")+esc(e.time)+'</span>':'')+(pick(e.place)?'<span>'+ic("pin")+esc(pick(e.place))+'</span>':'')+'</p></div></div>'}
 function sortedPosts(){return DATA.posts.slice().sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0})}
@@ -514,10 +517,10 @@ function newsList(slice,pages){return(slice.length?'<div class="cards">'+slice.m
  (pages>1?'<div class="pager">'+Array.apply(null,{length:pages}).map(function(_,i){return '<button data-npage="'+(i+1)+'" aria-current="'+(st.newsPage===i+1)+'">'+(i+1)+'</button>'}).join("")+'</div>':'')}
 function pagePost(){var p=DATA.posts.filter(function(x){return x.id===st.route.arg})[0];if(!p){location.hash="news";return""}
  var others=sortedPosts().filter(function(x){return x.id!==p.id}).slice(0,6);
- var side=others.length?'<aside class="pside-news"><h2>'+esc(t("newsT"))+'</h2><div class="psn">'+others.map(function(x){return '<a class="psn-i" href="#post.'+esc(x.id)+'"><span class="psn-t t-'+x.cat+'">'+(x.img?'<img src="'+esc(x.img)+'" alt="" loading="lazy">':ic(catIcon(x.cat)))+'</span><span class="psn-b"><b>'+esc(pick(x.title))+'</b><small>'+esc(fmtDate(x.date))+'</small></span></a>'}).join("")+'</div><a class="more" href="#news">'+esc(t("allNews"))+' →</a></aside>':'';
+ var side=others.length?'<aside class="pside-news"><h2>'+esc(t("newsT"))+'</h2><div class="psn">'+others.map(function(x){return '<a class="psn-i" href="#post.'+esc(x.id)+'"><span class="psn-t t-'+x.cat+'">'+(pThumb(x)?'<img src="'+esc(pThumb(x))+'" alt="" loading="lazy">':ic(catIcon(x.cat)))+'</span><span class="psn-b"><b>'+esc(pick(x.title))+'</b><small>'+esc(fmtDate(x.date))+'</small></span></a>'}).join("")+'</div><a class="more" href="#news">'+esc(t("allNews"))+' →</a></aside>':'';
  return banner(null,null,lnk("news",esc(t("navNews")))+'<span>/</span>',pick(p.title))+'<div class="container page"><div class="postgrid"><article class="article" style="position:relative">'+ed("posts",p.id)+
   '<div class="meta" style="display:flex;gap:8px;align-items:center;margin-bottom:18px;flex-wrap:wrap"><span class="chip c-'+p.cat+'">'+esc(t("c_"+p.cat))+'</span><span style="color:var(--muted);font-size:14px">'+esc(fmtDate(p.date))+'</span>'+chipSample(p)+'</div>'+
-  (p.img?'<div class="cover"><img src="'+p.img+'" alt=""></div>':'')+'<div class="txt">'+esc(pick(p.text))+'</div><p style="margin-top:28px"><a class="more" href="#news">← '+esc(t("toNews"))+'</a></p></article>'+side+'</div></div>'}
+  (ytId(p.video)?'<div class="cover vcover"><div class="vframe"><iframe src="https://www.youtube-nocookie.com/embed/'+encodeURIComponent(ytId(p.video))+'?rel=0" title="YouTube" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div></div>':p.img?'<div class="cover"><img src="'+p.img+'" alt=""></div>':'')+'<div class="txt">'+esc(pick(p.text))+'</div><p style="margin-top:28px"><a class="more" href="#news">← '+esc(t("toNews"))+'</a></p></article>'+side+'</div></div>'}
 
 function pagePrograms(){var keys=["primary","basic","senior","extra"],L=LI[st.lang];
  var cards=keys.filter(function(k){return st.progF==="all"||st.progF===k}).map(function(k){var p=PROG[k];
@@ -851,7 +854,7 @@ function lightbox(aid,i){var a=DATA.albums.filter(function(x){return x.id===aid}
 /* generic editor */
 var CATS=["events","achieve","life","ann"];
 var SCHEMA={
- posts:[["cat","select",CATS,"c_"],["date","date"],["title","ml"],["text","mlarea"],["img","image"]],
+ posts:[["cat","select",CATS,"c_"],["date","date"],["title","ml"],["text","mlarea"],["img","media","video"]],
  events:[["date","date"],["time","text"],["title","ml"],["place","ml"]],
  staff:[["group","select",["admin","teacher"],"g_"],["name","text"],["role","ml"],["img","image"]],
  clubs:[["title","ml"],["desc","mlarea"],["when","ml"],["grades","text"]],
@@ -863,34 +866,43 @@ var SCHEMA={
  alumni:[["name","text"],["year","text"],["text","mlarea"]],
  partners:[["title","ml"],["url","url"],["img","logo"]],
  projects:[["title","ml"],["desc","mlarea"],["kind","select",["video","news","paper","blog","articles","tests","mixed"],"pt_"],["curator","text"],["url","url"],["img","logo"]],
- pitem:[["kind","select",["video","issue","post","link"],"pk_"],["date","date"],["title","ml"],["text","mlarea"],["url","urlfile"],["img","image"]]};
+ pitem:[["kind","select",["video","post","issue","link"],"pk_"],["date","date"],["title","ml"],["text","mlarea"],["img","media","url"],["url","urlfile"]]};
 var LBL={kind:"f_kind",curator:"f_curator",cat:"f_cat",date:"f_date",title:"f_title",text:"f_text",img:"f_img",time:"f_time",place:"f_place",group:"f_group",name:"f_name",role:"f_role",desc:"f_desc",when:"f_when",grades:"f_grades",level:"f_level",year:"f_year",url:"f_url",q:"f_q",a:"f_a"};
 var edImg=null;
 function field(name,type,val,opts,pref){var id="fe-"+name,lab=esc(t(LBL[name]||name));
  if(type==="ml"||type==="mlarea")return '<label>'+lab+'<div class="ml">'+LANGS.map(function(l){var v=val&&val[l]||"";return type==="ml"?'<input id="'+id+'-'+l+'" placeholder="'+["KZ","RU","EN"][LI[l]]+'" value="'+esc(v)+'">':'<textarea id="'+id+'-'+l+'" placeholder="'+["KZ","RU","EN"][LI[l]]+'">'+esc(v)+'</textarea>'}).join("")+'</div></label>';
  if(type==="select")return '<label>'+lab+'<select id="'+id+'">'+opts.map(function(o){return '<option value="'+o+'"'+(o===val?" selected":"")+'>'+esc(t(pref+o))+'</option>'}).join("")+'</select></label>';
  if(type==="image"||type==="logo")return '<label>'+(type==="logo"?esc(t("f_logo")):lab)+'<input id="'+id+'" type="file" accept="image/*" data-edimg="'+(type==="logo"?"logo":"1")+'"></label>'+(type==="logo"?'<small class="hint" style="text-align:left;margin:-6px 0 0">'+esc(t("logoHint"))+'</small>':'')+'<div id="edprev">'+(val?'<img class="prev" src="'+val+'" alt=""> <button type="button" class="copy" data-clearimg="1">'+esc(t("del"))+'</button>':'')+'</div>';
- if(type==="urlfile")return '<label>'+esc(t("f_urlP"))+'<input id="'+id+'" type="url" placeholder="https://youtu.be/…" value="'+esc(val||"")+'" data-ytin="1"></label><div id="ytprev" class="ytprev">'+ytPrev(ytId(val))+'</div><label class="filepick">'+esc(t("uploadPdf"))+'<input type="file" accept="application/pdf,.pdf" data-edfile="'+id+'"><small class="hint" style="text-align:left;margin:4px 0 0"></small></label>';
+ if(type==="urlfile"){if(ytId(val)&&edItem&&edItem.kind==="video")val="";return '<div class="f-urlfile"><label>'+esc(t("f_urlL"))+'<input id="'+id+'" type="url" placeholder="https://" value="'+esc(val||"")+'"></label><label class="filepick">'+esc(t("uploadPdf"))+'<input type="file" accept="application/pdf,.pdf" data-edfile="'+id+'"><small class="hint" style="text-align:left;margin:4px 0 0"></small></label></div>'}
+ if(type==="media"){var yv=edItem&&edItem[opts]||"";if(!ytId(yv))yv="";
+  return '<div class="media"><span class="flabel">'+esc(t("f_media"))+'</span><div class="mtabs"><button type="button" data-mtab="img">'+ic("image")+esc(t("f_img"))+'</button><button type="button" data-mtab="yt">'+ic("play")+'YouTube</button></div>'+
+  '<div class="mp-img"><input id="'+id+'" type="file" accept="image/*" data-edimg="1"><div id="edprev">'+(val?'<img class="prev" src="'+val+'" alt=""> <button type="button" class="copy" data-clearimg="1">'+esc(t("del"))+'</button>':'')+'</div></div>'+
+  '<div class="mp-yt"><input id="fe-yt" type="url" placeholder="https://youtu.be/…" value="'+esc(yv)+'" data-ytin="1"><small class="hint" style="text-align:left;margin:0">'+esc(t("ytHint"))+'</small><div id="ytprev" class="ytprev">'+ytPrev(ytId(yv))+'</div></div></div>'}
  return '<label>'+lab+'<input id="'+id+'" type="'+(type==="date"?"date":type==="url"?"url":"text")+'" value="'+esc(val||"")+'"></label>'}
 function ytPrev(y){return y?'<div class="vframe"><iframe src="https://www.youtube-nocookie.com/embed/'+encodeURIComponent(y)+'?rel=0" title="YouTube" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div><small class="hint ok">✓ '+esc(t("ytOk"))+'</small>':''}
 var ytLast="";
 function ytInput(inp){var y=ytId(inp.value),box=document.getElementById("ytprev");if(!box||y===ytLast)return;ytLast=y;box.innerHTML=ytPrev(y);
  if(!y)return;
- var k=document.getElementById("fe-kind");if(k&&k.value!=="video")k.value="video";
+ var k=document.getElementById("fe-kind");if(k&&k.value!=="video"){k.value="video";if(k.form)k.form.dataset.k="video"}
  var empty=LANGS.every(function(l){var el=document.getElementById("fe-title-"+l);return !el||!el.value.trim()});if(!empty)return;
  var url="https://www.youtube.com/watch?v="+y;
  fetch("https://www.youtube.com/oembed?format=json&url="+encodeURIComponent(url)).then(function(r){if(!r.ok)throw 0;return r.json()})
   .catch(function(){return fetch("https://noembed.com/embed?url="+encodeURIComponent(url)).then(function(r){return r.json()})})
   .then(function(j){if(!j||!j.title||ytLast!==y)return;LANGS.forEach(function(l){var el=document.getElementById("fe-title-"+l);if(el&&!el.value.trim())el.value=j.title})}).catch(function(){})}
-function openEditor(col,id,preset){ytLast="";var item=id?DATA[col].filter(function(x){return x.id===id})[0]:(preset||{});edImg=item&&item.img||null;
- openLayer('<h3>'+esc(t(id?"edit":"add"))+'</h3><form class="form" id="edform" data-col="'+col+'" data-id="'+esc(id||"")+'">'+SCHEMA[col].map(function(s){return field(s[0],s[1],item[s[0]],s[2],s[3])}).join("")+
+var edItem=null;
+function openEditor(col,id,preset){ytLast="";var item=id?DATA[col].filter(function(x){return x.id===id})[0]:(preset||{});edImg=item&&item.img||null;edItem=item;
+ var mf=SCHEMA[col].filter(function(x){return x[1]==="media"})[0],mode=mf&&(ytId(item[mf[2]])||item.kind==="video")?"yt":"img";
+ openLayer('<h3>'+esc(t(id?"edit":"add"))+'</h3><form class="form" id="edform" data-col="'+col+'" data-id="'+esc(id||"")+'"'+(mf?' data-media="'+mode+'"':'')+(item.kind?' data-k="'+esc(item.kind)+'"':'')+'>'+SCHEMA[col].map(function(s){return field(s[0],s[1],item[s[0]],s[2],s[3])}).join("")+
  '<div class="acts"><button type="button" class="btn btn-soft" data-close="1">'+esc(t("cancel"))+'</button><button class="btn btn-primary" type="submit">'+esc(t("ok"))+'</button></div></form>')}
 function saveEditor(form){var col=form.dataset.col,id=form.dataset.id,obj={},hasText=false;
  SCHEMA[col].forEach(function(s){var n=s[0],tp=s[1];
   if(tp==="ml"||tp==="mlarea"){var o={};LANGS.forEach(function(l){var v=document.getElementById("fe-"+n+"-"+l).value.trim();if(v)o[l]=v});obj[n]=o;if((n==="title"||n==="q")&&Object.keys(o).length)hasText=true}
-  else if(tp==="image"||tp==="logo")obj[n]=edImg||"";else obj[n]=document.getElementById("fe-"+n).value.trim()});
+  else if(tp==="image"||tp==="logo"||tp==="media")obj[n]=edImg||"";else obj[n]=document.getElementById("fe-"+n).value.trim()});
  var needs=SCHEMA[col].some(function(s){return s[0]==="title"||s[0]==="q"});if(col==="staff"||col==="alumni")needs=false,hasText=!!obj.name;
- if(/^pi_/.test(col)&&obj.kind==="video"&&!ytId(obj.url)){toast(t("ytBad"));return}
+ var mf=SCHEMA[col].filter(function(x){return x[1]==="media"})[0];
+ if(mf){var yk=mf[2],yv=(document.getElementById("fe-yt")||{value:""}).value.trim(),useYt=form.dataset.media==="yt"&&obj.kind!=="issue"&&obj.kind!=="link";
+  if(useYt){if(!ytId(yv)){toast(t("ytBad"));return}obj[yk]=yv;obj[mf[0]]="";if("kind" in obj)obj.kind="video"}
+  else{if(yk!=="url")obj[yk]="";if(obj.kind==="video")obj.kind="post"}}
  if((needs||col==="staff"||col==="alumni")&&!hasText){toast(t("needTitle"));return}
  if(id){var it=DATA[col].filter(function(x){return x.id===id})[0];Object.keys(obj).forEach(function(k){it[k]=obj[k]});delete it.sample}
  else{obj.id=uid(col[0]);if(col==="albums")obj.photos=[];DATA[col].push(obj)}
@@ -919,7 +931,7 @@ function shrink(file,M){return new Promise(function(res){var r=new FileReader();
 
 /* ------------------------------------------------------------ events */
 document.addEventListener("click",function(e){
- var el=e.target.closest("[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
+ var el=e.target.closest("[data-mtab],[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
  if(!el)return;var d=el.dataset;
  if(d.yt){el.outerHTML='<div class="vframe"><iframe src="https://www.youtube-nocookie.com/embed/'+encodeURIComponent(d.yt)+'?autoplay=1&rel=0" title="YouTube" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>';return}
  if(d.pkind){st.pkind=d.pkind;render(true);return}
@@ -970,12 +982,14 @@ document.addEventListener("click",function(e){
  
  
  if(d.delph){var r=d.delph.split(":"),al=DATA.albums.filter(function(x){return x.id===r[0]})[0];al.photos.splice(+r[1],1);dirty();render(true);return}
+ if(d.mtab){var fm=el.closest("form");fm.dataset.media=d.mtab;var ks=document.getElementById("fe-kind");if(ks){if(d.mtab==="yt")ks.value="video";else if(ks.value==="video")ks.value="post";fm.dataset.k=ks.value}var yi=document.getElementById("fe-yt");if(d.mtab==="yt"&&yi)yi.focus();return}
  if(d.clearimg){edImg=null;document.getElementById("edprev").innerHTML="";return}
 });
 function selText(el){var s=el.parentNode.querySelector("span");if(!s)return;var r=document.createRange();r.selectNodeContents(s);var sel=getSelection();sel.removeAllRanges();sel.addRange(r)}
 document.addEventListener("input",function(e){if(e.target.dataset&&e.target.dataset.ytin){ytInput(e.target);return}if(e.target.id==="newsq"){st.newsQ=e.target.value;st.newsPage=1;var list=newsFiltered();
  document.getElementById("newslist").innerHTML=newsList(list.slice(0,9),Math.max(1,Math.ceil(list.length/9)))}});
 document.addEventListener("change",function(e){var d=e.target.dataset;
+ if(e.target.id==="fe-kind"&&e.target.form&&e.target.form.dataset.media){var fk=e.target.form;fk.dataset.k=e.target.value;fk.dataset.media=e.target.value==="video"?"yt":"img";return}
  
  if(d.ttsel){var px=d.ttsel.split(":"),lx=DATA.classes[st.cls].days[+px[0]][+px[1]];if(e.target.value==="__new__"){st.ttCustom=st.ttCustom||{};st.ttCustom[d.ttsel]=1;render(true);var inp=document.querySelector('[data-tts="'+d.ttsel+'"]');if(inp)inp.focus();return}lx.s=e.target.value;dirty();refreshBar();return}
  if(d.tts){var pp=d.tts.split(":"),ll=DATA.classes[st.cls].days[+pp[0]][+pp[1]],v=e.target.value.trim();if(v){ll.s=v;st.ttExtra=st.ttExtra||[];if(st.ttExtra.indexOf(v)<0)st.ttExtra.push(v)}if(st.ttCustom)delete st.ttCustom[d.tts];dirty();render(true);return}

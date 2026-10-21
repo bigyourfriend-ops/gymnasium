@@ -380,6 +380,23 @@ a.partner:hover{border-color:var(--b300)}
 .ytprev .hint.ok{color:#15803d;text-align:left;margin:0;font-weight:600}
 .paddv svg{width:16px;height:16px}
 .paddv.v svg{fill:currentColor;stroke:none}
+.form .media{display:flex;flex-direction:column;gap:8px}
+.form .flabel{font-size:12.5px;font-weight:700;color:#475569}
+.mtabs{display:inline-flex;gap:4px;padding:4px;border-radius:12px;background:#f1f5f9;border:1px solid #e2e8f0;align-self:flex-start}
+.mtabs button{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;border-radius:9px;padding:7px 14px;font:inherit;font-size:13px;font-weight:700;color:#475569;cursor:pointer}
+.mtabs button svg{width:15px;height:15px}
+.mtabs button[data-mtab=yt] svg{fill:currentColor;stroke:none}
+form[data-media=img] .mtabs [data-mtab=img],form[data-media=yt] .mtabs [data-mtab=yt]{background:#fff;color:#15803d;box-shadow:0 1px 3px rgba(15,23,42,.12)}
+form[data-media=yt] .mtabs [data-mtab=yt]{color:#dc2626}
+.mp-img,.mp-yt{display:flex;flex-direction:column;gap:8px}
+form[data-media=img] .mp-yt,form[data-media=yt] .mp-img,form[data-media=yt] .f-urlfile{display:none}
+form[data-k=issue] .mtabs,form[data-k=link] .mtabs{display:none}
+.f-urlfile{display:flex;flex-direction:column;gap:12px}
+.vbadge{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;background:rgba(220,38,38,.92);display:flex;align-items:center;justify-content:center;z-index:2;box-shadow:0 8px 20px rgba(0,0,0,.35);pointer-events:none}
+.vbadge svg{width:22px;height:22px;fill:#fff;stroke:none;margin-left:3px}
+.nfeat>.vbadge{top:42%}
+.article .vcover{aspect-ratio:16/9;background:#000}
+.article .vcover .vframe{height:100%}
 .fcopy{display:inline-flex;gap:14px;align-items:center;margin-top:20px;padding:10px 14px 10px 10px;border-radius:14px;background:#0f172a;border:1px solid #1e293b;max-width:100%;transition:border-color .15s}
 .fcopy:hover{border-color:#4ade80}
 .fqr{width:92px;height:92px;flex:none;background:#fff;border-radius:8px;padding:6px;display:block}
