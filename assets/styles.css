@@ -374,6 +374,12 @@ a.partner:hover{border-color:var(--b300)}
 .social a{width:36px;height:36px;border-radius:10px;background:#0f172a;border:1px solid #1e293b;display:flex;align-items:center;justify-content:center}
 .social a:hover{border-color:#4ade80}
 .social svg{width:17px;height:17px;color:#e2e8f0}
+.ytprev:empty{display:none}
+.ytprev{display:flex;flex-direction:column;gap:6px;margin:-4px 0 4px}
+.ytprev .vframe{border-radius:12px;overflow:hidden}
+.ytprev .hint.ok{color:#15803d;text-align:left;margin:0;font-weight:600}
+.paddv svg{width:16px;height:16px}
+.paddv.v svg{fill:currentColor;stroke:none}
 .fcopy{display:inline-flex;gap:14px;align-items:center;margin-top:20px;padding:10px 14px 10px 10px;border-radius:14px;background:#0f172a;border:1px solid #1e293b;max-width:100%;transition:border-color .15s}
 .fcopy:hover{border-color:#4ade80}
 .fqr{width:92px;height:92px;flex:none;background:#fff;border-radius:8px;padding:6px;display:block}

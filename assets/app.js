@@ -319,6 +319,7 @@ var T12={navProj:["Жобалар","Проекты","Projects"],
  pk_videos:["Бейнелер","Видео","Videos"],pk_issues:["Шығарылымдар","Выпуски","Issues"],pk_posts:["Жазбалар","Записи","Posts"],pk_links:["Материалдар","Материалы","Materials"],
  allK:["Барлығы","Все","All"], pEmpty:["Материал әлі жоқ","Пока нет материалов","No materials yet"],
  pNoItems:["Бұл жобада әлі материал жоқ","В этом проекте пока нет материалов","No materials in this project yet"],
+ addVideo:["Бейне қосу","Добавить видео","Add video"], addMat:["Материал қосу","Добавить материал","Add material"], ytOk:["YouTube бейнесі табылды — сайтта осылай ойнатылады","Видео YouTube найдено — на сайте будет проигрываться так","YouTube video found — it will play on the site like this"], ytBad:["YouTube сілтемесі танылмады. Бейненің сілтемесін қойыңыз (youtu.be/… немесе youtube.com/watch?v=…)","Ссылка YouTube не распознана. Вставьте ссылку на видео (youtu.be/… или youtube.com/watch?v=…)","Not a YouTube link. Paste a video link (youtu.be/… or youtube.com/watch?v=…)"],
  pNoItemsEd:["«Қосу» батырмасын басып, алғашқы материалды жариялаңыз.","Нажмите «Добавить», чтобы опубликовать первый материал.","Press “Add” to publish the first material."],
  curatorL:["Жетекші","Руководитель","Curator"], readIssue:["Оқу","Читать","Read"], readMore:["Толығырақ","Подробнее","Read more"], openLink:["Ашу","Открыть","Open"],
  otherProj:["Басқа жобалар","Другие проекты","Other projects"], ytCh:["YouTube арнасы","YouTube-канал","YouTube channel"], projSite:["Жоба сілтемесі","Ссылка проекта","Project link"],
@@ -642,6 +643,8 @@ function itemCard(i,col,p,showProj){var title=esc(pick(i.title)),txt=pick(i.text
  return '<article class="pitem post">'+e+(i.img?'<div class="pimg"><img src="'+esc(i.img)+'" alt="" loading="lazy"></div>':'')+'<div class="pib">'+tag+date+'<h4>'+title+'</h4>'+(txt?'<p class="clamp">'+esc(txt)+'</p>':'')+'<button class="lnkbtn" data-pread="'+esc(col+"|"+i.id)+'">'+esc(t("readMore"))+' →</button></div></article>'}
 function readHTML(i){var paras=(pick(i.text)||"").split(/\n+/).filter(Boolean).map(function(x){return '<p>'+esc(x)+'</p>'}).join("");
  return (i.img?'<img class="rimg" src="'+esc(i.img)+'" alt="">':'')+'<span class="pdate">'+esc(i.date?fmtDate(i.date):"")+'</span><h3>'+esc(pick(i.title))+'</h3><div class="rtext">'+paras+'</div>'+(i.url?'<p style="margin-top:14px"><a class="btn btn-soft"'+ext(i.url)+'>'+esc(t("openLink"))+' ↗</a></p>':'')}
+function pAddBtn(col,p){if(!st.canEdit||!canCol(col))return"";var v=defKind(p.kind)==="video";
+ return '<button class="btn btn-primary paddv'+(v?" v":"")+'" data-add="'+col+'" data-goed="1" data-preset="'+esc(JSON.stringify({kind:defKind(p.kind),date:todayISO()}))+'">'+ic(v?"play":"plus")+esc(t(v?"addVideo":"addMat"))+'</button>'}
 function projLogos(cur){return '<div class="plogos">'+(DATA.projects||[]).filter(function(p){return p.id!==cur}).map(function(p){return '<a class="plogo-s" href="#project.'+esc(p.id)+'"><span class="pl"><img src="'+esc(projLogo(p))+'" alt="" loading="lazy"></span><span class="pn">'+esc(pick(p.title))+'</span></a>'}).join("")+'</div>'}
 function pageProjects(){var P=DATA.projects||[];
  return banner("navProj","pd_proj")+'<div class="container page"><section><div class="toolbar" style="margin-bottom:18px"><span></span>'+addBtn("projects",{kind:"mixed"})+'</div>'+(st.editing||P.length<3?'<div class="grid3 pgrid">'+P.map(projCard).join("")+'</div>':projRing(P))+'</section></div>'}
@@ -684,7 +687,7 @@ function pageProject(){var p=(DATA.projects||[]).filter(function(x){return x.id=
  var link=p.url?'<a class="btn btn-outline"'+ext(p.url)+'>'+ic(/youtu/i.test(p.url)?"play":/instagram/i.test(p.url)?"insta":"link")+esc(/youtu/i.test(p.url)?t("ytCh"):/instagram/i.test(p.url)?"Instagram":t("projSite"))+'</a>':'';
  var head='<div class="phead">'+ed("projects",p.id)+'<div class="pjlogo big"><img src="'+esc(projLogo(p))+'" alt=""></div><div class="phtext"><h1 class="ptitle">'+esc(pick(p.title))+'</h1><span class="chip">'+esc(t("pt_"+p.kind))+'</span><p class="pdesc">'+esc(pick(p.desc))+'</p>'+
   (p.curator?'<p class="pcur">'+ic("user")+'<span>'+esc(t("curatorL"))+': <b>'+esc(p.curator)+'</b></span></p>':'')+(link?'<div class="pacts">'+link+'</div>':'')+'</div></div>';
- var tools='<div class="toolbar ptools">'+(kinds.length>1?'<div class="pills">'+["all"].concat(kinds).map(function(k){return '<button data-pkind="'+k+'" aria-pressed="'+(pf===k)+'">'+esc(t(k==="all"?"allK":"pk_"+k+"s"))+'</button>'}).join("")+'</div>':'<span></span>')+addBtn(col,{kind:defKind(p.kind),date:todayISO()})+'</div>';
+ var tools='<div class="toolbar ptools">'+(kinds.length>1?'<div class="pills">'+["all"].concat(kinds).map(function(k){return '<button data-pkind="'+k+'" aria-pressed="'+(pf===k)+'">'+esc(t(k==="all"?"allK":"pk_"+k+"s"))+'</button>'}).join("")+'</div>':'<span></span>')+(st.editing?addBtn(col,{kind:defKind(p.kind),date:todayISO()}):pAddBtn(col,p))+'</div>';
  var body=list.length?'<div class="pitems'+(list.every(function(i){return i.kind==="issue"})?" issues":"")+'">'+list.map(function(i){return itemCard(i,col,p)}).join("")+'</div>':'<div class="empty"><b>'+esc(t("pNoItems"))+'</b>'+(st.editing&&can("p_"+p.id)?'<p style="margin-top:8px">'+esc(t("pNoItemsEd"))+'</p>':'')+'</div>';
  var crumb=lnk("projects",esc(t("navProj")))+'<span>/</span>';
  return banner(null,null,crumb,pick(p.title),true)+'<div class="container page pjpage"><section>'+head+tools+body+'</section><section><h2 class="h2">'+esc(t("otherProj"))+'</h2>'+projLogos(p.id)+'</section></div>'}
@@ -867,9 +870,19 @@ function field(name,type,val,opts,pref){var id="fe-"+name,lab=esc(t(LBL[name]||n
  if(type==="ml"||type==="mlarea")return '<label>'+lab+'<div class="ml">'+LANGS.map(function(l){var v=val&&val[l]||"";return type==="ml"?'<input id="'+id+'-'+l+'" placeholder="'+["KZ","RU","EN"][LI[l]]+'" value="'+esc(v)+'">':'<textarea id="'+id+'-'+l+'" placeholder="'+["KZ","RU","EN"][LI[l]]+'">'+esc(v)+'</textarea>'}).join("")+'</div></label>';
  if(type==="select")return '<label>'+lab+'<select id="'+id+'">'+opts.map(function(o){return '<option value="'+o+'"'+(o===val?" selected":"")+'>'+esc(t(pref+o))+'</option>'}).join("")+'</select></label>';
  if(type==="image"||type==="logo")return '<label>'+(type==="logo"?esc(t("f_logo")):lab)+'<input id="'+id+'" type="file" accept="image/*" data-edimg="'+(type==="logo"?"logo":"1")+'"></label>'+(type==="logo"?'<small class="hint" style="text-align:left;margin:-6px 0 0">'+esc(t("logoHint"))+'</small>':'')+'<div id="edprev">'+(val?'<img class="prev" src="'+val+'" alt=""> <button type="button" class="copy" data-clearimg="1">'+esc(t("del"))+'</button>':'')+'</div>';
- if(type==="urlfile")return '<label>'+esc(t("f_urlP"))+'<input id="'+id+'" type="url" placeholder="https://" value="'+esc(val||"")+'"></label><label class="filepick">'+esc(t("uploadPdf"))+'<input type="file" accept="application/pdf,.pdf" data-edfile="'+id+'"><small class="hint" style="text-align:left;margin:4px 0 0"></small></label>';
+ if(type==="urlfile")return '<label>'+esc(t("f_urlP"))+'<input id="'+id+'" type="url" placeholder="https://youtu.be/…" value="'+esc(val||"")+'" data-ytin="1"></label><div id="ytprev" class="ytprev">'+ytPrev(ytId(val))+'</div><label class="filepick">'+esc(t("uploadPdf"))+'<input type="file" accept="application/pdf,.pdf" data-edfile="'+id+'"><small class="hint" style="text-align:left;margin:4px 0 0"></small></label>';
  return '<label>'+lab+'<input id="'+id+'" type="'+(type==="date"?"date":type==="url"?"url":"text")+'" value="'+esc(val||"")+'"></label>'}
-function openEditor(col,id,preset){var item=id?DATA[col].filter(function(x){return x.id===id})[0]:(preset||{});edImg=item&&item.img||null;
+function ytPrev(y){return y?'<div class="vframe"><iframe src="https://www.youtube-nocookie.com/embed/'+encodeURIComponent(y)+'?rel=0" title="YouTube" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div><small class="hint ok">✓ '+esc(t("ytOk"))+'</small>':''}
+var ytLast="";
+function ytInput(inp){var y=ytId(inp.value),box=document.getElementById("ytprev");if(!box||y===ytLast)return;ytLast=y;box.innerHTML=ytPrev(y);
+ if(!y)return;
+ var k=document.getElementById("fe-kind");if(k&&k.value!=="video")k.value="video";
+ var empty=LANGS.every(function(l){var el=document.getElementById("fe-title-"+l);return !el||!el.value.trim()});if(!empty)return;
+ var url="https://www.youtube.com/watch?v="+y;
+ fetch("https://www.youtube.com/oembed?format=json&url="+encodeURIComponent(url)).then(function(r){if(!r.ok)throw 0;return r.json()})
+  .catch(function(){return fetch("https://noembed.com/embed?url="+encodeURIComponent(url)).then(function(r){return r.json()})})
+  .then(function(j){if(!j||!j.title||ytLast!==y)return;LANGS.forEach(function(l){var el=document.getElementById("fe-title-"+l);if(el&&!el.value.trim())el.value=j.title})}).catch(function(){})}
+function openEditor(col,id,preset){ytLast="";var item=id?DATA[col].filter(function(x){return x.id===id})[0]:(preset||{});edImg=item&&item.img||null;
  openLayer('<h3>'+esc(t(id?"edit":"add"))+'</h3><form class="form" id="edform" data-col="'+col+'" data-id="'+esc(id||"")+'">'+SCHEMA[col].map(function(s){return field(s[0],s[1],item[s[0]],s[2],s[3])}).join("")+
  '<div class="acts"><button type="button" class="btn btn-soft" data-close="1">'+esc(t("cancel"))+'</button><button class="btn btn-primary" type="submit">'+esc(t("ok"))+'</button></div></form>')}
 function saveEditor(form){var col=form.dataset.col,id=form.dataset.id,obj={},hasText=false;
@@ -877,11 +890,14 @@ function saveEditor(form){var col=form.dataset.col,id=form.dataset.id,obj={},has
   if(tp==="ml"||tp==="mlarea"){var o={};LANGS.forEach(function(l){var v=document.getElementById("fe-"+n+"-"+l).value.trim();if(v)o[l]=v});obj[n]=o;if((n==="title"||n==="q")&&Object.keys(o).length)hasText=true}
   else if(tp==="image"||tp==="logo")obj[n]=edImg||"";else obj[n]=document.getElementById("fe-"+n).value.trim()});
  var needs=SCHEMA[col].some(function(s){return s[0]==="title"||s[0]==="q"});if(col==="staff"||col==="alumni")needs=false,hasText=!!obj.name;
+ if(/^pi_/.test(col)&&obj.kind==="video"&&!ytId(obj.url)){toast(t("ytBad"));return}
  if((needs||col==="staff"||col==="alumni")&&!hasText){toast(t("needTitle"));return}
  if(id){var it=DATA[col].filter(function(x){return x.id===id})[0];Object.keys(obj).forEach(function(k){it[k]=obj[k]});delete it.sample}
  else{obj.id=uid(col[0]);if(col==="albums")obj.photos=[];DATA[col].push(obj)}
  if(col==="projects")DATA.projects.forEach(function(p){regProj(p.id)});
- dirty();closeLayer();render(true)}
+ dirty();closeLayer();
+ if(form.dataset.qp){render(true);publish();return}
+ render(true)}
 function openSettings(){openLayer('<h3>'+esc(t("settings"))+'</h3>'+settingsForm(true))}
 function settingsForm(modal){var s=DATA.settings;
  return '<form class="form" id="setform"><div class="row2"><label>'+esc(t("f_phone"))+'<input id="se-phone" value="'+esc(s.phone)+'"></label><label>Email<input id="se-email" value="'+esc(s.email)+'"></label></div>'+
@@ -949,7 +965,7 @@ document.addEventListener("click",function(e){
  if(d.lb){var q=d.lb.split(":");lightbox(q[0],+q[1]);return}
  if(d.edit){e.preventDefault();openEditor(d.edit,d.id);return}
  if(d.del){e.preventDefault();var key=d.del+d.id;if(st.sureId!==key){st.sureId=key;render(true);return}DATA[d.del]=DATA[d.del].filter(function(x){return x.id!==d.id});st.sureId=null;dirty();if(st.route.arg===d.id)location.hash=d.del==="posts"?"news":d.del==="projects"?"projects":"gallery";render(true);return}
- if(d.add){e.preventDefault();openEditor(d.add,null,d.preset?JSON.parse(d.preset):null);return}
+ if(d.add){e.preventDefault();var qp=!!d.goed&&!st.editing;if(qp){st.editing=true;render(true)}openEditor(d.add,null,d.preset?JSON.parse(d.preset):null);var ef=document.getElementById("edform");if(qp&&ef)ef.dataset.qp="1";return}
  
  
  
@@ -957,7 +973,7 @@ document.addEventListener("click",function(e){
  if(d.clearimg){edImg=null;document.getElementById("edprev").innerHTML="";return}
 });
 function selText(el){var s=el.parentNode.querySelector("span");if(!s)return;var r=document.createRange();r.selectNodeContents(s);var sel=getSelection();sel.removeAllRanges();sel.addRange(r)}
-document.addEventListener("input",function(e){if(e.target.id==="newsq"){st.newsQ=e.target.value;st.newsPage=1;var list=newsFiltered();
+document.addEventListener("input",function(e){if(e.target.dataset&&e.target.dataset.ytin){ytInput(e.target);return}if(e.target.id==="newsq"){st.newsQ=e.target.value;st.newsPage=1;var list=newsFiltered();
  document.getElementById("newslist").innerHTML=newsList(list.slice(0,9),Math.max(1,Math.ceil(list.length/9)))}});
 document.addEventListener("change",function(e){var d=e.target.dataset;
  
