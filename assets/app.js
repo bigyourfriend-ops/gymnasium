@@ -388,7 +388,7 @@ function header(){
 function footer(){var s=DATA.settings,y=nowTZ().y;
  return '<footer class="footer"><div class="container"><div class="fgrid"><div><div class="fbrand">'+emblem()+'<b>'+esc(t("name"))+'</b></div>'+social()+copyQR()+'</div>'+
   '<div><h5>'+esc(t("navContacts"))+'</h5><ul><li>'+ic("pin")+'<span>'+esc(t("addr"))+'</span></li><li>'+ic("phone")+'<span class="tnum">'+esc(s.phone)+'</span></li><li>'+ic("mail")+'<span style="overflow-wrap:anywhere">'+esc(s.email)+'</span></li><li>'+ic("clock")+'<span>'+esc(pick(s.hours))+'</span></li></ul></div></div>'+
-  '<div class="fbottom"><span>© '+y+' '+esc(t("name"))+'. '+esc(t("rights"))+'</span><span>'+(PAGES.help?lnk("help",esc(t("helpT")))+' · ':'')+lnk("docs",esc(t("navRes")))+'</span></div></div></footer>'}
+  '<div class="fbottom"><span>© '+y+' '+esc(t("name"))+'. '+esc(t("rights"))+'</span><span>'+(PAGES.help?lnk("help",esc(t("helpT")))+' · ':'')+lnk("docs",esc(t("navRes")))+' · <a href="'+esc(PLATFORM_URL)+'" target="_blank" rel="noopener">'+esc(t("plFoot"))+'</a></span></div></div></footer>'}
 var COPY_PDF="assets/docs/avtorlyk-kuelik-30738.pdf";
 function copyQR(){var u=COPY_PDF,svg="";
  try{u=new URL(COPY_PDF,location.href.split("#")[0]).href}catch(e){}
@@ -428,6 +428,19 @@ function sortedPosts(){return DATA.posts.slice().sort(function(a,b){return a.dat
 function upcomingEvents(){var td=todayISO();return DATA.events.filter(function(e){return e.date>=td}).sort(function(a,b){return a.date<b.date?-1:1})}
 
 /* ------------------------------------------------------------ pages */
+var PLATFORM_URL=(window.SITE_CONFIG&&SITE_CONFIG.platformUrl)||"https://platform.gmonline.kz";
+var TPL={plE:["Онлайн тест платформасы","Онлайн-платформа тестов","Online test platform"],plT:["GM Platform — бақылау тесттері","GM Platform — контрольные тесты","GM Platform — control tests"],
+ plD:["Пәндер бойынша тест тапсырып, нәтижеңді бірден көр және қай бөлімдерді қайталау керек екенін біл.","Сдавай тесты по предметам, сразу смотри результат и узнай, какие разделы нужно повторить.","Take subject tests, see your result right away and find out which sections to review."],
+ plF1:["Пәндер бойынша тест","Тесты по предметам","Subject tests"],plF2:["Нәтиже бірден","Результат сразу","Instant results"],plF3:["Қайталайтын бөлімдер","Разделы для повторения","Sections to review"],
+ plGo:["Тест тапсыру","Пройти тест","Take a test"],plLogin:["Логин мен құпиясөзді сынып жетекшісінен алыңыз","Логин и пароль выдаёт классный руководитель","Your login and password come from your class teacher"],plFoot:["Тест платформасы","Платформа тестов","Test platform"]};
+for(var _kpl in TPL)T[_kpl]=TPL[_kpl];
+function platBanner(){var ck='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4L19 7"/></svg>';
+ var art='<svg class="pl-art" viewBox="0 0 220 180" aria-hidden="true"><rect x="38" y="14" width="132" height="156" rx="16" fill="#fff" opacity=".96"/><rect x="78" y="6" width="52" height="20" rx="8" fill="#bbf7d0"/>'+
+  [0,1,2,3].map(function(i){var y=46+i*30,ok=i<3;return '<rect x="56" y="'+y+'" width="20" height="20" rx="6" fill="'+(ok?"#16a34a":"#e2e8f0")+'"/>'+(ok?'<path d="M60.5 '+(y+10.5)+'l4 4 7.5-8" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>':'')+'<rect x="86" y="'+(y+4)+'" width="'+[64,52,60,44][i]+'" height="6" rx="3" fill="#cbd5e1"/><rect x="86" y="'+(y+13)+'" width="'+[40,48,30,36][i]+'" height="4" rx="2" fill="#e2e8f0"/>'}).join("")+
+  '<circle cx="170" cy="140" r="30" fill="#facc15"/><text x="170" y="150" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="28" font-weight="900" fill="#14532d">5</text></svg>';
+ return '<section class="plban"><div class="container"><a class="pl-card" href="'+esc(PLATFORM_URL)+'" target="_blank" rel="noopener"><div class="pl-txt"><span class="pl-eye">'+esc(t("plE"))+'</span><h2>'+esc(t("plT"))+'</h2><p>'+esc(t("plD"))+'</p>'+
+  '<ul class="pl-f">'+["plF1","plF2","plF3"].map(function(k){return '<li>'+ck+esc(t(k))+'</li>'}).join("")+'</ul></div>'+
+  '<div class="pl-act">'+art+'<span class="pl-btn">'+esc(t("plGo"))+' <span aria-hidden="true">→</span></span><small>'+esc(t("plLogin"))+'</small></div></a></div></section>'}
 function pageHome(){var s=DATA.settings;
  var hero='<section class="hero"><canvas id="heroCanvas" aria-hidden="true"></canvas><div class="container"><div>'+
   '<h1>'+esc(t("heroA"))+'<br><span class="grad-text">'+esc(t("heroB"))+'</span></h1><p class="lead">'+esc(t("heroLead"))+'</p>'+
@@ -449,7 +462,7 @@ function pageHome(){var s=DATA.settings;
   homeProjPanel()+'</div>'+addBtn("posts",{date:todayISO(),cat:"life"})+'</div></section>';
  var partners='<section class="section alt"><div class="container"><div class="sec-head"><h2>'+esc(t("partnersT"))+'</h2>'+addBtn("partners")+'</div>'+(st.editing?'<div class="partners">':'<div class="pview"><div class="partners ptrack" id="ptrack">')+
   DATA.partners.map(function(p){var inner=ed("partners",p.id)+(p.img?'<img class="plogo" src="'+esc(p.img)+'" alt="" loading="lazy">':'<span class="ico">'+ic("build")+'</span>')+'<span>'+esc(pick(p.title))+'</span>';return p.url&&!st.editing?'<a class="partner" href="'+esc(p.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="partner">'+inner+'</div>'}).join("")+'</div>'+(st.editing?'':'</div>')+'</div></section>';
- return photoStrip()+annTicker()+hero+news+readBanner()+partners}
+ return photoStrip()+annTicker()+platBanner()+hero+news+readBanner()+partners}
 function readBanner(){return '<section class="section" style="padding-block:8px 40px"><div class="container"><a class="rnban" href="https://reading-nation.kz" target="_blank" rel="noopener"><img src="assets/brand/kitap.webp" alt="Кітап оқитын ұлт" width="195" height="93" loading="lazy"><span class="rnban-t">'+esc(t("rnT"))+'</span><span class="rnban-b">'+esc(t("rnMore"))+'</span></a></div></section>'}
 
 function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"});
