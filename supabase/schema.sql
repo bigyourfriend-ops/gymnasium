@@ -30,6 +30,7 @@ insert into public.roles (id, name, perms, is_system) values
   ('secretary', 'Хатшы / Секретарь',      array['news','events','gallery','schedule','about','life','docs','settings','projects','feedback'], false),
   ('teacher',   'Мұғалім / Учитель',      array['news','events','gallery'], false)
 on conflict (id) do nothing;
+update public.roles set perms = array_append(perms, 'projects') where id = 'admin' and not ('projects' = any(perms));
 
 -- Қызметкерлер: пайдаланушы → рөл
 create table if not exists public.staff (
@@ -45,7 +46,7 @@ returns text[] language sql stable security definer set search_path = public as 
 $$;
 create or replace function public.has_perm(p text)
 returns boolean language sql stable security definer set search_path = public as $$
-  select p = any(public.my_perms());
+  select p = any(public.my_perms()) or 'users' = any(public.my_perms());  -- толық әкімші барлық бөлімді өңдей алады / полный админ может всё
 $$;
 create or replace function public.is_admin()
 returns boolean language sql stable security definer set search_path = public as $$

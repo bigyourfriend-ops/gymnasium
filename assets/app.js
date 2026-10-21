@@ -266,7 +266,7 @@ var SECPERM={settings:"settings",posts:"news",events:"events",albums:"gallery",s
 PERMS.splice(PERMS.indexOf("docs")+1,0,"projects");
 SECS.projects=["projects"];SECPERM.projects="projects";COLPERM.projects="projects";
 function regProj(id){var c="pi_"+id;SECS[c]=[c];SECPERM[c]="p_"+id;COLPERM[c]="p_"+id;if(typeof SCHEMA!=="undefined")SCHEMA[c]=SCHEMA.pitem;if(!Array.isArray(DATA[c]))DATA[c]=[]}
-function can(p){return st.perms.indexOf(p)>=0||(/^p_/.test(p)&&st.perms.indexOf("projects")>=0)}
+function can(p){return st.perms.indexOf(p)>=0||st.perms.indexOf("users")>=0&&p!=="tests"&&p!=="tests_all"||(/^p_/.test(p)&&st.perms.indexOf("projects")>=0)}
 function canCol(col){return can(COLPERM[col])}
 function secData(sec){var o={};SECS[sec].forEach(function(k){o[k]=DATA[k]});return o}
 function snapshot(){st.base={};Object.keys(SECS).forEach(function(s){st.base[s]=JSON.stringify(secData(s))})}
