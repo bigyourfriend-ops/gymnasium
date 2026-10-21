@@ -703,6 +703,15 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 .pib{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1;align-items:flex-start}
 .pib h4{font-size:15.5px;line-height:1.35;color:var(--ink);font-weight:700}
 .pib p{font-size:13.5px;color:var(--muted);line-height:1.5}
+.vitem .vhead{padding:18px 18px 14px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.vitem .vhead h4{font-family:Montserrat,Inter,sans-serif;font-size:20px;line-height:1.3;font-weight:800;color:var(--ink);margin:0}
+.vitem .vhead .pdate,.vitem .vhead .ptag{align-self:center}
+.vitem .vthumb,.vitem .vframe{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.vitem .vbody{padding:14px 18px 18px}
+.vitem .vbody p{font-size:14.5px;line-height:1.6;color:var(--muted);white-space:pre-line}
+.pitems.videos{grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr));gap:22px}
+.pitems.mix .vitem .vhead h4{font-size:16px}
+@media (max-width:600px){.vitem .vhead h4{font-size:18px}}
 .pib .clamp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .pdate{font-size:12px;font-weight:700;color:var(--b700);letter-spacing:.02em}
 .pbtn{margin-top:auto;padding:8px 14px;font-size:13.5px}
