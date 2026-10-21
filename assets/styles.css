@@ -707,9 +707,13 @@ img.em{border-radius:50%;object-fit:contain;background:#fff;display:block}
 .vitem .vhead h4{font-family:Montserrat,Inter,sans-serif;font-size:20px;line-height:1.3;font-weight:800;color:var(--ink);margin:0}
 .vitem .vhead .pdate,.vitem .vhead .ptag{align-self:center}
 .vitem .vthumb,.vitem .vframe{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.vitem .vbody{padding:14px 18px 18px}
+.vitem .vbody{padding:14px 22px 22px;align-items:center;text-align:center;gap:10px}
 .vitem .vbody p{font-size:14.5px;line-height:1.6;color:var(--muted);white-space:pre-line}
-.pitems.videos{grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr));gap:22px}
+.pitems.videos{grid-template-columns:1fr;gap:28px;max-width:960px;margin-inline:auto}
+.pitems.videos .vhead{padding:22px 24px 16px}
+.pitems.videos .vhead h4{font-size:24px}
+.pitems.videos .vbody p{max-width:760px}
+@media (max-width:600px){.pitems.videos .vhead h4{font-size:19px}.pitems.videos .vhead{padding:16px 14px 12px}.pitems.videos .vbody{padding:12px 14px 18px}}
 .pitems.mix .vitem .vhead h4{font-size:16px}
 @media (max-width:600px){.vitem .vhead h4{font-size:18px}}
 .pib .clamp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
