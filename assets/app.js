@@ -584,6 +584,22 @@ function schedArt(){return '<svg class="bart" viewBox="0 0 300 170" aria-hidden=
  [0,1,2,3,4,5,6,7,8,9,10,11].map(function(i){var a=i*Math.PI/6,r1=i%3?31:28;return '<line x1="'+(195+Math.sin(a)*r1).toFixed(1)+'" y1="'+(110-Math.cos(a)*r1).toFixed(1)+'" x2="'+(195+Math.sin(a)*34).toFixed(1)+'" y2="'+(110-Math.cos(a)*34).toFixed(1)+'" stroke="#0f172a" stroke-width="'+(i%3?1.5:2.5)+'"/>'}).join("")+
  '<path d="M195 110V86M195 110l15 9" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round"/><circle cx="195" cy="110" r="3.5" fill="#15803d"/><path d="M188 62h14" stroke="#d4a24c" stroke-width="6" stroke-linecap="round"/></g>'+
  '<rect x="250" y="104" width="38" height="54" rx="6" fill="#fff" stroke="#cbd5e1"/><path d="M258 104l-3-38M268 104l2-44M278 104l6-34" stroke-width="5" stroke-linecap="round" stroke="#16a34a"/><path d="M268 104l2-44" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/><path d="M278 104l6-34" stroke="#0ea5e9" stroke-width="5" stroke-linecap="round"/></svg>'}
+var T20={p_backup:["Сақтық көшірме","Резервная копия","Backup"],
+ bkT:["Сақтық көшірмені жүктеп алу","Скачать резервную копию","Download a backup"],
+ bkD:["Сайттың барлық мазмұны (жаңалықтар, кесте, жобалар, баптаулар, рөлдер, пайдаланушылар тізімі, пікірлер) және барлық фото мен PDF файлдары бір ZIP файлға жиналады. Айына бір рет жүктеп, компьютерге немесе флешкаға сақтаңыз.","Всё содержимое сайта (новости, расписание, проекты, настройки, роли, список пользователей, отзывы) и все фото и PDF собираются в один ZIP-файл. Скачивайте раз в месяц и храните на компьютере или флешке.","All site content and every photo/PDF in one ZIP file. Download it monthly and keep it safe."],
+ bkGo:["Көшірмені жүктеп алу","Скачать копию","Download backup"],bkPrep:["Деректер жиналуда…","Собираю данные…","Collecting data…"],bkFiles:["Файлдар жүктелуде: {a} / {b}","Скачиваю файлы: {a} из {b}","Downloading files {a} / {b}"],bkZip:["ZIP жасалуда…","Упаковываю ZIP…","Packing ZIP…"],
+ bkDone:["Дайын: {n} файл, {s} МБ. Файл «Жүктеулер» қалтасында.","Готово: {n} файлов, {s} МБ. Файл в папке «Загрузки».","Done: {n} files, {s} MB."],bkFail:["({n} файл жүктелмеді)","(не скачалось файлов: {n})","({n} files failed)"],
+ bkErr:["Көшірме жасалмады. Интернетті тексеріп, қайталаңыз.","Не удалось сделать копию. Проверьте интернет и попробуйте ещё раз.","Backup failed."],bkLast:["Соңғы көшірме осы құрылғыда: {d}","Последняя копия на этом устройстве: {d}","Last backup on this device: {d}"],
+ rsT:["Көшірмеден қалпына келтіру","Восстановить из копии","Restore from a backup"],
+ rsD:["Деректер жоғалса немесе қате өзгертілсе: ZIP көшірмені таңдаңыз. Сайттың мазмұны мен рөлдері көшірмедегі күйге қайтады, жоқ фото қайта жүктеледі. Пайдаланушылар аккаунттары қалпына келмейді — олар қайта тіркеледі.","Если данные пропали или испорчены: выберите ZIP-копию. Содержимое сайта и роли вернутся к состоянию из копии, недостающие фото загрузятся заново. Учётные записи пользователей так не восстанавливаются — им нужно будет зарегистрироваться заново.","Pick a backup ZIP to roll the site content back to it."],
+ rsPick:["ZIP көшірмені таңдау","Выбрать ZIP-копию","Choose backup ZIP"],rsBad:["Бұл файл сайттың сақтық көшірмесі емес.","Это не резервная копия сайта.","Not a site backup."],
+ rsAsk:["Көшірме: {d}. {n} бөлім, {files} файл. Қазіргі мазмұн осы көшірмемен ауыстырылады.","Копия от {d}: {n} разделов, {files} файлов. Текущее содержимое будет заменено этой копией.","Backup from {d}: {n} sections, {files} files. Current content will be replaced."],
+ rsGo:["Қалпына келтіру","Восстановить","Restore"],rsFiles:["Файлдар қайтарылуда: {a} / {b}","Возвращаю файлы: {a} из {b}","Restoring files {a} / {b}"],rsSave:["Мазмұн сақталуда…","Сохраняю содержимое…","Saving content…"],
+ rsDone:["Қалпына келтірілді! Бет жаңартылады…","Восстановлено! Страница обновится…","Restored! Reloading…"],rsErr:["Қалпына келтіру кезінде қате шықты. Әкімші ретінде кіргеніңізді тексеріңіз.","Ошибка при восстановлении. Проверьте, что вы вошли как администратор.","Restore failed."],
+ autoT:["Автоматты апталық көшірме","Автоматическая еженедельная копия","Automatic weekly backup"],
+ autoD:["Әр жексенбі түнде GitHub өзі толық көшірме жасайды: деректер базасы (пайдаланушылармен бірге), барлық файлдар және сайт коды. Көшірме құпиясөзбен шифрланған, 90 күн сақталады.","Каждое воскресенье ночью GitHub сам делает полную копию: база данных (вместе с пользователями), все файлы и код сайта. Копия зашифрована паролем и хранится 90 дней.","Every Sunday night GitHub makes a full encrypted backup, kept 90 days."],
+ autoGo:["GitHub-тағы көшірмелер","Копии на GitHub","Backups on GitHub"]};
+for(var _k20 in T20)T[_k20]=T20[_k20];
 var T19={heroAbout:["Гимназия туралы","О гимназии","About the gymnasium"],heroPlat:["Гимназиялық бақылау","Гимназиялық бақылау","Gymnasium tests"],
  dirPanel:["Директор панелі","Панель директора","Principal's desk"],dirWrite:["Директорға жазу","Написать директору","Write to the principal"],dirAdm:["Әкімшілік","Администрация","Administration"],
  dirHint:["Ұсыныс, сұрақ немесе алғысыңызды жазыңыз — хатыңыз директорға жетеді.","Напишите предложение, вопрос или благодарность — письмо дойдёт до директора.","Send a suggestion, question or thanks — it reaches the principal."],
@@ -1055,8 +1071,10 @@ function shrink(file,M){return new Promise(function(res){var r=new FileReader();
 
 /* ------------------------------------------------------------ events */
 document.addEventListener("click",function(e){
- var el=e.target.closest("[data-dir],[data-flip],[data-bk],[data-bkgo],[data-pgmv],[data-pgdel],[data-mtab],[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
+ var el=e.target.closest("[data-bkpdo],[data-rsgo],[data-dir],[data-flip],[data-bk],[data-bkgo],[data-pgmv],[data-pgdel],[data-mtab],[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
  if(!el)return;var d=el.dataset;
+ if(d.bkpdo){doBackup();return}
+ if(d.rsgo){doRestore();return}
  if(d.dir){openDirector();return}
  if(d.flip){e.preventDefault();var fp=d.flip.split("|");openFlip(fp[0],fp[1]);return}
  if(d.bk){if(d.bk==="thumbs"||d.bk==="zoom")bkPanel(d.bk);else if(d.bk==="fs"){var fe=document.getElementById("flip");if(document.fullscreenElement||document.webkitFullscreenElement)(document.exitFullscreen||document.webkitExitFullscreen).call(document);else if(fe)(fe.requestFullscreen||fe.webkitRequestFullscreen).call(fe)}else bkGo(d.bk);return}
@@ -1129,6 +1147,7 @@ document.addEventListener("change",function(e){var d=e.target.dataset;
  if(d.edfile){var fl2=e.target.files[0];if(!fl2)return;var ui=document.getElementById(d.edfile),pv2=e.target.nextElementSibling;if(fl2.size>20*1048576){toast(t("pdfBig"));e.target.value="";return}if(!sb){pv2.textContent=t("upErr");return}
   pv2.textContent=t("uploading");var fpath="files/"+new Date().getFullYear()+"/"+uid("doc")+".pdf";
   sb.storage.from("media").upload(fpath,fl2,{contentType:"application/pdf",cacheControl:"31536000",upsert:false}).then(function(r){if(r.error)throw r.error;ui.value=sb.storage.from("media").getPublicUrl(fpath).data.publicUrl;pv2.textContent="✓ "+fl2.name}).catch(function(){pv2.textContent=t("upErr")});return}
+ if(d.bkprs){pickRestore(e.target.files[0]);e.target.value="";return}
  if(d.edpdf){var pfl=e.target.files[0];if(pfl)pdfToPages(pfl,e.target);return}
  if(d.edpages){var fs=[].slice.call(e.target.files).sort(function(x,y){return x.name.localeCompare(y.name,undefined,{numeric:true})}),inp=e.target,stl=document.getElementById("edpagesst"),k=0;if(!fs.length)return;inp.disabled=true;
   (function next(){if(k>=fs.length){inp.disabled=false;inp.value="";stl.textContent="";return}stl.textContent=f(t("upPages"),{a:k+1,b:fs.length});
@@ -1237,7 +1256,51 @@ function quickAction(k){if(!st.canEdit)return;st.editing=true;var need={post:"ne
 
 
 /* ------------------------------------------------------------ admin page (#admin) */
-function adminTabs(){var tb=[["dash","p_dash","star"],["content","a_content","book"]];if(can("feedback"))tb.push(["feedback","p_fb","msg"]);if(can("help")&&window.GMHelp)tb.push(["help","p_help","shield"]);if(can("settings"))tb.push(["settings","settings","gear"]);if(st.isAdmin)tb.push(["users","p_users","users"],["roles","p_roles","user"]);return tb}
+function adminTabs(){var tb=[["dash","p_dash","star"],["content","a_content","book"]];if(can("feedback"))tb.push(["feedback","p_fb","msg"]);if(can("help")&&window.GMHelp)tb.push(["help","p_help","shield"]);if(can("settings"))tb.push(["settings","settings","gear"]);if(st.isAdmin)tb.push(["users","p_users","users"],["roles","p_roles","user"],["backup","p_backup","shield"]);return tb}
+/* ------------------------------------------------------------ backup & restore (admin) */
+var bkp={busy:false,msg:""};
+function loadJs(src,name){return new Promise(function(res,rej){if(window[name])return res();var s=document.createElement("script");s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
+var MEDIA_RE=/https:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\/media\/[^"'\s?)\\<>]+/g;
+function tabBackup(){var last="";try{last=localStorage.getItem("gm-lastbk")||""}catch(e){}
+ return '<div class="bkp"><section class="panel"><h3>'+ic("file")+esc(t("bkT"))+'</h3><p>'+esc(t("bkD"))+'</p><button class="btn btn-primary" data-bkpdo="1"'+(bkp.busy?' disabled':'')+'>'+esc(t("bkGo"))+'</button><p class="hint bkmsg" id="bkpmsg">'+esc(bkp.msg||(last?f(t("bkLast"),{d:fmtDate(last)}):""))+'</p></section>'+
+ '<section class="panel"><h3>'+ic("gear")+esc(t("rsT"))+'</h3><p>'+esc(t("rsD"))+'</p><label class="filepick">'+esc(t("rsPick"))+'<input type="file" accept=".zip,application/zip" data-bkprs="1"></label><div class="hint bkmsg" id="rsmsg"></div></section>'+
+ '<section class="panel"><h3>'+ic("shield")+esc(t("autoT"))+'</h3><p>'+esc(t("autoD"))+'</p><a class="btn btn-soft" href="https://github.com/bigyourfriend-ops/gymnasium/actions/workflows/backup.yml" target="_blank" rel="noopener">'+esc(t("autoGo"))+' ↗</a></section></div>'}
+function bkMsg(id,x){if(id==="bkpmsg")bkp.msg=x;var el=document.getElementById(id);if(el)el.textContent=x}
+function doBackup(){if(bkp.busy||!sb)return;bkp.busy=true;var b0=document.querySelector("[data-bkpdo]");if(b0)b0.disabled=true;bkMsg("bkpmsg",t("bkPrep"));
+ var names=["site_content","roles","staff","profiles","feedback","feedback_badwords"],list=[],fail=0,zip;
+ function end(x){bkp.busy=false;var b=document.querySelector("[data-bkpdo]");if(b)b.disabled=false;bkMsg("bkpmsg",x)}
+ Promise.all([loadJs("assets/vendor/jszip.min.js","JSZip")].concat(names.map(function(n){return sb.from(n).select("*").then(function(r){return r},function(){return{error:1}})}))).then(function(r){
+  zip=new JSZip();var db={};names.forEach(function(n,i){db[n]=r[i+1]&&!r[i+1].error?r[i+1].data:null});
+  if(!db.site_content)throw 0;
+  zip.file("backup.json",JSON.stringify({meta:{site:"gmonline.kz",created:new Date().toISOString(),by:st.user&&st.user.email,supabase:(window.SITE_CONFIG||{}).supabaseUrl,format:1},db:db},null,1));
+  var seen={};(JSON.stringify(db).match(MEDIA_RE)||[]).forEach(function(u){if(!seen[u]){seen[u]=1;list.push(u)}});
+  return new Promise(function(res){var k=0;(function next(){if(k>=list.length)return res();var u=list[k++];bkMsg("bkpmsg",f(t("bkFiles"),{a:k,b:list.length}));
+   fetch(u).then(function(x){if(!x.ok)throw 0;return x.blob()}).then(function(bl){zip.file("media/"+decodeURIComponent(u.split("/public/media/")[1]),bl)}).catch(function(){fail++}).then(next)})()})})
+ .then(function(){zip.file("README.txt","Ғани Мұратбаев атындағы гимназия — сайттың сақтық көшірмесі / резервная копия сайта gmonline.kz\n\nbackup.json — сайттың мазмұны / содержимое сайта\nmedia/ — фото мен PDF / фото и PDF\n\nҚалпына келтіру / Восстановление: сайт → Әкімші панелі → Сақтық көшірме → «ZIP көшірмені таңдау».\n");
+  bkMsg("bkpmsg",t("bkZip"));return zip.generateAsync({type:"blob"})})
+ .then(function(blob){var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="gmonline-backup-"+todayISO()+".zip";document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},3000);
+  try{localStorage.setItem("gm-lastbk",todayISO())}catch(e){}
+  end(f(t("bkDone"),{n:list.length-fail,s:(blob.size/1048576).toFixed(1)})+(fail?" "+f(t("bkFail"),{n:fail}):""))})
+ .catch(function(){end(t("bkErr"))})}
+var rsPending=null;
+function pickRestore(file){var box=document.getElementById("rsmsg");rsPending=null;if(!file||!box)return;box.textContent=t("bkPrep");
+ loadJs("assets/vendor/jszip.min.js","JSZip").then(function(){return JSZip.loadAsync(file)}).then(function(zip){var jf=zip.file("backup.json");if(!jf)throw 0;
+  return jf.async("string").then(function(txt){var b=JSON.parse(txt);if(!b||!b.db||!Array.isArray(b.db.site_content))throw 0;
+   var files=Object.keys(zip.files).filter(function(n){return /^media\/./.test(n)&&!zip.files[n].dir});rsPending={zip:zip,b:b,files:files};
+   box.innerHTML='<p>'+esc(f(t("rsAsk"),{d:fmtDate(String(b.meta&&b.meta.created||"").slice(0,10)),n:b.db.site_content.length,files:files.length}))+'</p><button class="btn btn-danger" data-rsgo="1">'+esc(t("rsGo"))+'</button>'})})
+ .catch(function(){box.textContent=t("rsBad")})}
+function doRestore(){var p=rsPending;if(!p||!sb||!st.user)return;rsPending=null;var zip=p.zip,b=p.b,files=p.files,k=0;
+ var ct={jpg:"image/jpeg",jpeg:"image/jpeg",png:"image/png",webp:"image/webp",pdf:"application/pdf"};
+ var newBase=sb.storage.from("media").getPublicUrl("x").data.publicUrl.replace(/x$/,"");
+ new Promise(function(res){(function next(){if(k>=files.length)return res();var n=files[k++];bkMsg("rsmsg",f(t("rsFiles"),{a:k,b:files.length}));
+   zip.file(n).async("blob").then(function(bl){var path=n.slice(6),e=(path.split(".").pop()||"").toLowerCase();return sb.storage.from("media").upload(path,bl,{contentType:ct[e]||"application/octet-stream",cacheControl:"31536000",upsert:false})}).catch(function(){}).then(next)})()})
+ .then(function(){bkMsg("rsmsg",t("rsSave"));var now=new Date().toISOString();
+  var rows=b.db.site_content.map(function(r){var j=JSON.stringify(r.data).replace(/https:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\/media\//g,newBase);return{id:r.id,data:JSON.parse(j),updated_at:now,updated_by:st.user.id}});
+  return sb.from("site_content").upsert(rows).then(function(r){if(r.error)throw r.error;
+   var roles=(b.db.roles||[]).filter(function(x){return !x.is_system}).map(function(x){return{id:x.id,name:x.name,perms:x.perms}});
+   return roles.length?sb.from("roles").upsert(roles).then(function(){},function(){}):null})})
+ .then(function(){bkMsg("rsmsg",t("rsDone"));setTimeout(function(){location.reload()},1500)})
+ .catch(function(){bkMsg("rsmsg",t("rsErr"))})}
 function pageAdmin(){
  if(!sb)return banner("adminPanel","pd_admin")+'<div class="container page"><div class="empty"><b>'+esc(t("noAuth"))+'</b></div></div>';
  if(!st.user)return pageProfile();
@@ -1247,7 +1310,7 @@ function pageAdmin(){
   (st.roleName?'<span class="arole">'+esc(st.roleName)+'</span>':'')+
   '<nav class="anav">'+tabs.map(function(x){var badge=x[0]==="feedback"&&st.fbAdmin?st.fbAdmin.filter(function(f){return f.status==="pending"}).length:x[0]==="help"&&window.GMHelp?GMHelp.badge():0;return '<button data-atab="'+x[0]+'" aria-pressed="'+(st.atab===x[0])+'">'+ic(x[2])+'<span>'+esc(t(x[1]))+'</span>'+(badge?'<i class="abadge">'+badge+'</i>':'')+'</button>'}).join("")+'</nav>'+
   '<div class="afoot"><a href="#home">'+ic("left")+esc(t("backSite"))+'</a><a href="#profile">'+ic("user")+esc(t("cabinet"))+'</a></div></aside>';
- var body={dash:tabDash,content:tabContent,feedback:tabFb,help:function(){return GMHelp.adminTab()},settings:tabSettings,users:tabUsers,roles:tabRoles}[st.atab]();
+ var body={backup:tabBackup,dash:tabDash,content:tabContent,feedback:tabFb,help:function(){return GMHelp.adminTab()},settings:tabSettings,users:tabUsers,roles:tabRoles}[st.atab]();
  var title=(tabs.filter(function(x){return x[0]===st.atab})[0]||tabs[0])[1];
  return '<div class="adminwrap"><div class="container"><div class="adm">'+side+'<section class="amain"><div class="atop"><div><span class="eyebrow">'+esc(t("adminPanel"))+'</span><h1>'+esc(t(title))+'</h1></div>'+(st.dirty?'<span class="chip sample">'+esc(f(t("unsaved"),{n:st.dirty}))+'</span>':'')+'</div>'+body+'</section></div></div></div>'}
 function tabContent(){var photos=DATA.albums.reduce(function(s,a){return s+a.photos.length},0);
