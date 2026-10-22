@@ -441,9 +441,18 @@ function platBanner(){var ck='<svg viewBox="0 0 24 24" width="15" height="15" fi
  return '<section class="plban"><div class="container"><a class="pl-card" href="'+esc(PLATFORM_URL)+'" target="_blank" rel="noopener"><div class="pl-txt"><span class="pl-eye">'+esc(t("plE"))+'</span><h2>'+esc(t("plT"))+'</h2><p>'+esc(t("plD"))+'</p>'+
   '<ul class="pl-f">'+["plF1","plF2","plF3"].map(function(k){return '<li>'+ck+esc(t(k))+'</li>'}).join("")+'</ul></div>'+
   '<div class="pl-act">'+art+'<span class="pl-btn">'+esc(t("plGo"))+' <span aria-hidden="true">→</span></span></div></a></div></section>'}
+/* "Директор панелі": card on the home page that opens the principal's window */
+function director(){return DATA.staff.filter(function(x){return x.group==="admin"&&/директор|principal/i.test(pick(x.role)||"")&&!/орынбасар|заместит|deputy/i.test(pick(x.role)||"")})[0]||DATA.staff.filter(function(x){return x.group==="admin"})[0]||null}
+function dirAva(d,cls){var ini=d?(d.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join(""):"";return '<span class="dava '+(cls||"")+'">'+(d&&d.img?'<img src="'+esc(d.img)+'" alt="">':esc(ini)||ic("user"))+'</span>'}
+function dirCard(){var d=director();return '<button class="dircard" data-dir="1">'+dirAva(d)+'<b>'+esc(t("dirPanel"))+'</b></button>'}
+function openDirector(){var d=director(),msg=pick(DATA.settings.dirText||{}),paras=(msg||"").split(/\n+/).filter(Boolean).map(function(x){return '<p>'+esc(x)+'</p>'}).join("");
+ openLayer('<div class="dirmodal"><div class="dm-head">'+dirAva(d,"big")+'<div><span class="eyebrow">'+esc(t("dirPanel"))+'</span><h3>'+esc(d?d.name:t("name"))+'</h3><span class="dm-role">'+esc(d?pick(d.role):"")+'</span></div></div>'+
+  (paras?'<blockquote class="dm-msg">'+paras+'</blockquote>':'')+'<p class="dm-hint">'+esc(t("dirHint"))+'</p>'+
+  '<div class="dm-acts"><a class="btn btn-primary" href="#contacts.feedback" data-close="1">'+ic("msg")+esc(t("dirWrite"))+'</a><a class="btn btn-soft" href="#about.admin" data-close="1">'+esc(t("dirAdm"))+'</a></div></div>')}
 function pageHome(){var s=DATA.settings;
  var hero='<section class="hero"><canvas id="heroCanvas" aria-hidden="true"></canvas><div class="container"><div>'+
   '<h1>'+esc(t("heroA"))+'<br><span class="grad-text">'+esc(t("heroB"))+'</span></h1><p class="lead">'+esc(t("heroLead"))+'</p>'+
+  '<div class="hero-acts"><a class="btn btn-primary" href="#about">'+esc(t("heroAbout"))+'</a><a class="btn btn-outline" href="'+esc(PLATFORM_URL)+'" target="_blank" rel="noopener">'+esc(t("heroPlat"))+'</a></div>'+
   '</div>'+
   '<div class="hero-card card"><div id="now">'+nowHTML()+'</div></div></div></section>';
  var quick='<section class="section" style="padding-block:40px"><div class="container"><div class="quick">'+
@@ -457,12 +466,12 @@ function pageHome(){var s=DATA.settings;
   s.stats.map(function(x){return '<div class="stat"><b class="tnum">'+esc(x.n)+'</b><span>'+esc(pick(x.l))+'</span></div>'}).join("")+'</div>'+(s.statsSample?'<p class="note">'+esc(t("statsNote"))+'</p>':'')+'</div></section>';
  var up=upcomingEvents().slice(0,4);
  var hp=sortedPosts().filter(function(p){return p.cat!=="ann"});if(!hp.length)hp=sortedPosts();
- var news='<section class="section hnews-sec"><div class="container"><div class="sec-head"><div><span class="eyebrow">'+esc(t("newsE"))+'</span><h2>'+esc(t("newsT"))+'</h2><p>'+esc(t("newsD"))+'</p></div><a class="more" href="#news">'+esc(t("allNews"))+' →</a></div>'+
+ var news='<section class="section hnews-sec"><div class="container"><div class="sec-head"><div><span class="eyebrow">'+esc(t("newsE"))+'</span><h2>'+esc(t("newsT"))+'</h2><p>'+esc(t("newsD"))+'</p></div><div class="hn-side"><a class="more" href="#news">'+esc(t("allNews"))+' →</a>'+dirCard()+'</div></div>'+
   '<div class="hnews'+(hp.length<2?' one':'')+'">'+(hp.length?newsFeat(hp[0]):'<div class="empty"><b>'+esc(t("noResults"))+'</b></div>')+(hp.length>1?'<div class="nrows">'+hp.slice(1,4).map(newsRow).join("")+'</div>':'')+
   homeProjPanel()+'</div>'+addBtn("posts",{date:todayISO(),cat:"life"})+'</div></section>';
  var partners='<section class="section alt"><div class="container"><div class="sec-head"><h2>'+esc(t("partnersT"))+'</h2>'+addBtn("partners")+'</div>'+(st.editing?'<div class="partners">':'<div class="pview"><div class="partners ptrack" id="ptrack">')+
   DATA.partners.map(function(p){var inner=ed("partners",p.id)+(p.img?'<img class="plogo" src="'+esc(p.img)+'" alt="" loading="lazy">':'<span class="ico">'+ic("build")+'</span>')+'<span>'+esc(pick(p.title))+'</span>';return p.url&&!st.editing?'<a class="partner" href="'+esc(p.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="partner">'+inner+'</div>'}).join("")+'</div>'+(st.editing?'':'</div>')+'</div></section>';
- return photoStrip()+annTicker()+platBanner()+hero+news+readBanner()+partners}
+ return photoStrip()+annTicker()+hero+news+readBanner()+partners}
 function readBanner(){return '<section class="section" style="padding-block:8px 40px"><div class="container"><a class="rnban" href="https://reading-nation.kz" target="_blank" rel="noopener"><img src="assets/brand/kitap.webp" alt="Кітап оқитын ұлт" width="195" height="93" loading="lazy"><span class="rnban-t">'+esc(t("rnT"))+'</span><span class="rnban-b">'+esc(t("rnMore"))+'</span></a></div></section>'}
 
 function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"});
@@ -575,6 +584,11 @@ function schedArt(){return '<svg class="bart" viewBox="0 0 300 170" aria-hidden=
  [0,1,2,3,4,5,6,7,8,9,10,11].map(function(i){var a=i*Math.PI/6,r1=i%3?31:28;return '<line x1="'+(195+Math.sin(a)*r1).toFixed(1)+'" y1="'+(110-Math.cos(a)*r1).toFixed(1)+'" x2="'+(195+Math.sin(a)*34).toFixed(1)+'" y2="'+(110-Math.cos(a)*34).toFixed(1)+'" stroke="#0f172a" stroke-width="'+(i%3?1.5:2.5)+'"/>'}).join("")+
  '<path d="M195 110V86M195 110l15 9" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round"/><circle cx="195" cy="110" r="3.5" fill="#15803d"/><path d="M188 62h14" stroke="#d4a24c" stroke-width="6" stroke-linecap="round"/></g>'+
  '<rect x="250" y="104" width="38" height="54" rx="6" fill="#fff" stroke="#cbd5e1"/><path d="M258 104l-3-38M268 104l2-44M278 104l6-34" stroke-width="5" stroke-linecap="round" stroke="#16a34a"/><path d="M268 104l2-44" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/><path d="M278 104l6-34" stroke="#0ea5e9" stroke-width="5" stroke-linecap="round"/></svg>'}
+var T19={heroAbout:["Гимназия туралы","О гимназии","About the gymnasium"],heroPlat:["Гимназиялық бақылау","Гимназиялық бақылау","Gymnasium tests"],
+ dirPanel:["Директор панелі","Панель директора","Principal's desk"],dirWrite:["Директорға жазу","Написать директору","Write to the principal"],dirAdm:["Әкімшілік","Администрация","Administration"],
+ dirHint:["Ұсыныс, сұрақ немесе алғысыңызды жазыңыз — хатыңыз директорға жетеді.","Напишите предложение, вопрос или благодарность — письмо дойдёт до директора.","Send a suggestion, question or thanks — it reaches the principal."],
+ f_dirText:["Директордың сөзі («Директор панелі» терезесінде)","Обращение директора (в окне «Панель директора»)","Principal's message"]};
+for(var _k19 in T19)T[_k19]=T19[_k19];
 var T18={acYearT:["{y} оқу жылының шығарылымдары","Выпуски {y} учебного года","{y} school year"],acOther:["Күні көрсетілмеген","Без даты","Undated"],nIssues:["{n} шығарылым","Выпусков: {n}","{n} issues"],
  f_pages:["Газет беттері","Страницы выпуска","Issue pages"],addPages:["+ Беттерді қосу (суреттер)","+ Добавить страницы (картинки)","+ Add pages (images)"],
  pagesHint:["Бірнеше суретті бірден таңдауға болады — олар файл аты бойынша ретімен қойылады. Ретін ‹ › батырмаларымен өзгертіңіз.","Можно выбрать сразу несколько картинок — они встанут по порядку имён файлов. Порядок меняется кнопками ‹ ›.","Pick several images at once — they are ordered by file name. Reorder with ‹ ›."],
@@ -1027,11 +1041,12 @@ function settingsForm(modal){var s=DATA.settings;
  '<label>Facebook<input id="se-facebook" type="url" value="'+esc(s.facebook)+'"></label>'+
  '<label>'+esc(t("f_hours"))+'<div class="ml">'+LANGS.map(function(l){return '<input id="se-hours-'+l+'" value="'+esc(s.hours[l]||"")+'">'}).join("")+'</div></label>'+
  '<label>'+esc(t("f_motto"))+'<div class="ml">'+LANGS.map(function(l){return '<input id="se-motto-'+l+'" value="'+esc((s.motto||{})[l]||"")+'">'}).join("")+'</div></label>'+
+ '<label>'+esc(t("f_dirText"))+'<div class="ml">'+LANGS.map(function(l){return '<textarea id="se-dir-'+l+'" placeholder="'+["KZ","RU","EN"][LI[l]]+'">'+esc((s.dirText||{})[l]||"")+'</textarea>'}).join("")+'</div></label>'+
  s.stats.map(function(x,i){return '<label>'+esc(t("f_stat"))+' '+(i+1)+'<div class="ml" style="grid-template-columns:90px repeat(2,minmax(0,1fr))"><input id="se-sn-'+i+'" value="'+esc(x.n)+'">'+LANGS.map(function(l){return '<input id="se-sl-'+i+'-'+l+'" value="'+esc(x.l[l]||"")+'">'}).join("")+'</div></label>'}).join("")+
  '<div class="acts">'+(modal?'<button type="button" class="btn btn-soft" data-close="1">'+esc(t("cancel"))+'</button>':'')+'<button class="btn btn-primary" type="submit">'+esc(t("ok"))+'</button></div></form>'}
 function saveSettings(){var s=DATA.settings,g=function(id){return document.getElementById(id).value.trim()};
  ["phone","email","whatsapp","year","instagram","telegram","facebook"].forEach(function(k){s[k]=g("se-"+k)});
- LANGS.forEach(function(l){s.hours[l]=g("se-hours-"+l);s.motto=s.motto||{};s.motto[l]=g("se-motto-"+l)});
+ LANGS.forEach(function(l){s.hours[l]=g("se-hours-"+l);s.motto=s.motto||{};s.motto[l]=g("se-motto-"+l);s.dirText=s.dirText||{};var de=document.getElementById("se-dir-"+l);if(de)s.dirText[l]=de.value.trim()});
  s.stats.forEach(function(x,i){var nv=g("se-sn-"+i);if(nv!==x.n)s.statsSample=false;x.n=nv;LANGS.forEach(function(l){x.l[l]=g("se-sl-"+i+"-"+l)})});
  st.editing=true;dirty();closeLayer();render(true);toast(t("settingsHint"))}
 
@@ -1040,8 +1055,9 @@ function shrink(file,M){return new Promise(function(res){var r=new FileReader();
 
 /* ------------------------------------------------------------ events */
 document.addEventListener("click",function(e){
- var el=e.target.closest("[data-flip],[data-bk],[data-bkgo],[data-pgmv],[data-pgdel],[data-mtab],[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
+ var el=e.target.closest("[data-dir],[data-flip],[data-bk],[data-bkgo],[data-pgmv],[data-pgdel],[data-mtab],[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
  if(!el)return;var d=el.dataset;
+ if(d.dir){openDirector();return}
  if(d.flip){e.preventDefault();var fp=d.flip.split("|");openFlip(fp[0],fp[1]);return}
  if(d.bk){if(d.bk==="thumbs"||d.bk==="zoom")bkPanel(d.bk);else if(d.bk==="fs"){var fe=document.getElementById("flip");if(document.fullscreenElement||document.webkitFullscreenElement)(document.exitFullscreen||document.webkitExitFullscreen).call(document);else if(fe)(fe.requestFullscreen||fe.webkitRequestFullscreen).call(fe)}else bkGo(d.bk);return}
  if(d.bkgo!==undefined&&bk&&bk.pf){bk.pf.turnToPage(+d.bkgo);bkPanel("thumbs");bkSync();return}

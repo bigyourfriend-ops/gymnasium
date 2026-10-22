@@ -1428,3 +1428,22 @@ form:not([data-k=issue]) .f-pages{display:none}
 .pyear .pitem.issue .pbtn{margin-top:auto}
 @media (max-width:600px){.pyear .pitems.issues{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pyhead h3{font-size:16.5px}.pyhead{flex-wrap:wrap}.pyhead::after{flex-basis:100%}}
 .stats .grid{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr)}
+/* hero buttons + principal's desk */
+.hero-acts{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.hero-acts .btn{padding:13px 24px;font-size:15px}
+.hnews-sec .sec-head{align-items:flex-end}
+.hn-side{display:flex;flex-direction:column;align-items:flex-end;gap:12px;flex:none}
+.dircard{display:flex;align-items:center;gap:12px;min-width:250px;padding:10px 20px 10px 10px;border:2px solid var(--b200,#bbf7d0);border-radius:16px;background:#fff;cursor:pointer;font:inherit;color:var(--b900,#14532d);box-shadow:0 6px 18px rgba(20,83,45,.08);transition:border-color .2s,transform .2s,box-shadow .2s}
+.dircard:hover{border-color:var(--b500,#22c55e);transform:translateY(-1px);box-shadow:0 10px 24px rgba(20,83,45,.14)}
+.dircard b{font:700 15px var(--f-display);flex:1;text-align:center}
+.dava{width:44px;height:44px;border-radius:12px;background:var(--b100,#dcfce7);color:var(--b800,#166534);display:inline-flex;align-items:center;justify-content:center;font-weight:800;overflow:hidden;flex:none}
+.dava img{width:100%;height:100%;object-fit:cover}
+.dava.big{width:76px;height:76px;border-radius:18px;font-size:24px}
+.dirmodal .dm-head{display:flex;gap:16px;align-items:center;padding-right:36px}
+.dirmodal h3{margin:4px 0 2px}
+.dm-role{color:#64748b;font-size:14px}
+.dm-msg{margin:20px 0 0;padding:14px 18px;border-left:4px solid var(--b500,#22c55e);background:var(--b50,#f0fdf4);border-radius:0 12px 12px 0;font-style:italic;color:#1e293b}
+.dm-msg p{margin:0 0 8px}.dm-msg p:last-child{margin:0}
+.dm-hint{color:#475569;margin:18px 0 0}
+.dm-acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+@media (max-width:720px){.hnews-sec .sec-head{flex-direction:column;align-items:stretch}.hn-side{align-items:stretch}.hn-side .more{align-self:flex-end}.dircard{min-width:0}}
