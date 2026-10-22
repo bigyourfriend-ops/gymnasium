@@ -576,7 +576,7 @@ function pageSchedule(){var C=DATA.classes||{},names=Object.keys(C).sort(clsSort
  var addForm=ed?'<form class="panel form ttaddform" id="ttAddForm" style="flex-direction:row;flex-wrap:wrap;align-items:end;gap:10px;margin:0"><b style="width:100%">'+esc(t("addClass"))+'</b><label>'+esc(t("gradeL"))+'<input id="tta-g" type="number" min="1" max="11" value="'+(g||1)+'" style="width:90px"></label><label>'+esc(t("letterL"))+'<select id="tta-l">'+LETTERS.split("").map(function(x){return '<option>'+x+'</option>'}).join("")+'</select></label><label>'+esc(t("shiftL"))+'<select id="tta-s"><option value="1">1</option><option value="2">2</option></select></label><button class="btn btn-primary" type="submit">'+esc(t("add"))+'</button></form>':'';
  var bells=bellsSection(DATA.bells,"bell","bells1T",1)+bellsSection(DATA.bells2||[],"bell2","bells2T",2);
  return banner("navSched","pd_schedule").replace(/<\/div><\/section>$/,schedArt()+'</div></section>')+'<div class="container page ttpage">'+(bells?'<div class="bells2col">'+bells+'</div>':'')+
-  '<section style="display:flex;flex-direction:column;gap:18px">'+picker+body+addForm+'<div class="ttnotes"><p>'+esc(t("ttLegend"))+'</p><p>'+esc(t("ttSource"))+'</p></div></section></div>'}
+  '<section style="display:flex;flex-direction:column;gap:18px">'+picker+body+addForm+'<div class="ttnotes"><p>'+esc(t("ttLegend"))+'</p><p>'+esc(t("ttSource"))+'</p></div>'+tvCard()+'</section></div>'}
 /* decorative alarm clock, books and pencil cup for the timetable banner */
 function schedArt(){return '<svg class="bart" viewBox="0 0 300 170" aria-hidden="true"><g opacity=".5" fill="#86efac">'+[0,1,2,3].map(function(r){return [0,1,2,3].map(function(c){return '<circle cx="'+(14+c*12+(r%2)*6)+'" cy="'+(52+r*12)+'" r="3"/>'}).join("")}).join("")+'</g>'+
  '<rect x="70" y="128" width="112" height="20" rx="4" fill="#f8fafc" stroke="#cbd5e1"/><rect x="66" y="128" width="8" height="20" rx="3" fill="#15803d"/><rect x="78" y="108" width="100" height="20" rx="4" fill="#16a34a"/><rect x="78" y="114" width="100" height="3" fill="#bbf7d0"/><rect x="74" y="148" width="116" height="10" rx="3" fill="#e2e8f0"/>'+
@@ -584,6 +584,15 @@ function schedArt(){return '<svg class="bart" viewBox="0 0 300 170" aria-hidden=
  [0,1,2,3,4,5,6,7,8,9,10,11].map(function(i){var a=i*Math.PI/6,r1=i%3?31:28;return '<line x1="'+(195+Math.sin(a)*r1).toFixed(1)+'" y1="'+(110-Math.cos(a)*r1).toFixed(1)+'" x2="'+(195+Math.sin(a)*34).toFixed(1)+'" y2="'+(110-Math.cos(a)*34).toFixed(1)+'" stroke="#0f172a" stroke-width="'+(i%3?1.5:2.5)+'"/>'}).join("")+
  '<path d="M195 110V86M195 110l15 9" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round"/><circle cx="195" cy="110" r="3.5" fill="#15803d"/><path d="M188 62h14" stroke="#d4a24c" stroke-width="6" stroke-linecap="round"/></g>'+
  '<rect x="250" y="104" width="38" height="54" rx="6" fill="#fff" stroke="#cbd5e1"/><path d="M258 104l-3-38M268 104l2-44M278 104l6-34" stroke-width="5" stroke-linecap="round" stroke="#16a34a"/><path d="M268 104l2-44" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/><path d="M278 104l6-34" stroke="#0ea5e9" stroke-width="5" stroke-linecap="round"/></svg>'}
+var T21={tvT:["Интерактивті тақта / теледидар режимі","Режим для интерактивной панели / телевизора","Interactive panel / TV mode"],
+ tvD:["Сыныптағы интерактивті тақтада немесе дәліздегі теледидарда толық экранда ашыңыз: үлкен сағат, қазіргі сабақ, қалған уақыт және кесте өздігінен жаңарып тұрады.","Откройте на интерактивной панели в классе или на телевизоре в коридоре: крупные часы, текущий урок, сколько осталось и расписание — всё обновляется само.","Full-screen clock, current lesson and timetable for classroom panels and hallway TVs."],
+ tvCls:["{c} сыныбы үшін ашу","Открыть для {c} класса","Open for class {c}"],tvAll:["Бүкіл мектеп (дәліз үшін)","Вся школа (для коридора)","Whole school (hallway)"],
+ tvHint:["Кеңес: бетті бетбелгіге қосып қойсаңыз, теледидар бірден осы режимде ашылады.","Совет: добавьте страницу в закладки — телевизор будет сразу открываться в этом режиме.","Tip: bookmark this page so the TV opens straight into this mode."],
+ tvToday:["Бүгінгі сабақтар","Уроки сегодня","Today's lessons"],tvMonday:["Келесі оқу күні: {d}","Следующий учебный день: {d}","Next school day: {d}"],tvNow:["Қазір","Сейчас","Now"],tvNext:["Келесі","Далее","Next"],
+ tvNoLes:["Бүгін сабақ жоқ","Сегодня уроков нет","No lessons today"],tvFree:["Сабақ жоқ","Нет урока","—"],tvBreak:["Үзіліс","Перемена","Break"],tvRoom:["{r}-кабинет","Кабинет {r}","Room {r}"],
+ tvSchool:["Бүкіл мектеп","Вся школа","Whole school"],tvShiftNow:["{s} — қазір","{s} — сейчас","{s} — now"],tvExit:["Шығу","Выйти","Exit"],tvFs:["Толық экран","Во весь экран","Fullscreen"],tvPage:["{a} / {b} бет","стр. {a} из {b}","page {a}/{b}"],
+ tvDone:["Сабақтар аяқталды","Уроки закончились","Lessons are over"]};
+for(var _k21 in T21)T[_k21]=T21[_k21];
 var T20={p_backup:["Сақтық көшірме","Резервная копия","Backup"],
  bkT:["Сақтық көшірмені жүктеп алу","Скачать резервную копию","Download a backup"],
  bkD:["Сайттың барлық мазмұны (жаңалықтар, кесте, жобалар, баптаулар, рөлдер, пайдаланушылар тізімі, пікірлер) және барлық фото мен PDF файлдары бір ZIP файлға жиналады. Айына бір рет жүктеп, компьютерге немесе флешкаға сақтаңыз.","Всё содержимое сайта (новости, расписание, проекты, настройки, роли, список пользователей, отзывы) и все фото и PDF собираются в один ZIP-файл. Скачивайте раз в месяц и храните на компьютере или флешке.","All site content and every photo/PDF in one ZIP file. Download it monthly and keep it safe."],
@@ -834,12 +843,14 @@ function homeProjects(){var P=DATA.projects||[];if(!P.length)return"";var all=[]
  return '<section class="section"><div class="container"><div class="sec-head"><div><span class="eyebrow">'+esc(t("projE"))+'</span><h2>'+esc(t("navProj"))+'</h2></div><a class="btn btn-soft" href="#projects">'+esc(t("allProj"))+' →</a></div>'+projLogos()+
   (all.length?'<h3 class="psub">'+esc(t("projNew"))+'</h3><div class="pitems mix">'+all.slice(0,4).map(function(x){return itemCard(x.i,"pi_"+x.p.id,x.p,true)}).join("")+'</div>':'')+'</div></section>'}
 
-var PAGES={projects:pageProjects,project:pageProject,admin:pageAdmin,profile:pageProfile,home:pageHome,about:pageAbout,news:pageNews,post:pagePost,schedule:pageSchedule,olympiad:pageOlympiad,gallery:pageGallery,album:pageAlbum,alumni:pageAlumni,docs:pageDocs,contacts:pageContacts};
+var PAGES={tv:pageTV,projects:pageProjects,project:pageProject,admin:pageAdmin,profile:pageProfile,home:pageHome,about:pageAbout,news:pageNews,post:pagePost,schedule:pageSchedule,olympiad:pageOlympiad,gallery:pageGallery,album:pageAlbum,alumni:pageAlumni,docs:pageDocs,contacts:pageContacts};
 
 /* ------------------------------------------------------------ render */
 var app=document.getElementById("app"),layer=document.getElementById("layer");
 function render(keepScroll){document.documentElement.lang=st.lang;syncNav();var y=window.scrollY;emN=0;
  var fn=PAGES[st.route.page]||pageHome;
+ if(st.route.page==="tv"){app.innerHTML=pageTV();document.title=t("tvT")+" · "+t("name");tvStart();return}
+ if(tv.timer)tvStop();
  app.innerHTML=topbar()+header()+'<main id="main">'+fn()+'</main>'+footer()+editbar();
  document.title=(st.route.page==="home"?"":titleFor()+" · ")+t("name");
  if(keepScroll)window.scrollTo(0,y);aboutSlide();startPartners();startProjRing();startHero();startStrip();startTicker()}
@@ -1071,8 +1082,10 @@ function shrink(file,M){return new Promise(function(res){var r=new FileReader();
 
 /* ------------------------------------------------------------ events */
 document.addEventListener("click",function(e){
- var el=e.target.closest("[data-bkpdo],[data-rsgo],[data-dir],[data-flip],[data-bk],[data-bkgo],[data-pgmv],[data-pgdel],[data-mtab],[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
+ var el=e.target.closest("[data-tvgo],[data-tvfs],[data-bkpdo],[data-rsgo],[data-dir],[data-flip],[data-bk],[data-bkgo],[data-pgmv],[data-pgdel],[data-mtab],[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
  if(!el)return;var d=el.dataset;
+ if(d.tvgo){tvFull();location.hash="tv."+d.tvgo;return}
+ if(d.tvfs){tvFull();return}
  if(d.bkpdo){doBackup();return}
  if(d.rsgo){doRestore();return}
  if(d.dir){openDirector();return}
@@ -1301,6 +1314,62 @@ function doRestore(){var p=rsPending;if(!p||!sb||!st.user)return;rsPending=null;
    return roles.length?sb.from("roles").upsert(roles).then(function(){},function(){}):null})})
  .then(function(){bkMsg("rsmsg",t("rsDone"));setTimeout(function(){location.reload()},1500)})
  .catch(function(){bkMsg("rsmsg",t("rsErr"))})}
+/* ------------------------------------------------------------ TV / interactive panel mode (#tv, #tv.1А, #tv.all) */
+var TV_SVG='<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>';
+function tvCard(){var c=st.cls&&(DATA.classes||{})[st.cls]?st.cls:"";
+ return '<section class="tvcard"><div class="tvc-ico">'+TV_SVG+'</div><div class="tvc-txt"><h3>'+esc(t("tvT"))+'</h3><p>'+esc(t("tvD"))+'</p><small>'+esc(t("tvHint"))+'</small></div>'+
+  '<div class="tvc-acts">'+(c?'<button class="btn btn-primary" data-tvgo="'+esc(c)+'">'+esc(f(t("tvCls"),{c:c}))+'</button>':'')+'<button class="btn btn-outline" data-tvgo="all">'+esc(t("tvAll"))+'</button></div></section>'}
+var tv={timer:0,page:0,lastFlip:0,lock:null,idle:0,sync:0};
+function tvArg(){var a=st.route.arg||"";try{a=decodeURIComponent(a)}catch(e){}return a}
+function tvClassState(c,n){var b=c.bells&&c.bells.length?c.bells:c.shift===2?(DATA.bells2||[]):DATA.bells;if(n.wd===0||n.wd===6)return{kind:"weekend",b:b};var r=shiftState(b,n);r.b=b;return r}
+function tvDayIdx(n){return n.wd>=1&&n.wd<=5?n.wd-1:-1}
+function pageTV(){var C=DATA.classes||{},names=Object.keys(C).sort(clsSort),arg=tvArg(),all=arg==="all",cls=all?"":(C[arg]?arg:(C[st.cls]?st.cls:names[0]));
+ tv.mode=all?"all":"cls";tv.cls=cls;tv.page=0;
+ return '<div class="tv'+(all?" tv-all":"")+'" id="tv"><header class="tv-top">'+emblem("tv-em")+'<div class="tv-name"><b>'+esc(t("name"))+'</b><span>'+esc(all?t("tvSchool"):f(t("clsTitle"),{c:cls}))+'</span></div>'+
+  '<div class="tv-clock"><div class="tv-time tnum" id="tvtime"></div><div class="tv-date" id="tvdate"></div></div></header>'+
+  '<div class="tv-main" id="tvmain"></div>'+
+  '<div class="tv-ctl" id="tvctl"><select id="tvsel" aria-label="'+esc(t("letterL"))+'"><option value="all"'+(all?" selected":"")+'>'+esc(t("tvSchool"))+'</option>'+names.map(function(n){return '<option value="'+esc(n)+'"'+(n===cls?" selected":"")+'>'+esc(n)+'</option>'}).join("")+'</select>'+
+  '<button data-tvfs="1">'+esc(t("tvFs"))+'</button><a href="#schedule">'+esc(t("tvExit"))+'</a></div></div>'}
+function tvLessons(c,di){return di<0?[]:(c.days[di]||[]).slice().sort(function(a,b){return a.n-b.n})}
+function tvDrawCls(n){var c=DATA.classes[tv.cls];if(!c)return"";var s=tvClassState(c,n),di=tvDayIdx(n),title=t("tvToday"),ls=tvLessons(c,di);
+ if(di<0){var nd=n.wd===6?2:1,dt=new Date(Date.UTC(n.y,n.m-1,n.d+nd));title=f(t("tvMonday"),{d:WDL[LI[st.lang]][1]});ls=tvLessons(c,0)}
+ var curN=s.kind==="lesson"?bellLabel(s.b[s.i],s.i):null,nextN=s.kind==="break"?bellLabel(s.b[s.i],s.i):s.kind==="before"?(ls[0]&&ls[0].n):s.kind==="lesson"?((ls.filter(function(l){return l.n>curN})[0]||{}).n):null;
+ var curL=ls.filter(function(l){return l.n===curN})[0],nowMin=n.min;
+ var head,sub="",bar="";
+ if(s.kind==="lesson"){head=curL?curL.s:f(t("lesson"),{n:curN});sub=f(t("lesson"),{n:curN})+" · "+s.b[s.i][0]+"–"+s.b[s.i][1]+" · "+f(t("left"),{m:s.left});bar='<div class="tv-bar"><i style="width:'+s.pct+'%"></i></div>'}
+ else if(s.kind==="break"){var nl=ls.filter(function(l){return l.n===nextN})[0];head=t("tvBreak");sub=(nl?t("tvNext")+": "+nl.s+" · ":"")+f(t("next"),{t:s.b[s.i][0]})+" · "+f(t("brkLeft"),{m:s.left});bar='<div class="tv-bar brk"><i style="width:'+s.pct+'%"></i></div>'}
+ else if(s.kind==="before"){head=f(t("before"),{t:(bellFor(c.shift,ls[0]?ls[0].n:1,c)||s.b[0]||["08:00"])[0]});sub=ls[0]?t("tvNext")+": "+ls[0].s:""}
+ else if(s.kind==="after"){head=t("tvDone")}else head=t("weekend");
+ if(di>=0&&!ls.length)head=t("tvNoLes");
+ var room=(ls[0]&&ls[0].r)||"";
+ return '<section class="tv-now"><span class="shiftchip s'+c.shift+'">'+esc(t("shift"+c.shift))+'</span>'+(room?'<span class="tv-room">'+esc(f(t("tvRoom"),{r:room}))+'</span>':'')+'<h2>'+esc(head)+'</h2><p>'+esc(sub)+'</p>'+bar+'</section>'+
+  '<section class="tv-list"><h3>'+esc(title)+'</h3><ol>'+ls.map(function(l){var bb=bellFor(c.shift,l.n,c),past=di>=0&&bb&&toMin(bb[1])<=nowMin,cur=l.n===curN&&di>=0,nx=l.n===nextN&&di>=0;
+   return '<li class="'+(cur?"cur":nx?"nx":past?"past":"")+'"><span class="n">'+l.n+'</span><span class="tm tnum">'+(bb?bb[0]+'–'+bb[1]:'')+'</span><span class="sj">'+esc(l.s)+'</span>'+(cur?'<span class="tag">'+esc(t("tvNow"))+'</span>':nx?'<span class="tag nx">'+esc(t("tvNext"))+'</span>':'')+'</li>'}).join("")+'</ol></section>'}
+function tvDrawAll(n){var C=DATA.classes||{},ls0=lessonState(),shift=ls0.kind==="weekend"?1:ls0.shift,di=tvDayIdx(n);
+ var names=Object.keys(C).sort(clsSort).filter(function(k){return C[k].shift===shift});
+ var per=window.innerWidth>=1500?18:window.innerWidth>=1000?12:6,pages=Math.max(1,Math.ceil(names.length/per));if(tv.page>=pages)tv.page=0;
+ var cards=names.slice(tv.page*per,tv.page*per+per).map(function(k){var c=C[k],s=tvClassState(c,n),ls=tvLessons(c,di),now="",nxt="";
+  if(s.kind==="lesson"){var cn=bellLabel(s.b[s.i],s.i),cl=ls.filter(function(l){return l.n===cn})[0];var nl=ls.filter(function(l){return l.n>cn})[0];now=cl?cl.s:nl?t("tvFree"):t("tvDone");nxt=nl?nl.s:""}
+  else if(s.kind==="break"){var bn=bellLabel(s.b[s.i],s.i);var nl2=ls.filter(function(l){return l.n>=bn})[0];now=nl2?t("tvBreak"):t("tvDone");nxt=nl2?nl2.s:""}
+  else if(s.kind==="before"){now="—";nxt=ls[0]?ls[0].s:""}else{now=s.kind==="weekend"?t("weekend"):t("tvDone")}
+  return '<div class="tv-cc'+(s.kind==="lesson"&&now!==t("tvDone")&&now!==t("tvFree")?" on":"")+(now===t("tvDone")?" done":"")+'"><b>'+esc(k)+'</b><div><span class="now">'+esc(now)+'</span>'+(nxt?'<span class="nxt">'+esc(t("tvNext"))+': '+esc(nxt)+'</span>':'')+'</div></div>'}).join("");
+ var state=nowHTML();
+ return '<section class="tv-now tv-now-all"><div id="now" class="tv-nowbox">'+state+'</div></section><section class="tv-grid-wrap"><h3>'+esc(f(t("tvShiftNow"),{s:t("shift"+shift)}))+(pages>1?' <small>'+esc(f(t("tvPage"),{a:tv.page+1,b:pages}))+'</small>':'')+'</h3><div class="tv-grid">'+cards+'</div></section>'}
+function tvDraw(){var m=document.getElementById("tvmain");if(!m)return;var n=nowTZ();m.innerHTML=tv.mode==="all"?tvDrawAll(n):tvDrawCls(n)}
+function tvTick(){if(!document.getElementById("tv")){tvStop();return}var d=new Date(),n=nowTZ(),tm=document.getElementById("tvtime"),dt=document.getElementById("tvdate");
+ if(tm)tm.innerHTML=pad(n.h)+':'+pad(n.mi)+'<small>:'+pad(d.getSeconds())+'</small>';if(dt)dt.textContent=WDL[LI[st.lang]][n.wd]+" · "+fmtDate(todayISO());
+ var key=n.min;if(key!==tv.lastMin){tv.lastMin=key;tvDraw()}
+ if(tv.mode==="all"&&Date.now()-tv.lastFlip>12000){tv.lastFlip=Date.now();tv.page++;tvDraw()}
+ if(Date.now()-tv.sync>30*60000){tv.sync=Date.now();tvSync()}
+ if(Date.now()-tv.idle>4000)document.getElementById("tv").classList.add("idle")}
+function tvSync(){if(!sb)return;sb.from("site_content").select("data").eq("id","schedule").maybeSingle().then(function(r){var d=r&&r.data&&r.data.data;if(!d)return;["classes","bells","bells2"].forEach(function(k){if(d[k])DATA[k]=d[k]});tvDraw()},function(){})}
+function tvStart(){tvStop();document.body.classList.add("tvmode");tv.lastMin=-1;tv.lastFlip=Date.now();tv.sync=Date.now();tv.idle=Date.now();tvTick();tv.timer=setInterval(tvTick,1000);
+ try{if(navigator.wakeLock)navigator.wakeLock.request("screen").then(function(l){tv.lock=l},function(){})}catch(e){}
+ var sel=document.getElementById("tvsel");if(sel)sel.addEventListener("change",function(){location.hash="tv."+sel.value})}
+function tvStop(){clearInterval(tv.timer);tv.timer=0;document.body.classList.remove("tvmode");if(tv.lock){try{tv.lock.release()}catch(e){}tv.lock=null}}
+function tvFull(){var el=document.documentElement;try{if(document.fullscreenElement||document.webkitFullscreenElement)(document.exitFullscreen||document.webkitExitFullscreen).call(document);else (el.requestFullscreen||el.webkitRequestFullscreen).call(el)}catch(e){}}
+["mousemove","touchstart","keydown"].forEach(function(ev){document.addEventListener(ev,function(){if(!tv.timer)return;tv.idle=Date.now();var el=document.getElementById("tv");if(el)el.classList.remove("idle")},{passive:true})});
+document.addEventListener("visibilitychange",function(){if(tv.timer&&document.visibilityState==="visible"&&navigator.wakeLock){try{navigator.wakeLock.request("screen").then(function(l){tv.lock=l},function(){})}catch(e){}}});
 function pageAdmin(){
  if(!sb)return banner("adminPanel","pd_admin")+'<div class="container page"><div class="empty"><b>'+esc(t("noAuth"))+'</b></div></div>';
  if(!st.user)return pageProfile();
