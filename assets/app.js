@@ -584,6 +584,20 @@ function schedArt(){return '<svg class="bart" viewBox="0 0 300 170" aria-hidden=
  [0,1,2,3,4,5,6,7,8,9,10,11].map(function(i){var a=i*Math.PI/6,r1=i%3?31:28;return '<line x1="'+(195+Math.sin(a)*r1).toFixed(1)+'" y1="'+(110-Math.cos(a)*r1).toFixed(1)+'" x2="'+(195+Math.sin(a)*34).toFixed(1)+'" y2="'+(110-Math.cos(a)*34).toFixed(1)+'" stroke="#0f172a" stroke-width="'+(i%3?1.5:2.5)+'"/>'}).join("")+
  '<path d="M195 110V86M195 110l15 9" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round"/><circle cx="195" cy="110" r="3.5" fill="#15803d"/><path d="M188 62h14" stroke="#d4a24c" stroke-width="6" stroke-linecap="round"/></g>'+
  '<rect x="250" y="104" width="38" height="54" rx="6" fill="#fff" stroke="#cbd5e1"/><path d="M258 104l-3-38M268 104l2-44M278 104l6-34" stroke-width="5" stroke-linecap="round" stroke="#16a34a"/><path d="M268 104l2-44" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/><path d="M278 104l6-34" stroke="#0ea5e9" stroke-width="5" stroke-linecap="round"/></svg>'}
+var T22={p_rep:["Есептер мен жетістіктер","Отчёты и достижения","Reports & achievements"],
+ rpQ1:["1-тоқсан","1 четверть","Term 1"],rpQ2:["2-тоқсан","2 четверть","Term 2"],rpQ3:["3-тоқсан","3 четверть","Term 3"],rpQ4:["4-тоқсан","4 четверть","Term 4"],rpAch:["Жетістіктер","Достижения","Achievements"],
+ rpIntro:["Тоқсандық есептер мен жетістіктеріңізді осында жүктеңіз — файлдар гимназияның Google Drive-ындағы өз папкаңызға өздігінен түседі.","Загружайте сюда отчёты за четверти и достижения — файлы сами попадут в вашу папку на Google Диске гимназии.","Upload term reports and achievements; files go to your folder on the school Google Drive."],
+ rpNoUrl:["Әкімші Google Drive байланысын әлі қоспаған. Кейінірек кіріңіз.","Администратор ещё не подключил Google Диск. Загляните позже.","Google Drive is not connected yet."],
+ rpLoading:["Google Drive-пен байланыс…","Связываюсь с Google Диском…","Connecting to Google Drive…"],rpErr:["Google Drive-пен байланыс болмады. Бетті жаңартып көріңіз.","Не удалось связаться с Google Диском. Обновите страницу.","Couldn't reach Google Drive."],
+ rpNotT:["Бұл бөлім тек мұғалімдерге арналған: «Профиль» бөлімінде «Мен — Мұғалім» деп белгілеңіз.","Раздел только для учителей: в «Профиле» выберите «Мен — Мұғалім».","Teachers only: set your role to Teacher in Profile."],
+ rpWho:["Бірінші рет: өзіңізді таңдаңыз","В первый раз: выберите себя","First time: choose yourself"],rpDept:["Әдістемелік бірлестік","Методобъединение","Department"],rpName:["Аты-жөніңіз","Ваше ФИО","Your name"],
+ rpNotList:["— Тізімде жоқпын —","— Меня нет в списке —","— Not in the list —"],rpNewName:["Толық аты-жөніңіз (папка осы атпен ашылады)","Полное ФИО (так будет названа папка)","Full name (folder name)"],
+ rpSave:["Сақтау","Сохранить","Save"],rpChange:["Өзгерту","Изменить","Change"],rpFolder:["Папканы ашу","Открыть папку","Open folder"],
+ rpCur:["Қазіргі тоқсан","Текущая четверть","Current term"],rpNone:["Әлі ештеңе жүктелмеген","Пока ничего не загружено","Nothing uploaded yet"],rpN:["{n} файл","Файлов: {n}","{n} files"],
+ rpUp:["Файл жүктеу","Загрузить файлы","Upload files"],rpUping:["Жүктелуде {a} / {b}: {f}","Загрузка {a} из {b}: {f}","Uploading {a}/{b}: {f}"],rpDone:["Жүктелді ✓","Загружено ✓","Uploaded ✓"],
+ rpBig:["«{f}» тым үлкен (25 МБ-тан аспауы керек)","Файл «{f}» слишком большой (не больше 25 МБ)","{f} is over 25 MB"],rpFail:["«{f}» жүктелмеді","Не загрузился «{f}»","{f} failed"],
+ f_drive:["Google Drive скрипті (мұғалімдер есебі үшін, …/exec сілтемесі)","Скрипт Google Диска (для отчётов учителей, ссылка …/exec)","Google Drive script URL"]};
+for(var _k22 in T22)T[_k22]=T22[_k22];
 var T21={tvT:["Интерактивті тақта / теледидар режимі","Режим для интерактивной панели / телевизора","Interactive panel / TV mode"],
  tvD:["Сыныптағы интерактивті тақтада немесе дәліздегі теледидарда толық экранда ашыңыз: үлкен сағат, қазіргі сабақ, қалған уақыт және кесте өздігінен жаңарып тұрады.","Откройте на интерактивной панели в классе или на телевизоре в коридоре: крупные часы, текущий урок, сколько осталось и расписание — всё обновляется само.","Full-screen clock, current lesson and timetable for classroom panels and hallway TVs."],
  tvCls:["{c} сыныбы үшін ашу","Открыть для {c} класса","Open for class {c}"],tvAll:["Бүкіл мектеп (дәліз үшін)","Вся школа (для коридора)","Whole school (hallway)"],
@@ -1068,11 +1082,12 @@ function settingsForm(modal){var s=DATA.settings;
  '<label>Facebook<input id="se-facebook" type="url" value="'+esc(s.facebook)+'"></label>'+
  '<label>'+esc(t("f_hours"))+'<div class="ml">'+LANGS.map(function(l){return '<input id="se-hours-'+l+'" value="'+esc(s.hours[l]||"")+'">'}).join("")+'</div></label>'+
  '<label>'+esc(t("f_motto"))+'<div class="ml">'+LANGS.map(function(l){return '<input id="se-motto-'+l+'" value="'+esc((s.motto||{})[l]||"")+'">'}).join("")+'</div></label>'+
+ '<label>'+esc(t("f_drive"))+'<input id="se-drive" type="url" placeholder="https://script.google.com/macros/s/…/exec" value="'+esc(s.driveUrl||"")+'"></label>'+
  '<label>'+esc(t("f_dirText"))+'<div class="ml">'+LANGS.map(function(l){return '<textarea id="se-dir-'+l+'" placeholder="'+["KZ","RU","EN"][LI[l]]+'">'+esc((s.dirText||{})[l]||"")+'</textarea>'}).join("")+'</div></label>'+
  s.stats.map(function(x,i){return '<label>'+esc(t("f_stat"))+' '+(i+1)+'<div class="ml" style="grid-template-columns:90px repeat(2,minmax(0,1fr))"><input id="se-sn-'+i+'" value="'+esc(x.n)+'">'+LANGS.map(function(l){return '<input id="se-sl-'+i+'-'+l+'" value="'+esc(x.l[l]||"")+'">'}).join("")+'</div></label>'}).join("")+
  '<div class="acts">'+(modal?'<button type="button" class="btn btn-soft" data-close="1">'+esc(t("cancel"))+'</button>':'')+'<button class="btn btn-primary" type="submit">'+esc(t("ok"))+'</button></div></form>'}
 function saveSettings(){var s=DATA.settings,g=function(id){return document.getElementById(id).value.trim()};
- ["phone","email","whatsapp","year","instagram","telegram","facebook"].forEach(function(k){s[k]=g("se-"+k)});
+ ["phone","email","whatsapp","year","instagram","telegram","facebook"].forEach(function(k){s[k]=g("se-"+k)});var dv=document.getElementById("se-drive");if(dv)s.driveUrl=dv.value.trim();
  LANGS.forEach(function(l){s.hours[l]=g("se-hours-"+l);s.motto=s.motto||{};s.motto[l]=g("se-motto-"+l);s.dirText=s.dirText||{};var de=document.getElementById("se-dir-"+l);if(de)s.dirText[l]=de.value.trim()});
  s.stats.forEach(function(x,i){var nv=g("se-sn-"+i);if(nv!==x.n)s.statsSample=false;x.n=nv;LANGS.forEach(function(l){x.l[l]=g("se-sl-"+i+"-"+l)})});
  st.editing=true;dirty();closeLayer();render(true);toast(t("settingsHint"))}
@@ -1082,8 +1097,9 @@ function shrink(file,M){return new Promise(function(res){var r=new FileReader();
 
 /* ------------------------------------------------------------ events */
 document.addEventListener("click",function(e){
- var el=e.target.closest("[data-tvgo],[data-tvfs],[data-bkpdo],[data-rsgo],[data-dir],[data-flip],[data-bk],[data-bkgo],[data-pgmv],[data-pgdel],[data-mtab],[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
+ var el=e.target.closest("[data-rpchange],[data-tvgo],[data-tvfs],[data-bkpdo],[data-rsgo],[data-dir],[data-flip],[data-bk],[data-bkgo],[data-pgmv],[data-pgdel],[data-mtab],[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
  if(!el)return;var d=el.dataset;
+ if(d.rpchange){rp.picking=true;render(true);return}
  if(d.tvgo){tvFull();location.hash="tv."+d.tvgo;return}
  if(d.tvfs){tvFull();return}
  if(d.bkpdo){doBackup();return}
@@ -1160,6 +1176,9 @@ document.addEventListener("change",function(e){var d=e.target.dataset;
  if(d.edfile){var fl2=e.target.files[0];if(!fl2)return;var ui=document.getElementById(d.edfile),pv2=e.target.nextElementSibling;if(fl2.size>20*1048576){toast(t("pdfBig"));e.target.value="";return}if(!sb){pv2.textContent=t("upErr");return}
   pv2.textContent=t("uploading");var fpath="files/"+new Date().getFullYear()+"/"+uid("doc")+".pdf";
   sb.storage.from("media").upload(fpath,fl2,{contentType:"application/pdf",cacheControl:"31536000",upsert:false}).then(function(r){if(r.error)throw r.error;ui.value=sb.storage.from("media").getPublicUrl(fpath).data.publicUrl;pv2.textContent="✓ "+fl2.name}).catch(function(){pv2.textContent=t("upErr")});return}
+ if(d.rpup){rpUpload(d.rpup,e.target.files);return}
+ if(e.target.id==="rp-dept"){rp.selDept=e.target.value;render(true);return}
+ if(e.target.id==="rp-teacher"){var rn=document.querySelector(".rp-new");if(rn)rn.hidden=e.target.value!=="__new";return}
  if(d.bkprs){pickRestore(e.target.files[0]);e.target.value="";return}
  if(d.edpdf){var pfl=e.target.files[0];if(pfl)pdfToPages(pfl,e.target);return}
  if(d.edpages){var fs=[].slice.call(e.target.files).sort(function(x,y){return x.name.localeCompare(y.name,undefined,{numeric:true})}),inp=e.target,stl=document.getElementById("edpagesst"),k=0;if(!fs.length)return;inp.disabled=true;
@@ -1168,7 +1187,7 @@ document.addEventListener("change",function(e){var d=e.target.dataset;
  if(d.edimg){var fl=e.target.files[0];if(!fl)return;var pv=document.getElementById("edprev");pv.textContent=t("uploading");(d.edimg==="logo"?shrinkLogo(fl,400):shrink(fl,1400)).then(uploadImg).then(function(src){if(!src){pv.textContent=t("upErr");return}edImg=src;pv.innerHTML='<img class="prev" src="'+esc(src)+'" alt="">'});return}
  if(d.upload){var al=DATA.albums.filter(function(x){return x.id===d.upload})[0],files=[].slice.call(e.target.files||[]);
   toast(t("uploading"));Promise.all(files.map(function(fl){return shrink(fl,1600).then(uploadImg)})).then(function(srcs){var n=0;srcs.forEach(function(s){if(s){al.photos.push({src:s,cap:{}});n++}});if(n<srcs.length)toast(t("upErr"));if(n){delete al.sample;dirty();render(true)}})}});
-document.addEventListener("submit",function(e){if(/^auth/.test(e.target.id)){e.preventDefault();e.stopPropagation();submitAuth(e.target)}else if(e.target.dataset&&e.target.dataset.roleform!==undefined){e.preventDefault();e.stopPropagation();saveRole(e.target)}else if(e.target.id==="ttAddForm"){e.preventDefault();e.stopPropagation();var gg=parseInt(document.getElementById("tta-g").value,10),lt=document.getElementById("tta-l").value,nm2=gg+lt;if(gg>=1&&gg<=11&&!DATA.classes[nm2]){DATA.classes[nm2]={shift:+document.getElementById("tta-s").value,days:[[],[],[],[],[]]};st.cls=nm2;dirty();render(true)}}else if(e.target.id==="fbForm"){e.preventDefault();e.stopPropagation();if(sb)submitFb(e.target)}else if(e.target.dataset&&e.target.dataset.fbreply){e.preventDefault();e.stopPropagation();var fid=e.target.dataset.fbreply;fbUpdate(fid,{reply:document.getElementById("rep-"+fid).value.trim()||null})}else if(e.target.id==="profForm"){e.preventDefault();e.stopPropagation();saveProfile(e.target)}},true);
+document.addEventListener("submit",function(e){if(/^auth/.test(e.target.id)){e.preventDefault();e.stopPropagation();submitAuth(e.target)}else if(e.target.dataset&&e.target.dataset.roleform!==undefined){e.preventDefault();e.stopPropagation();saveRole(e.target)}else if(e.target.id==="ttAddForm"){e.preventDefault();e.stopPropagation();var gg=parseInt(document.getElementById("tta-g").value,10),lt=document.getElementById("tta-l").value,nm2=gg+lt;if(gg>=1&&gg<=11&&!DATA.classes[nm2]){DATA.classes[nm2]={shift:+document.getElementById("tta-s").value,days:[[],[],[],[],[]]};st.cls=nm2;dirty();render(true)}}else if(e.target.id==="fbForm"){e.preventDefault();e.stopPropagation();if(sb)submitFb(e.target)}else if(e.target.dataset&&e.target.dataset.fbreply){e.preventDefault();e.stopPropagation();var fid=e.target.dataset.fbreply;fbUpdate(fid,{reply:document.getElementById("rep-"+fid).value.trim()||null})}else if(e.target.id==="profForm"){e.preventDefault();e.stopPropagation();saveProfile(e.target)}else if(e.target.id==="rpPick"){e.preventDefault();e.stopPropagation();rpSavePick(e.target)}},true);
 document.addEventListener("input",function(e){if(e.target.id==="fb-text"){var c=document.getElementById("fb-cnt");if(c)c.textContent=e.target.value.length+" / 1500"}if(e.target.id==="uq"){st.uq=e.target.value;var l=document.getElementById("ulistP");if(l)l.innerHTML=userRows()}});
 document.addEventListener("change",function(e){if(e.target.dataset&&e.target.dataset.setrole){var sel=e.target,uid=sel.dataset.setrole;sel.disabled=true;sb.rpc("set_role",{target:uid,role:sel.value||null}).then(function(r){sel.disabled=false;if(r.error){toast(/last/i.test(r.error.message)?t("lastAdmin"):t("e_generic"));st.admin=null;render(true);return}st.admin.staff[uid]=sel.value||undefined;if(!sel.value)delete st.admin.staff[uid];toast(t("adminChanged"))});return}
  if(e.target.dataset&&e.target.dataset.avatar){var f=e.target.files[0];if(f)uploadAvatar(f)}});
@@ -1183,15 +1202,64 @@ function pageProfile(){
  if(!sb)return banner("cabinet","pd_profile")+'<div class="container page"><div class="empty"><b>'+esc(t("noAuth"))+'</b></div></div>';
  if(!st.user)return banner("cabinet","pd_profile")+'<div class="container page"><div class="panel" style="max-width:520px;margin:0 auto;text-align:center">'+emblem("em72")+'<p style="margin:14px 0 18px;color:var(--muted)">'+esc(t("needLogin"))+'</p><div class="btns" style="justify-content:center"><button class="btn btn-primary btn-lg" data-auth="login">'+esc(t("signIn"))+'</button><button class="btn btn-outline btn-lg" data-auth="register">'+esc(t("signUp"))+'</button></div>'+bilimBtn()+'</div></div>';
  var tabs=[["me","p_me","user"],["security","p_sec","gear"]];
- if(!tabs.some(function(x){return x[0]===st.ptab}))st.ptab=tabs[0][0];
  var p=st.profile||{},u=st.user,m=u.user_metadata||{},role=p.role||m.role,a=avatarURL();
+ if(role==="teacher"||st.canEdit)tabs.splice(1,0,["reports","p_rep","file"]);
+ if(!tabs.some(function(x){return x[0]===st.ptab}))st.ptab=tabs[0][0];
  var side='<aside class="pside"><div class="pava">'+(a?'<img src="'+esc(a)+'" alt="">':esc(uname().charAt(0).toUpperCase()))+'</div><b class="pname">'+esc(uname())+'</b><span class="pmail">'+esc(u.email)+'</span>'+
   '<div class="tags" style="justify-content:center;margin-top:8px">'+(role?'<span>'+esc(t("r_"+role))+'</span>':'')+(p.grade?'<span>'+esc(p.grade)+'</span>':'')+(st.roleName?'<span class="adm">'+esc(st.roleName)+'</span>':'')+'</div>'+
   '<small class="since">'+esc(t("memberSince"))+': '+esc(fmtDate(String(p.created_at||u.created_at||"").slice(0,10)))+'</small>'+
   '<nav class="ptabs">'+tabs.map(function(x){return '<button data-ptab="'+x[0]+'" aria-pressed="'+(st.ptab===x[0])+'">'+ic(x[2])+esc(t(x[1]))+'</button>'}).join("")+'</nav>'+
   (st.canEdit?'<a class="btn btn-primary" href="#admin" style="width:100%;margin-bottom:8px">'+ic("star")+esc(t("adminPanel"))+'</a>':'')+(PAGES.tests?'<a class="btn btn-outline" href="#tests" style="width:100%;margin-bottom:8px">'+ic("flask")+esc(t("navGT"))+'</a>':'')+'<button class="btn btn-soft" data-auth="signout" style="width:100%">'+esc(t("signOut"))+'</button></aside>';
- var body={me:tabMe,security:tabSec,dash:tabDash,users:tabUsers,feedback:tabFb,roles:tabRoles}[st.ptab]();
+ var body={me:tabMe,reports:tabReports,security:tabSec,dash:tabDash,users:tabUsers,feedback:tabFb,roles:tabRoles}[st.ptab]();
  return banner("cabinet","pd_profile")+'<div class="container page"><div class="prof">'+side+'<section class="pmain">'+body+'</section></div></div>'}
+/* ------------------------------------------------------------ teacher reports → Google Drive (google/teacher-reports.gs) */
+var RP_CATS=["q1","q2","q3","q4","ach"],RP_LBL={q1:"rpQ1",q2:"rpQ2",q3:"rpQ3",q4:"rpQ4",ach:"rpAch"};
+var rp={tree:null,mine:null,loading:false,err:"",busy:{},msg:{},picking:false};
+function rpMe(){var m=(st.user&&st.user.user_metadata)||{},l={};try{l=JSON.parse(localStorage.getItem("gm-drive")||"{}")}catch(e){}return{dept:m.drive_dept||l.dept||"",teacher:m.drive_teacher||l.teacher||""}}
+function rpCall(body){var url=(DATA.settings||{}).driveUrl;if(!url||!sb)return Promise.reject(new Error("nourl"));
+ return sb.auth.getSession().then(function(r){var tok=r&&r.data&&r.data.session&&r.data.session.access_token;if(!tok)throw new Error("auth");body.token=tok;
+  return fetch(url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body)})}).then(function(r){return r.json()}).then(function(j){if(!j||!j.ok)throw new Error(j&&j.error||"err");return j})}
+function rpCurQ(){var m=nowTZ().m;return m>=9&&m<=10?"q1":m>=11?"q2":m<=3?"q3":m<=6?"q4":""}
+function rpLoad(){if(rp.loading)return;rp.loading=true;rp.err="";var me=rpMe();
+ rpCall({action:"tree"}).then(function(j){rp.tree=j.tree;if(me.dept&&me.teacher&&!rp.picking)return rpCall({action:"mine",dept:me.dept,teacher:me.teacher}).then(function(k){rp.mine=k.mine},function(e){if(/noTeacher|noDept/.test(e.message))rp.picking=true;else throw e})})
+ .catch(function(e){rp.err=/notTeacher/.test(e.message)?t("rpNotT"):t("rpErr")}).then(function(){rp.loading=false;if(st.ptab==="reports")render(true)})}
+function tabReports(){var url=(DATA.settings||{}).driveUrl,me=rpMe();
+ var head='<div class="panel rp"><h3>'+ic("file")+esc(t("p_rep"))+'</h3><p class="rp-intro">'+esc(t("rpIntro"))+'</p>';
+ if(!url)return head+'<div class="empty"><b>'+esc(t("rpNoUrl"))+'</b></div></div>';
+ if(rp.err)return head+'<div class="empty"><b>'+esc(rp.err)+'</b></div></div>';
+ if(!rp.tree){setTimeout(rpLoad,0);return head+'<p class="hint rp-load">'+esc(t("rpLoading"))+'</p></div>'}
+ if(!me.dept||!me.teacher||rp.picking){var dep=rp.selDept||me.dept||"",dl=rp.tree.depts||[],cur=dl.filter(function(d){return d.name===dep})[0];
+  return head+'<form class="form rp-pick" id="rpPick"><b>'+esc(t("rpWho"))+'</b><label>'+esc(t("rpDept"))+'<select id="rp-dept"><option value="">—</option>'+dl.map(function(d){return '<option'+(d.name===dep?" selected":"")+'>'+esc(d.name)+'</option>'}).join("")+'</select></label>'+
+   (cur?'<label>'+esc(t("rpName"))+'<select id="rp-teacher"><option value="">—</option>'+cur.teachers.map(function(n){return '<option'+(n===me.teacher?" selected":"")+'>'+esc(n)+'</option>'}).join("")+'<option value="__new">'+esc(t("rpNotList"))+'</option></select></label>'+
+    '<label class="rp-new" hidden>'+esc(t("rpNewName"))+'<input id="rp-newname" autocomplete="name"></label><button class="btn btn-primary" type="submit">'+esc(t("rpSave"))+'</button>':'')+'</form></div>'}
+ if(!rp.mine){setTimeout(rpLoad,0);return head+'<p class="hint rp-load">'+esc(t("rpLoading"))+'</p></div>'}
+ var cq=rpCurQ();
+ return head+'<div class="rp-who"><div><span class="eyebrow">'+esc(rp.mine.year||"")+' · '+esc(me.dept)+'</span><b>'+esc(me.teacher)+'</b></div><div class="rp-who-acts"><a class="btn btn-soft" href="'+esc(rp.mine.folder)+'" target="_blank" rel="noopener">'+esc(t("rpFolder"))+' ↗</a><button class="btn btn-soft" data-rpchange="1">'+esc(t("rpChange"))+'</button></div></div>'+
+  '<div class="rp-grid">'+RP_CATS.map(function(k){var fl=(rp.mine.cats||{})[k]||[];
+   return '<section class="rp-card'+(k===cq?" cur":"")+(k==="ach"?" ach":"")+'"><div class="rp-h"><h4>'+(k==="ach"?ic("trophy"):'')+esc(t(RP_LBL[k]))+'</h4>'+(k===cq?'<span class="chip">'+esc(t("rpCur"))+'</span>':'')+'</div>'+
+    '<p class="rp-n'+(fl.length?" ok":"")+'">'+esc(fl.length?f(t("rpN"),{n:fl.length}):t("rpNone"))+'</p>'+
+    (fl.length?'<ul>'+fl.slice(0,3).map(function(x){return '<li><a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.name)+'</a></li>'}).join("")+'</ul>':'')+
+    '<label class="btn '+(k===cq?"btn-primary":"btn-outline")+' rp-up'+(rp.busy[k]?" dis":"")+'">'+ic("plus")+esc(t("rpUp"))+'<input type="file" multiple data-rpup="'+k+'"'+(rp.busy[k]?" disabled":"")+'></label>'+
+    '<small class="rp-msg" id="rpmsg-'+k+'">'+esc(rp.msg[k]||"")+'</small></section>'}).join("")+'</div></div>'}
+function rpUpload(k,files){var me=rpMe(),list=[].slice.call(files||[]),i=0,bad=[];if(!list.length)return;rp.busy[k]=true;
+ function msg(x){rp.msg[k]=x;var el=document.getElementById("rpmsg-"+k);if(el)el.textContent=x}
+ render(true);
+ (function next(){if(i>=list.length){rp.busy[k]=false;msg(bad.length?bad.join("; "):t("rpDone"));
+   return rpCall({action:"mine",dept:me.dept,teacher:me.teacher}).then(function(j){rp.mine=j.mine},function(){}).then(function(){if(st.ptab==="reports")render(true)})}
+  var fl=list[i++];msg(f(t("rpUping"),{a:i,b:list.length,f:fl.name}));
+  if(fl.size>25*1048576){bad.push(f(t("rpBig"),{f:fl.name}));return next()}
+  new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(String(r.result).split(",")[1]||"")};r.onerror=rej;r.readAsDataURL(fl)})
+  .then(function(b64){return rpCall({action:"upload",dept:me.dept,teacher:me.teacher,cat:k,name:fl.name,mime:fl.type||"application/octet-stream",data:b64})})
+  .catch(function(){bad.push(f(t("rpFail"),{f:fl.name}))}).then(next)})()}
+function rpSavePick(form){var dept=(document.getElementById("rp-dept")||{}).value,sel=(document.getElementById("rp-teacher")||{}).value,nn=((document.getElementById("rp-newname")||{}).value||"").trim();
+ if(!dept||!sel||(sel==="__new"&&nn.length<5)){toast(t("needTitle"));return}
+ busy(form,true);
+ var p=sel==="__new"?rpCall({action:"addTeacher",dept:dept,teacher:nn}).then(function(j){return j.teacher}):Promise.resolve(sel);
+ p.then(function(name){try{localStorage.setItem("gm-drive",JSON.stringify({dept:dept,teacher:name}))}catch(e){}
+   st.user.user_metadata=Object.assign({},st.user.user_metadata,{drive_dept:dept,drive_teacher:name});
+   return sb.auth.updateUser({data:{drive_dept:dept,drive_teacher:name}}).catch(function(){})})
+ .then(function(){busy(form,false);rp.picking=false;rp.mine=null;rp.tree=null;render(true)})
+ .catch(function(){busy(form,false);toast(t("rpErr"))})}
 function tabMe(){var p=st.profile||{},m=st.user.user_metadata||{},role=p.role||m.role||"student";
  return '<div class="panel"><h3>'+esc(t("p_me"))+'</h3><form class="form" id="profForm">'+
   '<div class="avrow"><div class="pava sm">'+(avatarURL()?'<img src="'+esc(avatarURL())+'" alt="">':esc(uname().charAt(0).toUpperCase()))+'</div><label class="addbtn" style="cursor:pointer">'+esc(t("changePhoto"))+'<input type="file" accept="image/*" class="sr" data-avatar="1"></label></div>'+
