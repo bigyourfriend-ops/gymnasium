@@ -1416,3 +1416,14 @@ form:not([data-k=issue]) .f-pages{display:none}
 .f-pages details.imgpages summary{cursor:pointer;font-size:13.5px;color:#475569;margin:2px 0}
 .f-pages details.imgpages[open]{display:flex;flex-direction:column;gap:8px}
 .flip.pnl .fl-body{visibility:hidden}
+/* issues by school year */
+.pyear{max-width:1040px}
+.pyear+.pyear{margin-top:40px}
+.pyhead{display:flex;align-items:center;gap:12px;margin:6px 0 18px}
+.pyhead h3{font:800 20px/1.25 var(--f-display);color:var(--b800);margin:0}
+.pyhead .chip{flex:none}
+.pyhead::after{content:"";flex:1;min-width:24px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--b300,#86efac),rgba(134,239,172,0))}
+.pyear .pitems.issues{grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.pyear .pitem.issue .pib p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pyear .pitem.issue .pbtn{margin-top:auto}
+@media (max-width:600px){.pyear .pitems.issues{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pyhead h3{font-size:16.5px}.pyhead{flex-wrap:wrap}.pyhead::after{flex-basis:100%}}
