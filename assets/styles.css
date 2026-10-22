@@ -1427,3 +1427,4 @@ form:not([data-k=issue]) .f-pages{display:none}
 .pyear .pitem.issue .pib p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .pyear .pitem.issue .pbtn{margin-top:auto}
 @media (max-width:600px){.pyear .pitems.issues{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pyhead h3{font-size:16.5px}.pyhead{flex-wrap:wrap}.pyhead::after{flex-basis:100%}}
+.stats .grid{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr)}
