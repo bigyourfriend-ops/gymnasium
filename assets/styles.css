@@ -1626,3 +1626,8 @@ a.dircard{text-decoration:none}
 .person[hidden]{display:none!important}
 .tsnone{padding:22px;text-align:center;font-weight:700;color:var(--muted);border:1px dashed var(--line);border-radius:16px;margin:0 0 14px}
 @media (max-width:560px){.tsearch input{padding-right:16px}.tsearch small{position:static;margin-left:8px;flex:none}.tsearch{flex-wrap:nowrap}}
+.drbio{padding:26px 28px}
+.drbio .h2{margin-bottom:14px}
+.drbio p{color:#334155;font-size:15.5px;line-height:1.7;margin:0 0 12px;max-width:85ch}
+.drbio p:last-child{margin-bottom:0}
+@media (max-width:560px){.drbio{padding:20px 18px}.drbio p{font-size:15px}}

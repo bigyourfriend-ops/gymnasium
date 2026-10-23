@@ -19,6 +19,7 @@
       "Your letter is read by the principal personally."],
     drWrite: ["Хат жазу", "Написать письмо", "Write a letter"],
     drHaveCode: ["Менде код бар", "У меня есть код", "I have a code"],
+    drBioT: ["Директор туралы", "О директоре", "About the principal"],
     drMine: ["Менің хаттарым", "Мои письма", "My letters"],
     drHours: ["Қабылдау уақыты", "Приём граждан", "Office hours"],
     drSoon: ["нақтыланады", "уточняется", "to be confirmed"],
@@ -201,8 +202,14 @@
           (open ? '<div class="drl-b">' + threadView(x, "drMineReply", ' data-id="' + x.id + '"') + '</div>' : '') + '</article>'
       }).join("") + '</div>' : '<div class="empty"><b>' + esc(t("drMineNone")) + '</b></div>') + '</section>'
   }
+  function bioBox() {
+    var d = director(), bio = d && c(d.bio);
+    if (!bio) return "";
+    var paras = bio.split(/\n+/).map(function (x) { return x.trim() }).filter(Boolean);
+    return '<section class="panel drbio"><h2 class="h2">' + esc(t("drBioT")) + '</h2>' + paras.map(function (x) { return '<p>' + esc(x) + '</p>' }).join("") + '</section>'
+  }
   function pageDirector() {
-    return hero() + '<div class="container page hlpage drpage"><section class="hlgrid">' + form() + side() + '</section>' + mineBox() + codeBox() + '</div>'
+    return hero() + '<div class="container page hlpage drpage">' + bioBox() + '<section class="hlgrid">' + form() + side() + '</section>' + mineBox() + codeBox() + '</div>'
   }
   A.PAGES.director = pageDirector;
 
