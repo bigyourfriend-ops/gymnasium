@@ -474,7 +474,7 @@ function pageHome(){var s=DATA.settings;
  return photoStrip()+annTicker()+hero+news+readBanner()+partners}
 function readBanner(){return '<section class="section" style="padding-block:8px 40px"><div class="container"><a class="rnban" href="https://reading-nation.kz" target="_blank" rel="noopener"><img src="assets/brand/kitap.webp" alt="Кітап оқитын ұлт" width="195" height="93" loading="lazy"><span class="rnban-t">'+esc(t("rnT"))+'</span><span class="rnban-b">'+esc(t("rnMore"))+'</span></a></div></section>'}
 
-function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"});
+function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"}).map(function(x,i){return [x,i]}).sort(function(a,b){return rankW(b[0])-rankW(a[0])||a[1]-b[1]}).map(function(x){return x[0]});
  function person(p){var ini=(p.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join("");return '<div class="box person'+(p.rank==="master"?' is-master':'')+'">'+ed("staff",p.id)+'<div class="ava">'+(p.img?'<img src="'+p.img+'" alt="">':esc(ini))+'</div><div><b>'+esc(p.name)+'</b><span>'+esc(pick(p.role))+'</span>'+rankBadge(p)+'</div></div>'}
  var tabs=[["history","historyT"],["admin","adminT"],["teachers","teachersT"],["base","baseT"]],cur=ABOUT_TABS.indexOf(st.route.arg);if(cur<0)cur=0;
  var shown=st.aboutAnim?st.aboutIdx:cur;
@@ -499,6 +499,8 @@ var T21={f_rank:["Біліктілік санаты","Квалификацион
  msT:["Біздің педагог-шеберлер","Наши педагоги-мастера","Our master teachers"],msD:["Ең жоғары біліктілік санаты — тәжірибесін республика деңгейінде таратушы ұстаздар","Высшая квалификационная категория — педагоги, чей опыт распространяется на республиканском уровне","The highest qualification category"],
  msExp:["Өтілі: {n} жыл","Стаж: {n} лет","{n} years of experience"],msPrev:["Алдыңғы","Предыдущий","Previous"],msNext:["Келесі","Следующий","Next"]};
 for(var _k21 in T21)T[_k21]=T21[_k21];
+/* order on the teachers tab: master on top … plain pedagog / no category at the bottom */
+var RANK_W={master:6,researcher:5,expert:4,moderator:3,pedagog:2,intern:1};function rankW(p){return RANK_W[p.rank]||0}
 function rankBadge(p){return (p.mrank&&p.mrank!=="none"?'<i class="rank rk-mgr">'+esc(t("mr_"+p.mrank))+'</i>':'')+(p.rank&&p.rank!=="none"?'<i class="rank rk-'+esc(p.rank)+'">'+(p.rank==="master"?ic("star"):'')+esc(t("rk_"+p.rank))+'</i>':'')}
 function masterBanner(){var ms=DATA.staff.filter(function(x){return x.rank==="master"});if(!ms.length)return"";
  return '<section class="msban" aria-roledescription="carousel" aria-label="'+esc(t("msT"))+'"><div class="ms-head"><div><span class="eyebrow">'+ic("star")+esc(t("rk_master"))+'</span><h2 class="h2">'+esc(t("msT"))+'</h2><p>'+esc(t("msD"))+'</p></div>'+
