@@ -475,14 +475,14 @@ function pageHome(){var s=DATA.settings;
 function readBanner(){return '<section class="section" style="padding-block:8px 40px"><div class="container"><a class="rnban" href="https://reading-nation.kz" target="_blank" rel="noopener"><img src="assets/brand/kitap.webp" alt="Кітап оқитын ұлт" width="195" height="93" loading="lazy"><span class="rnban-t">'+esc(t("rnT"))+'</span><span class="rnban-b">'+esc(t("rnMore"))+'</span></a></div></section>'}
 
 function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"});
- function person(p){var ini=(p.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join("");return '<div class="box person">'+ed("staff",p.id)+'<div class="ava">'+(p.img?'<img src="'+p.img+'" alt="">':esc(ini))+'</div><div><b>'+esc(p.name)+'</b><span>'+esc(pick(p.role))+'</span></div></div>'}
+ function person(p){var ini=(p.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join("");return '<div class="box person'+(p.rank==="master"?' is-master':'')+'">'+ed("staff",p.id)+'<div class="ava">'+(p.img?'<img src="'+p.img+'" alt="">':esc(ini))+'</div><div><b>'+esc(p.name)+'</b><span>'+esc(pick(p.role))+'</span>'+rankBadge(p)+'</div></div>'}
  var tabs=[["history","historyT"],["admin","adminT"],["teachers","teachersT"],["base","baseT"]],cur=ABOUT_TABS.indexOf(st.route.arg);if(cur<0)cur=0;
  var shown=st.aboutAnim?st.aboutIdx:cur;
  var panels=[
   '<div class="twocol"><div class="prose"><h2 class="h2">'+esc(t("historyT"))+'</h2><p>'+esc(t("about1"))+'</p><p>'+esc(t("about2"))+'</p></div>'+
    '<figure class="schoolpic"><img src="assets/school.webp" alt="'+esc(t("name"))+'" loading="lazy" width="1024" height="1024"></figure></div>',
   '<h2 class="h2">'+esc(t("adminT"))+' '+addBtn("staff",{group:"admin"})+'</h2><div class="grid3">'+admin.map(person).join("")+'</div>',
-  '<h2 class="h2">'+esc(t("teachersT"))+' '+addBtn("staff",{group:"teacher"})+'</h2>'+(tea.length?'<div class="grid3">'+tea.map(person).join("")+'</div>':empty("emptyTeachers")),
+  masterBanner()+'<h2 class="h2">'+esc(t("teachersT"))+' '+addBtn("staff",{group:"teacher"})+'</h2>'+(tea.length?'<div class="grid3">'+tea.map(person).join("")+'</div>':empty("emptyTeachers")),
   '<h2 class="h2">'+esc(t("baseT"))+' '+addBtn("facilities")+'</h2><div class="grid3">'+DATA.facilities.map(function(x,i){return '<div class="box">'+ed("facilities",x.id)+'<div class="ico">'+ic(["flask","gear","ball","book","star","users"][i%6])+'</div><h4>'+esc(pick(x.title))+' '+chipSample(x)+'</h4><p>'+esc(pick(x.desc))+'</p></div>'}).join("")+'</div>'];
  return aboutHero()+'<div class="container page about-page">'+
   '<nav class="subnav pills ab-tabs" id="abtabs">'+tabs.map(function(x,i){return '<a href="#about'+(i?'.'+x[0]:'')+'" data-abi="'+i+'"'+(i===cur?' aria-current="page"':'')+'>'+esc(t(x[1]))+'</a>'}).join("")+'</nav>'+
@@ -490,6 +490,34 @@ function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){ret
    panels.map(function(h,i){return '<section id="'+tabs[i][0]+'" class="ab-panel"'+(i!==cur?' inert aria-hidden="true"':'')+'>'+h+'</section>'}).join("")+
   '</div></div></div>'}
 var ABOUT_TABS=["history","admin","teachers","base"];
+/* Teacher qualification ranks (біліктілік санаты) + swipeable banner of master teachers */
+var T21={f_rank:["Біліктілік санаты","Квалификационная категория","Qualification"],f_exp:["Педагогтік өтілі (жыл, міндетті емес)","Педагогический стаж (лет, необязательно)","Teaching experience (years)"],
+ f_bio:["Жетістіктері / сөзі (педагог-шебер баннеріне, міндетті емес)","Достижения или девиз (для баннера педагога-мастера, необязательно)","Achievements (for the master banner)"],
+ rk_none:["Санаты жоқ","Без категории","No category"],rk_pedagog:["Педагог","Педагог","Teacher"],rk_moderator:["Педагог-модератор","Педагог-модератор","Moderator"],
+ rk_expert:["Педагог-сарапшы","Педагог-эксперт","Expert"],rk_researcher:["Педагог-зерттеуші","Педагог-исследователь","Researcher"],rk_master:["Педагог-шебер","Педагог-мастер","Master teacher"],
+ msT:["Біздің педагог-шеберлер","Наши педагоги-мастера","Our master teachers"],msD:["Ең жоғары біліктілік санаты — тәжірибесін республика деңгейінде таратушы ұстаздар","Высшая квалификационная категория — педагоги, чей опыт распространяется на республиканском уровне","The highest qualification category"],
+ msExp:["Өтілі: {n} жыл","Стаж: {n} лет","{n} years of experience"],msPrev:["Алдыңғы","Предыдущий","Previous"],msNext:["Келесі","Следующий","Next"]};
+for(var _k21 in T21)T[_k21]=T21[_k21];
+function rankBadge(p){return p.rank&&p.rank!=="none"?'<i class="rank rk-'+esc(p.rank)+'">'+(p.rank==="master"?ic("star"):'')+esc(t("rk_"+p.rank))+'</i>':''}
+function masterBanner(){var ms=DATA.staff.filter(function(x){return x.rank==="master"});if(!ms.length)return"";
+ return '<section class="msban" aria-roledescription="carousel" aria-label="'+esc(t("msT"))+'"><div class="ms-head"><div><span class="eyebrow">'+ic("star")+esc(t("rk_master"))+'</span><h2 class="h2">'+esc(t("msT"))+'</h2><p>'+esc(t("msD"))+'</p></div>'+
+  (ms.length>1?'<div class="ms-nav"><button type="button" data-ms="-1" aria-label="'+esc(t("msPrev"))+'">‹</button><button type="button" data-ms="1" aria-label="'+esc(t("msNext"))+'">›</button></div>':'')+'</div>'+
+  '<div class="ms-track" id="mstrack">'+ms.map(function(p,i){var ini=(p.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join(""),bio=pick(p.bio||{});
+   return '<article class="ms-card" aria-roledescription="slide" aria-label="'+(i+1)+' / '+ms.length+'"><div class="ms-photo">'+(p.img?'<img src="'+esc(p.img)+'" alt="'+esc(p.name)+'" loading="lazy">':'<span>'+esc(ini)+'</span>')+'</div>'+
+    '<div class="ms-body"><span class="ms-badge">'+ic("star")+esc(t("rk_master"))+'</span><h3>'+esc(p.name)+'</h3><span class="ms-role">'+esc(pick(p.role))+'</span>'+
+    (p.exp?'<span class="ms-exp tnum">'+esc(f(t("msExp"),{n:p.exp}))+'</span>':'')+(bio?'<blockquote>'+esc(bio)+'</blockquote>':'')+'</div></article>'}).join("")+'</div>'+
+  (ms.length>1?'<div class="ms-dots" id="msdots">'+ms.map(function(_,i){return '<button type="button" data-msdot="'+i+'" aria-label="'+(i+1)+'"'+(i?'':' aria-current="true"')+'></button>'}).join("")+'</div>':'')+'</section>'}
+var msTimer=null;
+function startMasters(){clearInterval(msTimer);var tr=document.getElementById("mstrack");if(!tr||tr.children.length<2)return;
+ var paused=false,idx=function(){return Math.round(tr.scrollLeft/tr.clientWidth)};
+ function dots(){var d=document.getElementById("msdots"),i=idx();if(d)[].forEach.call(d.children,function(b,j){if(j===i)b.setAttribute("aria-current","true");else b.removeAttribute("aria-current")})}
+ tr.addEventListener("scroll",function(){clearTimeout(tr._t);tr._t=setTimeout(dots,80)},{passive:true});
+ ["pointerdown","touchstart","mouseenter","focusin"].forEach(function(ev){tr.addEventListener(ev,function(){paused=true},{passive:true})});
+ tr.addEventListener("mouseleave",function(){paused=false});
+ msTimer=setInterval(function(){if(!document.body.contains(tr)){clearInterval(msTimer);return}if(paused||document.hidden||st.route.page!=="about"||st.route.arg!=="teachers")return;
+  var n=idx()+1;if(n>=tr.children.length)n=0;tr.scrollTo({left:n*tr.clientWidth,behavior:"smooth"})},6000)}
+function msGo(d,abs){var tr=document.getElementById("mstrack");if(!tr)return;var n=abs?d:Math.round(tr.scrollLeft/tr.clientWidth)+d,c=tr.children.length;n=(n+c)%c;tr.scrollTo({left:n*tr.clientWidth,behavior:"smooth"})}
+document.addEventListener("click",function(e){var b=e.target.closest("[data-ms],[data-msdot]");if(!b)return;if(b.dataset.msdot!=null)msGo(+b.dataset.msdot,true);else msGo(+b.dataset.ms)});
 /* About tabs: the four blocks sit side by side; switching slides left (forward) or right (back) */
 function aboutSlide(){var tr=document.getElementById("abtrack"),vw=document.getElementById("abview");if(!tr)return;
  var cur=ABOUT_TABS.indexOf(st.route.arg);if(cur<0)cur=0;var from=st.aboutAnim?st.aboutIdx:cur,ps=tr.children;st.aboutAnim=false;st.aboutIdx=cur;
@@ -498,8 +526,8 @@ function aboutSlide(){var tr=document.getElementById("abtrack"),vw=document.getE
   setTimeout(function(){tr.classList.remove("anim");vw.classList.remove("anim");vw.style.height="auto"},480)}
  else vw.style.height="auto";
  var tb=document.getElementById("abtabs"),ta=tb&&tb.children[cur];if(ta&&tb.scrollWidth>tb.clientWidth)tb.scrollLeft=ta.offsetLeft-(tb.clientWidth-ta.offsetWidth)/2;
- var x0=0,y0=0;vw.addEventListener("touchstart",function(e){x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
- vw.addEventListener("touchend",function(e){var dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;if(Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.5)return;
+ var x0=0,y0=0;vw.addEventListener("touchstart",function(e){x0=e.target.closest&&e.target.closest(".msban")?null:e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
+ vw.addEventListener("touchend",function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;if(Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.5)return;
   var n=cur+(dx<0?1:-1);if(n>=0&&n<ABOUT_TABS.length)location.hash="about"+(n?"."+ABOUT_TABS[n]:"")},{passive:true})}
 /* "About" banner built from the gymnasium's brand elements (assets/brand) */
 var T17={ahE:["Ғани Мұратбаев атындағы","Имени Гани Муратбаева","Gani Muratbayev"],ahF1:["1–11 сынып","1–11 классы","Grades 1–11"],ahF2:["2 ауысым","2 смены","2 shifts"]};
@@ -867,7 +895,7 @@ function render(keepScroll){document.documentElement.lang=st.lang;syncNav();var 
  if(tv.timer)tvStop();
  app.innerHTML=topbar()+header()+'<main id="main">'+fn()+'</main>'+footer()+editbar();
  document.title=(st.route.page==="home"?"":titleFor()+" · ")+t("name");
- if(keepScroll)window.scrollTo(0,y);aboutSlide();startPartners();startProjRing();startHero();startStrip();startTicker()}
+ if(keepScroll)window.scrollTo(0,y);aboutSlide();startMasters();startPartners();startProjRing();startHero();startStrip();startTicker()}
 function titleFor(){if(EXTRA_TITLES[st.route.page])return EXTRA_TITLES[st.route.page]();var m={projects:"navProj",admin:"adminPanel",feedback:"navFeedback",profile:"cabinet",about:"navAbout",news:"navNews",programs:"navProg",schedule:"navSched",olympiad:"navOlymp",events:"navEvents",gallery:"navGallery",alumni:"navAlumni",docs:"navRes",contacts:"navContacts"}[st.route.page];
  if(m)return t(m);if(st.route.page==="project"){var pj=(DATA.projects||[]).filter(function(x){return x.id===st.route.arg})[0];return pj?pick(pj.title):""}if(st.route.page==="post"){var p=DATA.posts.filter(function(x){return x.id===st.route.arg})[0];return p?pick(p.title):""}
  if(st.route.page==="album"){var a=DATA.albums.filter(function(x){return x.id===st.route.arg})[0];return a?pick(a.title):""}return""}
@@ -1013,10 +1041,11 @@ function lightbox(aid,i){var a=DATA.albums.filter(function(x){return x.id===aid}
 
 /* generic editor */
 var CATS=["events","achieve","life","ann"];
+var RANKS=["none","pedagog","moderator","expert","researcher","master"];
 var SCHEMA={
  posts:[["cat","select",CATS,"c_"],["date","date"],["title","ml"],["text","mlarea"],["img","media","video"]],
  events:[["date","date"],["time","text"],["title","ml"],["place","ml"]],
- staff:[["group","select",["admin","teacher"],"g_"],["name","text"],["role","ml"],["img","image"]],
+ staff:[["group","select",["admin","teacher"],"g_"],["name","text"],["role","ml"],["rank","select",RANKS,"rk_"],["exp","text"],["bio","mlarea"],["img","image"]],
  facilities:[["title","ml"],["desc","mlarea"]],
  achievements:[["year","text"],["level","select",["district","region","republic","intl"],"lv_"],["title","ml"]],
  docs:[["cat","select",["docs","res"],"k_"],["title","ml"],["url","url"]],
@@ -1026,7 +1055,7 @@ var SCHEMA={
  partners:[["title","ml"],["url","url"],["img","logo"]],
  projects:[["title","ml"],["desc","mlarea"],["kind","select",["video","news","paper","blog","articles","tests","mixed"],"pt_"],["curator","text"],["url","url"],["img","logo"]],
  pitem:[["kind","select",["video","post","issue","link"],"pk_"],["date","date"],["title","ml"],["text","mlarea"],["img","media","url"],["url","urlfile"],["pages","pages"]]};
-var LBL={kind:"f_kind",curator:"f_curator",cat:"f_cat",date:"f_date",title:"f_title",text:"f_text",img:"f_img",time:"f_time",place:"f_place",group:"f_group",name:"f_name",role:"f_role",desc:"f_desc",when:"f_when",grades:"f_grades",level:"f_level",year:"f_year",url:"f_url",q:"f_q",a:"f_a"};
+var LBL={kind:"f_kind",curator:"f_curator",cat:"f_cat",date:"f_date",title:"f_title",text:"f_text",img:"f_img",time:"f_time",place:"f_place",group:"f_group",name:"f_name",role:"f_role",desc:"f_desc",when:"f_when",grades:"f_grades",level:"f_level",year:"f_year",url:"f_url",q:"f_q",a:"f_a",rank:"f_rank",exp:"f_exp",bio:"f_bio"};
 var edImg=null,edPages=[];
 function pagesThumbs(){return edPages.map(function(u,i){return '<span class="pg"><img src="'+esc(u)+'" alt=""><span class="pgb"><button type="button" data-pgmv="'+i+':-1" aria-label="‹"'+(i?'':' disabled')+'>‹</button><b>'+(i+1)+'</b><button type="button" data-pgmv="'+i+':1" aria-label="›"'+(i<edPages.length-1?'':' disabled')+'>›</button><button type="button" class="del" data-pgdel="'+i+'" aria-label="'+esc(t("del"))+'">×</button></span></span>'}).join("")}
 function drawPages(){var b=document.getElementById("edpages");if(b)b.innerHTML=pagesThumbs()}
