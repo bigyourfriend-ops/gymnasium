@@ -120,17 +120,30 @@
 
   /* ---------- страница ---------- */
   function hero() {
-    var d = director(), s = DATA.settings || {}, msg = c(s.dirText), hours = c(s.dirHours);
-    var paras = (msg || "").split(/\n+/).filter(Boolean).map(function (x) { return '<p>' + esc(x) + '</p>' }).join("");
-    return '<section class="drhero"><div class="container"><nav class="crumbs" aria-label="breadcrumb"><a href="#home">' + esc(t("home")) + '</a><span>/</span><span class="cur">' + esc(t("drT")) + '</span></nav>' +
-      '<div class="drhero-in">' + ava(d) + '<div class="drwho"><span class="eyebrow">' + esc(t("drEye")) + '</span><h1>' + esc(d ? d.name : t("drDir")) + '</h1>' +
-      '<span class="drrole">' + esc(d ? pick(d.role) : "") + '</span>' +
-      '<p class="drhours">' + ic("clock") + '<span><b>' + esc(t("drHours")) + ':</b> ' + (hours ? esc(hours) : '<i class="hlsoon">' + esc(t("drSoon")) + '</i>') + '</span></p>' +
-      (paras ? '<blockquote class="dm-msg drmsg">' + paras + '</blockquote>' : '') +
-      '<p class="drlead">' + esc(t("drLead")) + '</p>' +
-      '<div class="btns"><a class="btn btn-primary btn-lg" href="#director.write">' + ic("send") + esc(t("drWrite")) + '</a>' +
+    var d = director(), s = DATA.settings || {}, msg = c(s.dirText), B = "assets/brand/";
+    var quote = (msg || "").split(/\n+/).filter(Boolean).map(function (x) { return '<p>' + esc(x) + '</p>' }).join("");
+    var bio = ((d && c(d.bio)) || "").split(/\n+/).map(function (x) { return x.trim() }).filter(Boolean);
+    var ini = d ? (d.name || "?").split(/\s+/).slice(0, 2).map(function (w) { return w[0] || "" }).join("") : "";
+    var chips = [];
+    if (d && d.rank && d.rank !== "none") chips.push('<li>' + ic("cap") + esc(t("rk_" + d.rank)) + '</li>');
+    if (d && d.mrank && d.mrank !== "none") chips.push('<li>' + ic("star") + esc(t("mr_" + d.mrank)) + '</li>');
+    if (d && d.exp) chips.push('<li>' + ic("clock") + esc(A.f(t("msExp"), { n: d.exp })) + '</li>');
+    return '<section class="drx"><img class="drx-bar" src="' + B + 'phor.webp" alt="" aria-hidden="true"><div class="container">' +
+      '<nav class="crumbs" aria-label="breadcrumb"><a href="#home">' + esc(t("home")) + '</a><span>/</span><span class="cur">' + esc(t("drT")) + '</span></nav>' +
+      '<div class="drx-grid"><aside class="drx-side"><div class="drx-portrait"><img class="drx-orn" src="' + B + 'pvert.webp" alt="" aria-hidden="true">' +
+      '<div class="drx-photo">' + (d && d.img ? '<img src="' + esc(d.img) + '" alt="' + esc(d.name) + '">' : '<span>' + esc(ini) + '</span>') + '</div>' +
+      '<div class="drx-plate"><img src="' + B + 'logo.webp" alt="" aria-hidden="true"><span>' + esc(t("name")) + '</span></div></div>' +
+      '<div class="drx-cta"><a class="btn btn-primary btn-lg" href="#director.write">' + ic("send") + esc(t("drWrite")) + '</a>' +
       (st.user ? '<a class="btn btn-outline btn-lg" href="#director.mine">' + ic("inbox") + esc(t("drMine")) + mineBadge() + '</a>' : '') +
-      '<a class="btn btn-soft btn-lg" href="#director.code">' + esc(t("drHaveCode")) + '</a></div></div></div></div></section>'
+      '<a class="btn btn-soft btn-lg" href="#director.code">' + esc(t("drHaveCode")) + '</a>' +
+      '<p class="drx-priv">' + ic("lockd") + '<span>' + esc(t("drLead")) + '</span></p></div></aside>' +
+      '<div class="drx-main"><span class="drx-eye">' + esc(t("drEye")) + '</span><h1>' + esc(d ? d.name : t("drDir")) + '</h1>' +
+      '<span class="drx-role">' + esc(d ? pick(d.role) : "") + '</span>' +
+      '<img class="drx-div" src="' + B + 'divider.webp" alt="" aria-hidden="true">' +
+      (chips.length ? '<ul class="drx-chips">' + chips.join("") + '</ul>' : '') +
+      (bio.length ? '<div class="drx-bio">' + bio.map(function (x, i) { return '<p' + (i ? '' : ' class="lead1"') + '>' + esc(x) + '</p>' }).join("") + '</div>' : '') +
+      (quote ? '<blockquote class="drx-quote">' + quote + '</blockquote>' : '') +
+      '</div></div></div></section>'
   }
   function mineBadge() { var n = D.mine ? D.mine.filter(function (x) { return x.unread }).length : 0; return n ? ' <i class="abadge">' + n + '</i>' : '' }
   function radios(name, list, pre, cur) {
@@ -209,7 +222,7 @@
     return '<section class="panel drbio"><h2 class="h2">' + esc(t("drBioT")) + '</h2>' + paras.map(function (x) { return '<p>' + esc(x) + '</p>' }).join("") + '</section>'
   }
   function pageDirector() {
-    return hero() + '<div class="container page hlpage drpage">' + bioBox() + '<section class="hlgrid">' + form() + side() + '</section>' + mineBox() + codeBox() + '</div>'
+    return hero() + '<div class="container page hlpage drpage"><section class="hlgrid">' + form() + side() + '</section>' + mineBox() + codeBox() + '</div>'
   }
   A.PAGES.director = pageDirector;
 

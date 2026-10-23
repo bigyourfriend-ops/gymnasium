@@ -1122,7 +1122,6 @@ function settingsForm(modal){var s=DATA.settings;
  '<label>'+esc(t("f_motto"))+'<div class="ml">'+LANGS.map(function(l){return '<input id="se-motto-'+l+'" value="'+esc((s.motto||{})[l]||"")+'">'}).join("")+'</div></label>'+
  '<label>'+esc(t("f_drive"))+'<input id="se-drive" type="url" placeholder="https://script.google.com/macros/s/…/exec" value="'+esc(s.driveUrl||"")+'"></label>'+
  '<label>'+esc(t("f_dirText"))+'<div class="ml">'+LANGS.map(function(l){return '<textarea id="se-dir-'+l+'" placeholder="'+["KZ","RU","EN"][LI[l]]+'">'+esc((s.dirText||{})[l]||"")+'</textarea>'}).join("")+'</div></label>'+
- '<label>'+esc(t("f_dirHours"))+'<div class="ml">'+LANGS.map(function(l){return '<input id="se-dirh-'+l+'" placeholder="'+["Дс, Ср — 15:00–17:00","Пн, Ср — 15:00–17:00"][LI[l]]+'" value="'+esc((s.dirHours||{})[l]||"")+'">'}).join("")+'</div></label>'+
  s.stats.map(function(x,i){return '<label>'+esc(t("f_stat"))+' '+(i+1)+'<div class="ml" style="grid-template-columns:90px repeat(2,minmax(0,1fr))"><input id="se-sn-'+i+'" value="'+esc(x.n)+'">'+LANGS.map(function(l){return '<input id="se-sl-'+i+'-'+l+'" value="'+esc(x.l[l]||"")+'">'}).join("")+'</div></label>'}).join("")+
  '<div class="acts">'+(modal?'<button type="button" class="btn btn-soft" data-close="1">'+esc(t("cancel"))+'</button>':'')+'<button class="btn btn-primary" type="submit">'+esc(t("ok"))+'</button></div></form>'}
 function saveSettings(){var s=DATA.settings,g=function(id){return document.getElementById(id).value.trim()};
