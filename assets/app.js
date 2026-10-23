@@ -388,7 +388,7 @@ function header(){
 function footer(){var s=DATA.settings,y=nowTZ().y;
  return '<footer class="footer"><div class="container"><div class="fgrid"><div><div class="fbrand">'+emblem()+'<b>'+esc(t("name"))+'</b></div>'+social()+copyQR()+'</div>'+
   '<div><h5>'+esc(t("navContacts"))+'</h5><ul><li>'+ic("pin")+'<span>'+esc(t("addr"))+'</span></li><li>'+ic("phone")+'<span class="tnum">'+esc(s.phone)+'</span></li><li>'+ic("mail")+'<span style="overflow-wrap:anywhere">'+esc(s.email)+'</span></li><li>'+ic("clock")+'<span>'+esc(pick(s.hours))+'</span></li></ul></div></div>'+
-  '<div class="fbottom"><span>© '+y+' '+esc(t("name"))+'. '+esc(t("rights"))+'</span><span>'+(PAGES.help?lnk("help",esc(t("helpT")))+' · ':'')+lnk("docs",esc(t("navRes")))+' · <a href="'+esc(PLATFORM_URL)+'" target="_blank" rel="noopener">'+esc(t("plFoot"))+'</a></span></div></div></footer>'}
+  '<div class="fbottom"><span>© '+y+' '+esc(t("name"))+'. '+esc(t("rights"))+'</span><span>'+(PAGES.help?lnk("help",esc(t("helpT")))+' · ':'')+(PAGES.director?lnk("director",esc(t("navDir")))+' · ':'')+lnk("docs",esc(t("navRes")))+' · <a href="'+esc(PLATFORM_URL)+'" target="_blank" rel="noopener">'+esc(t("plFoot"))+'</a></span></div></div></footer>'}
 var COPY_PDF="assets/docs/avtorlyk-kuelik-30738.pdf";
 function copyQR(){var u=COPY_PDF,svg="";
  try{u=new URL(COPY_PDF,location.href.split("#")[0]).href}catch(e){}
@@ -444,11 +444,11 @@ function platBanner(){var ck='<svg viewBox="0 0 24 24" width="15" height="15" fi
 /* "Директор панелі": card on the home page that opens the principal's window */
 function director(){return DATA.staff.filter(function(x){return x.group==="admin"&&/директор|principal/i.test(pick(x.role)||"")&&!/орынбасар|заместит|deputy/i.test(pick(x.role)||"")})[0]||DATA.staff.filter(function(x){return x.group==="admin"})[0]||null}
 function dirAva(d,cls){var ini=d?(d.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join(""):"";return '<span class="dava '+(cls||"")+'">'+(d&&d.img?'<img src="'+esc(d.img)+'" alt="">':esc(ini)||ic("user"))+'</span>'}
-function dirCard(){var d=director();return '<button class="dircard" data-dir="1">'+dirAva(d)+'<b>'+esc(t("dirPanel"))+'</b></button>'}
+function dirCard(){var d=director();return PAGES.director?'<a class="dircard" href="#director">'+dirAva(d)+'<b>'+esc(t("dirPanel"))+'</b></a>':'<button class="dircard" data-dir="1">'+dirAva(d)+'<b>'+esc(t("dirPanel"))+'</b></button>'}
 function openDirector(){var d=director(),msg=pick(DATA.settings.dirText||{}),paras=(msg||"").split(/\n+/).filter(Boolean).map(function(x){return '<p>'+esc(x)+'</p>'}).join("");
  openLayer('<div class="dirmodal"><div class="dm-head">'+dirAva(d,"big")+'<div><span class="eyebrow">'+esc(t("dirPanel"))+'</span><h3>'+esc(d?d.name:t("name"))+'</h3><span class="dm-role">'+esc(d?pick(d.role):"")+'</span></div></div>'+
   (paras?'<blockquote class="dm-msg">'+paras+'</blockquote>':'')+'<p class="dm-hint">'+esc(t("dirHint"))+'</p>'+
-  '<div class="dm-acts"><a class="btn btn-primary" href="#contacts.feedback" data-close="1">'+ic("msg")+esc(t("dirWrite"))+'</a><a class="btn btn-soft" href="#about.admin" data-close="1">'+esc(t("dirAdm"))+'</a></div></div>')}
+  '<div class="dm-acts"><a class="btn btn-primary" href="'+(PAGES.director?"#director.write":"#contacts.feedback")+'" data-close="1">'+ic("msg")+esc(t("dirWrite"))+'</a><a class="btn btn-soft" href="#about.admin" data-close="1">'+esc(t("dirAdm"))+'</a></div></div>')}
 function pageHome(){var s=DATA.settings;
  var hero='<section class="hero"><canvas id="heroCanvas" aria-hidden="true"></canvas><div class="container"><div>'+
   '<h1>'+esc(t("heroA"))+'<br><span class="grad-text">'+esc(t("heroB"))+'</span></h1><p class="lead">'+esc(t("heroLead"))+'</p>'+
@@ -1084,11 +1084,12 @@ function settingsForm(modal){var s=DATA.settings;
  '<label>'+esc(t("f_motto"))+'<div class="ml">'+LANGS.map(function(l){return '<input id="se-motto-'+l+'" value="'+esc((s.motto||{})[l]||"")+'">'}).join("")+'</div></label>'+
  '<label>'+esc(t("f_drive"))+'<input id="se-drive" type="url" placeholder="https://script.google.com/macros/s/…/exec" value="'+esc(s.driveUrl||"")+'"></label>'+
  '<label>'+esc(t("f_dirText"))+'<div class="ml">'+LANGS.map(function(l){return '<textarea id="se-dir-'+l+'" placeholder="'+["KZ","RU","EN"][LI[l]]+'">'+esc((s.dirText||{})[l]||"")+'</textarea>'}).join("")+'</div></label>'+
+ '<label>'+esc(t("f_dirHours"))+'<div class="ml">'+LANGS.map(function(l){return '<input id="se-dirh-'+l+'" placeholder="'+["Дс, Ср — 15:00–17:00","Пн, Ср — 15:00–17:00"][LI[l]]+'" value="'+esc((s.dirHours||{})[l]||"")+'">'}).join("")+'</div></label>'+
  s.stats.map(function(x,i){return '<label>'+esc(t("f_stat"))+' '+(i+1)+'<div class="ml" style="grid-template-columns:90px repeat(2,minmax(0,1fr))"><input id="se-sn-'+i+'" value="'+esc(x.n)+'">'+LANGS.map(function(l){return '<input id="se-sl-'+i+'-'+l+'" value="'+esc(x.l[l]||"")+'">'}).join("")+'</div></label>'}).join("")+
  '<div class="acts">'+(modal?'<button type="button" class="btn btn-soft" data-close="1">'+esc(t("cancel"))+'</button>':'')+'<button class="btn btn-primary" type="submit">'+esc(t("ok"))+'</button></div></form>'}
 function saveSettings(){var s=DATA.settings,g=function(id){return document.getElementById(id).value.trim()};
  ["phone","email","whatsapp","year","instagram","telegram","facebook"].forEach(function(k){s[k]=g("se-"+k)});var dv=document.getElementById("se-drive");if(dv)s.driveUrl=dv.value.trim();
- LANGS.forEach(function(l){s.hours[l]=g("se-hours-"+l);s.motto=s.motto||{};s.motto[l]=g("se-motto-"+l);s.dirText=s.dirText||{};var de=document.getElementById("se-dir-"+l);if(de)s.dirText[l]=de.value.trim()});
+ LANGS.forEach(function(l){s.hours[l]=g("se-hours-"+l);s.motto=s.motto||{};s.motto[l]=g("se-motto-"+l);s.dirText=s.dirText||{};var de=document.getElementById("se-dir-"+l);if(de)s.dirText[l]=de.value.trim();s.dirHours=s.dirHours||{};var dh=document.getElementById("se-dirh-"+l);if(dh)s.dirHours[l]=dh.value.trim()});
  s.stats.forEach(function(x,i){var nv=g("se-sn-"+i);if(nv!==x.n)s.statsSample=false;x.n=nv;LANGS.forEach(function(l){x.l[l]=g("se-sl-"+i+"-"+l)})});
  st.editing=true;dirty();closeLayer();render(true);toast(t("settingsHint"))}
 
@@ -1276,7 +1277,7 @@ function tabDash(){var A=st.admin;if(!A&&st.isAdmin){loadAdmin();return '<div cl
  var users=A.users,by={student:0,parent:0,teacher:0};users.forEach(function(u){if(by[u.role]!==undefined)by[u.role]++});
  var photos=DATA.albums.reduce(function(s,a){return s+a.photos.length},0),up=upcomingEvents().length;
  var who=st.meta&&st.meta.updated_by?(users.filter(function(u){return u.id===st.meta.updated_by})[0]||{}).full_name:"";
- var tl=[];if(can("feedback")){if(!st.fbAdmin)loadFbAdmin();tl.push(["msg",(st.fbAdmin||[]).filter(function(x){return x.status==="pending"}).length,"d_fb"])}if(can("help")&&window.GMHelp){GMHelp.preload();tl.push(["shield",GMHelp.badge(),"d_help"])}
+ var tl=[];if(can("feedback")){if(!st.fbAdmin)loadFbAdmin();tl.push(["msg",(st.fbAdmin||[]).filter(function(x){return x.status==="pending"}).length,"d_fb"])}if(can("help")&&window.GMHelp){GMHelp.preload();tl.push(["shield",GMHelp.badge(),"d_help"])}if(window.GMDir&&GMDir.isDir()){GMDir.preload();tl.push(["inbox",GMDir.badge(),"d_dir"])}
  if(st.isAdmin)tl.push(["users",users.length,"d_users"]);tl.push(["mega",DATA.posts.length,"d_posts"],["image",photos,"d_photos"]);
  var qa=[["post","mega","qa_post","news"],["album","image","qa_album","gallery"],["sched","cal","qa_sched","schedule"],["edit","edit","enterEdit",""],["settings","gear","settings","settings"]].filter(function(x){return !x[3]||can(x[3])});
  var out='<div class="tiles'+(tl.length>=5?' five':'')+'">'+tl.map(function(x){return '<div class="tile"><span class="ico">'+ic(x[0])+'</span><b class="tnum">'+x[1]+'</b><span>'+esc(t(x[2]))+'</span></div>'}).join("")+'</div>'+
@@ -1337,7 +1338,7 @@ function quickAction(k){if(!st.canEdit)return;st.editing=true;var need={post:"ne
 
 
 /* ------------------------------------------------------------ admin page (#admin) */
-function adminTabs(){var tb=[["dash","p_dash","star"],["content","a_content","book"]];if(can("feedback"))tb.push(["feedback","p_fb","msg"]);if(can("help")&&window.GMHelp)tb.push(["help","p_help","shield"]);if(can("settings"))tb.push(["settings","settings","gear"]);if(st.isAdmin)tb.push(["users","p_users","users"],["roles","p_roles","user"],["backup","p_backup","shield"]);return tb}
+function adminTabs(){var tb=[["dash","p_dash","star"],["content","a_content","book"]];if(can("feedback"))tb.push(["feedback","p_fb","msg"]);if(window.GMDir&&GMDir.isDir())tb.push(["director","p_dir","inbox"]);if(can("help")&&window.GMHelp)tb.push(["help","p_help","shield"]);if(can("settings"))tb.push(["settings","settings","gear"]);if(st.isAdmin)tb.push(["users","p_users","users"],["roles","p_roles","user"],["backup","p_backup","shield"]);return tb}
 /* ------------------------------------------------------------ backup & restore (admin) */
 var bkp={busy:false,msg:""};
 function loadJs(src,name){return new Promise(function(res,rej){if(window[name])return res();var s=document.createElement("script");s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
@@ -1445,9 +1446,9 @@ function pageAdmin(){
  var tabs=adminTabs();if(!tabs.some(function(x){return x[0]===st.atab}))st.atab="dash";
  var side='<aside class="aside"><div class="ahead">'+emblem()+'<div><b>'+esc(t("adminPanel"))+'</b><span>'+esc(uname())+'</span></div></div>'+
   (st.roleName?'<span class="arole">'+esc(st.roleName)+'</span>':'')+
-  '<nav class="anav">'+tabs.map(function(x){var badge=x[0]==="feedback"&&st.fbAdmin?st.fbAdmin.filter(function(f){return f.status==="pending"}).length:x[0]==="help"&&window.GMHelp?GMHelp.badge():0;return '<button data-atab="'+x[0]+'" aria-pressed="'+(st.atab===x[0])+'">'+ic(x[2])+'<span>'+esc(t(x[1]))+'</span>'+(badge?'<i class="abadge">'+badge+'</i>':'')+'</button>'}).join("")+'</nav>'+
+  '<nav class="anav">'+tabs.map(function(x){var badge=x[0]==="feedback"&&st.fbAdmin?st.fbAdmin.filter(function(f){return f.status==="pending"}).length:x[0]==="help"&&window.GMHelp?GMHelp.badge():x[0]==="director"&&window.GMDir?GMDir.badge():0;return '<button data-atab="'+x[0]+'" aria-pressed="'+(st.atab===x[0])+'">'+ic(x[2])+'<span>'+esc(t(x[1]))+'</span>'+(badge?'<i class="abadge">'+badge+'</i>':'')+'</button>'}).join("")+'</nav>'+
   '<div class="afoot"><a href="#home">'+ic("left")+esc(t("backSite"))+'</a><a href="#profile">'+ic("user")+esc(t("cabinet"))+'</a></div></aside>';
- var body={backup:tabBackup,dash:tabDash,content:tabContent,feedback:tabFb,help:function(){return GMHelp.adminTab()},settings:tabSettings,users:tabUsers,roles:tabRoles}[st.atab]();
+ var body={backup:tabBackup,dash:tabDash,content:tabContent,feedback:tabFb,help:function(){return GMHelp.adminTab()},director:function(){return GMDir.adminTab()},settings:tabSettings,users:tabUsers,roles:tabRoles}[st.atab]();
  var title=(tabs.filter(function(x){return x[0]===st.atab})[0]||tabs[0])[1];
  return '<div class="adminwrap"><div class="container"><div class="adm">'+side+'<section class="amain"><div class="atop"><div><span class="eyebrow">'+esc(t("adminPanel"))+'</span><h1>'+esc(t(title))+'</h1></div>'+(st.dirty?'<span class="chip sample">'+esc(f(t("unsaved"),{n:st.dirty}))+'</span>':'')+'</div>'+body+'</section></div></div></div>'}
 function tabContent(){var photos=DATA.albums.reduce(function(s,a){return s+a.photos.length},0);
