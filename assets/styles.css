@@ -1669,3 +1669,8 @@ a.dircard{text-decoration:none}
 .drx-quote p{margin:0 0 8px}.drx-quote p:last-child{margin:0}
 @media (max-width:900px){.drx-grid{grid-template-columns:1fr;gap:24px}.drx-side{display:contents}.drx-portrait{order:0;width:min(260px,72%);margin:0 auto}.drx-main{order:1}.drx-cta{order:2}.drx-main{text-align:left}}
 @media (max-width:560px){.drx .container{padding-block:32px 40px}.drx-photo span{font-size:56px}.drx-bio{padding:20px 18px}.drx-bio p{font-size:15px}.drx-bio p.lead1{font-size:16px}}
+.drx-main{position:relative}
+.drx-edit{position:absolute;right:0;top:0;display:inline-flex;gap:8px;align-items:center}
+.drx-edit svg{width:16px;height:16px}
+.drx-edhint{text-align:left;margin:0 0 4px;background:var(--b50,#f0fdf4);border:1px solid var(--b200,#bbf7d0);border-radius:12px;padding:10px 12px;color:var(--b900,#14532d)}
+@media (max-width:900px){.drx-edit{position:static;margin-bottom:14px}}

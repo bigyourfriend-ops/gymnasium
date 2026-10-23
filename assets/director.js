@@ -19,6 +19,8 @@
       "Your letter is read by the principal personally."],
     drWrite: ["Хат жазу", "Написать письмо", "Write a letter"],
     drHaveCode: ["Менде код бар", "У меня есть код", "I have a code"],
+    drEdit: ["Бетті өңдеу", "Редактировать страницу", "Edit page"],
+    drEditHint: ["Аты-жөні, лауазымы, санаттары, өтілі, өмірбаяны және суреті өзгереді. «Сақтау» басқанда бірден сайтқа шығады.", "Можно изменить ФИО, должность, категории, стаж, биографию и фото. После «Сақтау» изменения сразу появятся на сайте.", "Edit name, role, ranks, biography and photo."],
     drBioT: ["Директор туралы", "О директоре", "About the principal"],
     drMine: ["Менің хаттарым", "Мои письма", "My letters"],
     drHours: ["Қабылдау уақыты", "Приём граждан", "Office hours"],
@@ -137,7 +139,7 @@
       (st.user ? '<a class="btn btn-outline btn-lg" href="#director.mine">' + ic("inbox") + esc(t("drMine")) + mineBadge() + '</a>' : '') +
       '<a class="btn btn-soft btn-lg" href="#director.code">' + esc(t("drHaveCode")) + '</a>' +
       '<p class="drx-priv">' + ic("lockd") + '<span>' + esc(t("drLead")) + '</span></p></div></aside>' +
-      '<div class="drx-main"><span class="drx-eye">' + esc(t("drEye")) + '</span><h1>' + esc(d ? d.name : t("drDir")) + '</h1>' +
+      '<div class="drx-main">' + (d && A.can("about") ? '<button type="button" class="btn btn-soft drx-edit" data-edit="staff" data-id="' + esc(d.id) + '" data-drqp="1" title="' + esc(t("drEditHint")) + '">' + ic("edit") + esc(t("drEdit")) + '</button>' : '') + '<span class="drx-eye">' + esc(t("drEye")) + '</span><h1>' + esc(d ? d.name : t("drDir")) + '</h1>' +
       '<span class="drx-role">' + esc(d ? pick(d.role) : "") + '</span>' +
       '<img class="drx-div" src="' + B + 'divider.webp" alt="" aria-hidden="true">' +
       (chips.length ? '<ul class="drx-chips">' + chips.join("") + '</ul>' : '') +
@@ -322,6 +324,15 @@
   }
 
   /* ---------- события ---------- */
+  /* «Бетті өңдеу»: the app opens its usual staff editor; we mark it so «Сақтау» publishes at once */
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest("[data-drqp]")) return;
+    setTimeout(function () {
+      var f = document.getElementById("edform"); if (!f) return; f.dataset.qp = "1";
+      if (!f.querySelector(".drx-edhint")) f.insertAdjacentHTML("afterbegin", '<p class="hint drx-edhint">' + esc(t("drEditHint")) + '</p>');
+      var ta = f.querySelectorAll("textarea[id^=fe-bio-]"); [].forEach.call(ta, function (x) { x.rows = 10 })
+    }, 0)
+  });
   document.addEventListener("click", function (e) {
     var el = e.target.closest("[data-dr],[data-drst],[data-drset],[data-drdel],[data-drmine]"); if (!el) return; var d = el.dataset;
     if (d.dr === "new") { D.sentCode = ""; A.render(true); return }
