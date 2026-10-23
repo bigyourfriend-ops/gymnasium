@@ -219,7 +219,7 @@
     },
     badge: function () { return H.adm ? H.adm.filter(function (r) { return r.staff_unread && r.status !== "spam" }).length : 0 },
     adminTab: adminTab,
-    preload: function () { if (A.can("help") && !H.adm) loadAdm() }
+    preload: function () { if ((st.perms || []).indexOf("help") >= 0 && !H.adm) loadAdm() }
   };
 
   /* прокрутка к #help.write / #help.code */
@@ -258,7 +258,7 @@
 
   /* ---------- панель психолога ---------- */
   function loadAdm() {
-    if (!sb || H.admLoading || !A.can("help")) return; H.admLoading = true;
+    if (!sb || H.admLoading || !(st.perms || []).indexOf("help") >= 0) return; H.admLoading = true;
     sb.from("help_reports").select("*").order("last_activity", { ascending: false }).limit(300).then(function (r) {
       if (r.error) { H.admLoading = false; H.noDB = /help_reports|relation|schema cache|PGRST205|42P01/i.test((r.error.message || "") + r.error.code); H.adm = []; A.render(true); return }
       var rows = r.data || [], ids = rows.map(function (x) { return x.id });
@@ -323,5 +323,5 @@
   document.addEventListener("input", function (e) { if (e.target.id === "hl-body") { var c2 = document.getElementById("hl-cnt"); if (c2) c2.textContent = e.target.value.length + " / 3000" } });
   document.addEventListener("change", function (e) { if (e.target.id === "hl-talk") { var w = document.getElementById("hl-contact-w"); if (w) w.hidden = !e.target.checked } });
 
-  A.onUser(function (u) { H.adm = null; H.noDB = false; if (u) setTimeout(function () { if (A.can("help")) loadAdm() }, 600) });
+  A.onUser(function (u) { H.adm = null; H.noDB = false; if (u) setTimeout(function () { if ((st.perms || []).indexOf("help") >= 0) loadAdm() }, 600) });
 });

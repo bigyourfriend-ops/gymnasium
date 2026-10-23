@@ -18,6 +18,14 @@ insert into public.roles (id, name, perms, is_system)
 values ('psychologist', 'Психолог', array['help'], false)
 on conflict (id) do nothing;
 
+-- Строгая проверка: только явное право help (полный админ НЕ получает его автоматически)
+create or replace function public.help_is_staff()
+returns boolean language sql stable security definer set search_path = public as $$
+  select 'help' = any(public.my_perms());
+$$;
+revoke all on function public.help_is_staff() from public, anon;
+grant execute on function public.help_is_staff() to authenticated;
+
 -- ---------- Обращения ----------
 create table if not exists public.help_reports (
   id            bigint generated always as identity primary key,
@@ -62,12 +70,12 @@ alter table public.help_rate enable row level security;
 drop policy if exists "help read"   on public.help_reports;
 drop policy if exists "help update" on public.help_reports;
 drop policy if exists "help delete" on public.help_reports;
-create policy "help read"   on public.help_reports for select to authenticated using (public.has_perm('help'));
-create policy "help update" on public.help_reports for update to authenticated using (public.has_perm('help')) with check (public.has_perm('help'));
-create policy "help delete" on public.help_reports for delete to authenticated using (public.has_perm('help'));
+create policy "help read"   on public.help_reports for select to authenticated using (public.help_is_staff());
+create policy "help update" on public.help_reports for update to authenticated using (public.help_is_staff()) with check (public.help_is_staff());
+create policy "help delete" on public.help_reports for delete to authenticated using (public.help_is_staff());
 
 drop policy if exists "help msg read" on public.help_messages;
-create policy "help msg read" on public.help_messages for select to authenticated using (public.has_perm('help'));
+create policy "help msg read" on public.help_messages for select to authenticated using (public.help_is_staff());
 -- писать сообщения можно только через функции
 
 -- ---------- Вспомогательные ----------
@@ -180,7 +188,7 @@ create or replace function public.help_staff_reply(p_id bigint, p_body text)
 returns void language plpgsql security definer set search_path = public as $$
 declare v_body text := btrim(coalesce(p_body, ''));
 begin
-  if not public.has_perm('help') then raise exception 'not allowed'; end if;
+  if not public.help_is_staff() then raise exception 'not allowed'; end if;
   if char_length(v_body) < 1 then raise exception 'too_short'; end if;
   insert into help_messages (report_id, author, body, staff_id) values (p_id, 'staff', left(v_body, 2000), auth.uid());
   update help_reports set staff_unread = false, last_activity = now(),

@@ -1314,7 +1314,7 @@ function tabDash(){var A=st.admin;if(!A&&st.isAdmin){loadAdmin();return '<div cl
  var users=A.users,by={student:0,parent:0,teacher:0};users.forEach(function(u){if(by[u.role]!==undefined)by[u.role]++});
  var photos=DATA.albums.reduce(function(s,a){return s+a.photos.length},0),up=upcomingEvents().length;
  var who=st.meta&&st.meta.updated_by?(users.filter(function(u){return u.id===st.meta.updated_by})[0]||{}).full_name:"";
- var tl=[];if(can("feedback")){if(!st.fbAdmin)loadFbAdmin();tl.push(["msg",(st.fbAdmin||[]).filter(function(x){return x.status==="pending"}).length,"d_fb"])}if(can("help")&&window.GMHelp){GMHelp.preload();tl.push(["shield",GMHelp.badge(),"d_help"])}if(window.GMDir&&GMDir.isDir()){GMDir.preload();tl.push(["inbox",GMDir.badge(),"d_dir"])}
+ var tl=[];if(can("feedback")){if(!st.fbAdmin)loadFbAdmin();tl.push(["msg",(st.fbAdmin||[]).filter(function(x){return x.status==="pending"}).length,"d_fb"])}if(st.perms.indexOf("help")>=0&&window.GMHelp){GMHelp.preload();tl.push(["shield",GMHelp.badge(),"d_help"])}if(window.GMDir&&GMDir.isDir()){GMDir.preload();tl.push(["inbox",GMDir.badge(),"d_dir"])}
  if(st.isAdmin)tl.push(["users",users.length,"d_users"]);tl.push(["mega",DATA.posts.length,"d_posts"],["image",photos,"d_photos"]);
  var qa=[["post","mega","qa_post","news"],["album","image","qa_album","gallery"],["sched","cal","qa_sched","schedule"],["edit","edit","enterEdit",""],["settings","gear","settings","settings"]].filter(function(x){return !x[3]||can(x[3])});
  var out='<div class="tiles'+(tl.length>=5?' five':'')+'">'+tl.map(function(x){return '<div class="tile"><span class="ico">'+ic(x[0])+'</span><b class="tnum">'+x[1]+'</b><span>'+esc(t(x[2]))+'</span></div>'}).join("")+'</div>'+
@@ -1375,7 +1375,7 @@ function quickAction(k){if(!st.canEdit)return;st.editing=true;var need={post:"ne
 
 
 /* ------------------------------------------------------------ admin page (#admin) */
-function adminTabs(){var tb=[["dash","p_dash","star"],["content","a_content","book"]];if(can("feedback"))tb.push(["feedback","p_fb","msg"]);if(window.GMDir&&GMDir.isDir())tb.push(["director","p_dir","inbox"]);if(can("help")&&window.GMHelp)tb.push(["help","p_help","shield"]);if(can("settings"))tb.push(["settings","settings","gear"]);if(st.isAdmin)tb.push(["users","p_users","users"],["roles","p_roles","user"],["backup","p_backup","shield"]);return tb}
+function adminTabs(){var tb=[["dash","p_dash","star"],["content","a_content","book"]];if(can("feedback"))tb.push(["feedback","p_fb","msg"]);if(window.GMDir&&GMDir.isDir())tb.push(["director","p_dir","inbox"]);if(st.perms.indexOf("help")>=0&&window.GMHelp)tb.push(["help","p_help","shield"]);if(can("settings"))tb.push(["settings","settings","gear"]);if(st.isAdmin)tb.push(["users","p_users","users"],["roles","p_roles","user"],["backup","p_backup","shield"]);return tb}
 /* ------------------------------------------------------------ backup & restore (admin) */
 var bkp={busy:false,msg:""};
 function loadJs(src,name){return new Promise(function(res,rej){if(window[name])return res();var s=document.createElement("script");s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
