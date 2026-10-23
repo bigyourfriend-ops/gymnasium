@@ -1616,3 +1616,13 @@ a.dircard{text-decoration:none}
 .rk-mgr{background:var(--b100,#dcfce7);color:var(--b800,#166534)}
 .rk-intern{background:#f8fafc;color:#64748b;border:1px dashed #cbd5e1}
 .person .rank+.rank{margin-top:4px}
+/* поиск педагогов */
+.tsearch{position:relative;display:flex;align-items:center;margin:0 0 22px;max-width:620px}
+.tsearch .ts-ico{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--b600,#16a34a);display:flex;pointer-events:none}
+.tsearch .ts-ico svg{width:20px;height:20px}
+.tsearch input{width:100%;font:inherit;font-size:15.5px;padding:14px 110px 14px 46px;border:2px solid var(--b200,#bbf7d0);border-radius:16px;background:#fff;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s}
+.tsearch input:focus{border-color:var(--b500,#22c55e);box-shadow:0 0 0 4px rgba(34,197,94,.15)}
+.tsearch small{position:absolute;right:16px;font-size:12.5px;font-weight:700;color:var(--muted)}
+.person[hidden]{display:none!important}
+.tsnone{padding:22px;text-align:center;font-weight:700;color:var(--muted);border:1px dashed var(--line);border-radius:16px;margin:0 0 14px}
+@media (max-width:560px){.tsearch input{padding-right:16px}.tsearch small{position:static;margin-left:8px;flex:none}.tsearch{flex-wrap:nowrap}}
