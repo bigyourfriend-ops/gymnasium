@@ -152,7 +152,7 @@ var IC={play:'<path d="M8 5.5v13l10.5-6.5z"/>',pin:'<path d="M12 21s-7-6.2-7-11a
  file:'<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/>',
  link:'<path d="M10 14a4 4 0 0 0 6 0l3-3a4 4 0 0 0-6-6l-1 1"/><path d="M14 10a4 4 0 0 0-6 0l-3 3a4 4 0 0 0 6 6l1-1"/>',
  arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>', search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/>', menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
- build:'<path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/>', star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+ build:'<path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/>', medal:'<circle cx="12" cy="15" r="6"/><path d="M8.5 10.2L6 3h4l2 5 2-5h4l-2.5 7.2"/><path d="M12 12.5l.9 1.8 2 .3-1.45 1.4.35 2-1.8-.95-1.8.95.35-2L9.1 14.6l2-.3z"/>', cap:'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/><path d="M22 9v6"/>', brief:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2M3 13h18"/>', user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4.5-6.5 8-6.5s7 2 8 6.5"/>', star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
  msg:'<path d="M21 12a8 8 0 0 1-11.5 7.2L4 21l1.8-5A8 8 0 1 1 21 12z"/>', insta:'<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>',
  tg:'<path d="M21 4L3 11l6 2 2 6 3-4 5 4z"/><path d="M9 13l9-6"/>', fb:'<path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z"/>',
  edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/>', trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>', plus:'<path d="M12 5v14M5 12h14"/>',
@@ -476,8 +476,8 @@ function pageHome(){var s=DATA.settings;
  return photoStrip()+annTicker()+hero+news+readBanner()+partners}
 function readBanner(){return '<section class="section" style="padding-block:8px 40px"><div class="container"><a class="rnban" href="https://reading-nation.kz" target="_blank" rel="noopener"><img src="assets/brand/kitap.webp" alt="Кітап оқитын ұлт" width="195" height="93" loading="lazy"><span class="rnban-t">'+esc(t("rnT"))+'</span><span class="rnban-b">'+esc(t("rnMore"))+'</span></a></div></section>'}
 
-function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"}).map(function(x,i){return [x,i]}).sort(function(a,b){return rankW(b[0])-rankW(a[0])||a[1]-b[1]}).map(function(x){return x[0]});
- function person(p){var ini=(p.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join("");return '<div class="box person'+(p.rank==="master"?' is-master':'')+'" data-q="'+esc(((p.name||"")+" "+(p.role&&p.role.kk||"")+" "+(p.role&&p.role.ru||"")).toLowerCase())+'">'+ed("staff",p.id)+'<div class="ava">'+(p.img?'<img src="'+p.img+'" alt="">':esc(ini))+'</div><div><b>'+esc(p.name)+'</b><span>'+esc(pick(p.role))+'</span>'+rankBadge(p)+'</div></div>'}
+function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){return x.group==="admin"}),tea=DATA.staff.filter(function(x){return x.group==="teacher"}).map(function(x){return x});tea=byRank(tea);
+ function person(p){var ini=(p.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join("");return '<div class="box person'+(p.rank==="master"?' is-master':'')+(p.award==="best"?' is-best':'')+'" data-q="'+esc(((p.name||"")+" "+(p.role&&p.role.kk||"")+" "+(p.role&&p.role.ru||"")).toLowerCase())+'">'+ed("staff",p.id)+'<div class="ava">'+(p.img?'<img src="'+p.img+'" alt="">':esc(ini))+'</div><div><b>'+esc(p.name)+'</b><span>'+esc(pick(p.role))+'</span>'+rankBadge(p)+'</div></div>'}
  var tabs=[["history","historyT"],["admin","adminT"],["teachers","teachersT"],["base","baseT"]],cur=ABOUT_TABS.indexOf(st.route.arg);if(cur<0)cur=0;
  var shown=st.aboutAnim?st.aboutIdx:cur;
  var panels=[
@@ -499,24 +499,30 @@ var T21={f_rank:["Біліктілік санаты","Квалификацион
  f_mrank:["Басшы санаты (әкімшілік үшін)","Категория руководителя (для администрации)","Manager category"],mr_none:["—","—","—"],mr_h1:["Бірінші санаттағы басшы","Руководитель первой категории","Head, 1st category"],mr_h2:["Екінші санаттағы басшы","Руководитель второй категории","Head, 2nd category"],mr_d1:["Бірінші санаттағы басшы орынбасары","Заместитель руководителя первой категории","Deputy, 1st category"],mr_d2:["Екінші санаттағы басшы орынбасары","Заместитель руководителя второй категории","Deputy, 2nd category"],rk_pedagog:["Педагог","Педагог","Teacher"],rk_moderator:["Педагог-модератор","Педагог-модератор","Moderator"],
  rk_expert:["Педагог-сарапшы","Педагог-эксперт","Expert"],rk_researcher:["Педагог-зерттеуші","Педагог-исследователь","Researcher"],rk_master:["Педагог-шебер","Педагог-мастер","Master teacher"],
  msT:["Біздің педагог-шеберлер","Наши педагоги-мастера","Our master teachers"],msD:["Ең жоғары біліктілік санаты — тәжірибесін республика деңгейінде таратушы ұстаздар","Высшая квалификационная категория — педагоги, чей опыт распространяется на республиканском уровне","The highest qualification category"],
+ f_award:["Марапат","Награда","Award"],aw_none:["—","—","—"],aw_best:["Үздік педагог","Лучший педагог","Best teacher"],
+ msCat:["Санаты","Категория","Category"],msCatV:["жоғары","высшая","highest"],msExpL:["Өтілі","Стаж","Experience"],msYrs:["{n} жыл","{n} лет","{n} years"],msPhoto:["Фото","Фото","Photo"],
+ msBio:["Оқу мен тәрбиеде жоғары нәтижеге жеткен тәжірибелі ұстаз","Опытный педагог, добившийся высоких результатов в обучении и воспитании","An experienced teacher with strong results"],
  msExp:["Өтілі: {n} жыл","Стаж: {n} лет","{n} years of experience"],msPrev:["Алдыңғы","Предыдущий","Previous"],msNext:["Келесі","Следующий","Next"]};
 for(var _k21 in T21)T[_k21]=T21[_k21];
 /* order on the teachers tab: master on top … plain pedagog / no category at the bottom */
-var RANK_W={master:6,researcher:5,expert:4,moderator:3,pedagog:2,intern:1};function rankW(p){return RANK_W[p.rank]||0}
+var RANK_W={master:6,researcher:5,expert:4,moderator:3,pedagog:2,intern:1};function rankW(p){return (p.award==="best"?100:0)+(RANK_W[p.rank]||0)}
+function byRank(list){return list.map(function(x,i){return [x,i]}).sort(function(a,b){return rankW(b[0])-rankW(a[0])||a[1]-b[1]}).map(function(x){return x[0]})}
 T.tsPh=["Педагогті аты-жөні немесе пәні бойынша іздеу","Поиск педагога по имени или предмету","Search by name or subject"];T.tsNone=["Ешкім табылмады","Никого не найдено","Nobody found"];T.tsFound=["Табылды: {n}","Найдено: {n}","Found: {n}"];
 function teaSearch(){return '<div class="tsearch"><span class="ts-ico">'+ic("search")+'</span><input id="teasearch" type="search" autocomplete="off" placeholder="'+esc(t("tsPh"))+'" aria-label="'+esc(t("tsPh"))+'"><small id="tscount" class="tnum" hidden></small></div>'}
 document.addEventListener("input",function(e){if(e.target.id!=="teasearch")return;var q=e.target.value.trim().toLowerCase().replace(/\s+/g," "),g=document.getElementById("teagrid");if(!g)return;var n=0;
  [].forEach.call(g.children,function(c){var ok=!q||(c.getAttribute("data-q")||"").indexOf(q)>=0;c.hidden=!ok;if(ok)n++});
  var no=document.getElementById("tsnone"),cn=document.getElementById("tscount");if(no)no.hidden=n>0;if(cn){cn.hidden=!q;cn.textContent=f(t("tsFound"),{n:n})}
  var vw=document.getElementById("abview");if(vw)vw.style.height="auto"});
-function rankBadge(p){return (p.mrank&&p.mrank!=="none"?'<i class="rank rk-mgr">'+esc(t("mr_"+p.mrank))+'</i>':'')+(p.rank&&p.rank!=="none"?'<i class="rank rk-'+esc(p.rank)+'">'+(p.rank==="master"?ic("star"):'')+esc(t("rk_"+p.rank))+'</i>':'')}
-function masterBanner(){var ms=DATA.staff.filter(function(x){return x.rank==="master"});if(!ms.length)return"";
- return '<section class="msban" aria-roledescription="carousel" aria-label="'+esc(t("msT"))+'"><div class="ms-head"><div><span class="eyebrow">'+ic("star")+esc(t("rk_master"))+'</span><h2 class="h2">'+esc(t("msT"))+'</h2><p>'+esc(t("msD"))+'</p></div>'+
-  (ms.length>1?'<div class="ms-nav"><button type="button" data-ms="-1" aria-label="'+esc(t("msPrev"))+'">‹</button><button type="button" data-ms="1" aria-label="'+esc(t("msNext"))+'">›</button></div>':'')+'</div>'+
-  '<div class="ms-track" id="mstrack">'+ms.map(function(p,i){var ini=(p.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join(""),bio=pick(p.bio||{});
-   return '<article class="ms-card" aria-roledescription="slide" aria-label="'+(i+1)+' / '+ms.length+'"><div class="ms-photo">'+(p.img?'<img src="'+esc(p.img)+'" alt="'+esc(p.name)+'" loading="lazy">':'<span>'+esc(ini)+'</span>')+'</div>'+
-    '<div class="ms-body"><span class="ms-badge">'+ic("star")+esc(t("rk_master"))+'</span><h3>'+esc(p.name)+'</h3><span class="ms-role">'+esc(pick(p.role))+'</span>'+
-    (p.exp?'<span class="ms-exp tnum">'+esc(f(t("msExp"),{n:p.exp}))+'</span>':'')+(bio?'<blockquote>'+esc(bio)+'</blockquote>':'')+'</div></article>'}).join("")+'</div>'+
+function awardBadge(p,cls){return p.award&&p.award!=="none"?'<i class="'+(cls||'rank')+' aw-'+esc(p.award)+'">'+ic("medal")+esc(t("aw_"+p.award))+'</i>':''}
+function rankBadge(p){return awardBadge(p)+(p.mrank&&p.mrank!=="none"?'<i class="rank rk-mgr">'+esc(t("mr_"+p.mrank))+'</i>':'')+(p.rank&&p.rank!=="none"?'<i class="rank rk-'+esc(p.rank)+'">'+(p.rank==="master"?ic("star"):'')+esc(t("rk_"+p.rank))+'</i>':'')}
+function masterBanner(){var ms=byRank(DATA.staff.filter(function(x){return x.rank==="master"}));if(!ms.length)return"";
+ return '<section class="msban" aria-roledescription="carousel" aria-label="'+esc(t("msT"))+'"><span class="ms-star" aria-hidden="true">'+ic("star")+'</span><div class="ms-head"><div><span class="eyebrow">'+ic("star")+esc(t("rk_master"))+'</span><h2 class="h2">'+esc(t("msT"))+'</h2><p>'+esc(t("msD"))+'</p></div>'+
+  (ms.length>1?'<div class="ms-nav"><button type="button" data-ms="-1" aria-label="'+esc(t("msPrev"))+'">'+ic("left")+'</button><button type="button" data-ms="1" aria-label="'+esc(t("msNext"))+'">'+ic("right")+'</button></div>':'')+'</div>'+
+  '<div class="ms-track" id="mstrack">'+ms.map(function(p,i){var bio=pick(p.bio||{})||t("msBio");
+   return '<article class="ms-card'+(p.award==="best"?' is-best':'')+'" aria-roledescription="slide" aria-label="'+(i+1)+' / '+ms.length+'"><div class="ms-photo">'+(p.img?'<img src="'+esc(p.img)+'" alt="'+esc(p.name)+'" loading="lazy">':'<span class="ms-ph">'+ic("user")+'<small>'+esc(t("msPhoto"))+'</small></span>')+'</div>'+
+    '<div class="ms-body"><div class="ms-badges">'+awardBadge(p,"ms-badge")+'<span class="ms-badge">'+ic("star")+esc(t("rk_master"))+'</span></div><h3>'+esc(p.name)+'</h3><span class="ms-role">'+esc(pick(p.role))+'</span>'+
+    '<div class="ms-chips"><span class="ms-chip">'+ic("cap")+esc(t("msCat"))+': <b>'+esc(t("msCatV"))+'</b></span>'+(p.exp?'<span class="ms-chip tnum">'+ic("brief")+esc(t("msExpL"))+': <b>'+esc(f(t("msYrs"),{n:p.exp}))+'</b></span>':'')+'</div>'+
+    '<p class="ms-bio">'+esc(bio)+'</p></div></article>'}).join("")+'</div>'+
   (ms.length>1?'<div class="ms-dots" id="msdots">'+ms.map(function(_,i){return '<button type="button" data-msdot="'+i+'" aria-label="'+(i+1)+'"'+(i?'':' aria-current="true"')+'></button>'}).join("")+'</div>':'')+'</section>'}
 var msTimer=null;
 function startMasters(){clearInterval(msTimer);var tr=document.getElementById("mstrack");if(!tr||tr.children.length<2)return;
@@ -1052,11 +1058,11 @@ function lightbox(aid,i){var a=DATA.albums.filter(function(x){return x.id===aid}
 
 /* generic editor */
 var CATS=["events","achieve","life","ann"];
-var RANKS=["none","intern","pedagog","moderator","expert","researcher","master"],MRANKS=["none","h1","h2","d1","d2"];
+var AWARDS=["none","best"],RANKS=["none","intern","pedagog","moderator","expert","researcher","master"],MRANKS=["none","h1","h2","d1","d2"];
 var SCHEMA={
  posts:[["cat","select",CATS,"c_"],["date","date"],["title","ml"],["text","mlarea"],["img","media","video"]],
  events:[["date","date"],["time","text"],["title","ml"],["place","ml"]],
- staff:[["group","select",["admin","teacher"],"g_"],["name","text"],["role","ml"],["mrank","select",MRANKS,"mr_"],["rank","select",RANKS,"rk_"],["exp","text"],["bio","mlarea"],["img","image"]],
+ staff:[["group","select",["admin","teacher"],"g_"],["name","text"],["role","ml"],["mrank","select",MRANKS,"mr_"],["rank","select",RANKS,"rk_"],["award","select",AWARDS,"aw_"],["exp","text"],["bio","mlarea"],["img","image"]],
  facilities:[["title","ml"],["desc","mlarea"]],
  achievements:[["year","text"],["level","select",["district","region","republic","intl"],"lv_"],["title","ml"]],
  docs:[["cat","select",["docs","res"],"k_"],["title","ml"],["url","url"]],
@@ -1066,7 +1072,7 @@ var SCHEMA={
  partners:[["title","ml"],["url","url"],["img","logo"]],
  projects:[["title","ml"],["desc","mlarea"],["kind","select",["video","news","paper","blog","articles","tests","mixed"],"pt_"],["curator","text"],["url","url"],["img","logo"]],
  pitem:[["kind","select",["video","post","issue","link"],"pk_"],["date","date"],["title","ml"],["text","mlarea"],["img","media","url"],["url","urlfile"],["pages","pages"]]};
-var LBL={kind:"f_kind",curator:"f_curator",cat:"f_cat",date:"f_date",title:"f_title",text:"f_text",img:"f_img",time:"f_time",place:"f_place",group:"f_group",name:"f_name",role:"f_role",desc:"f_desc",when:"f_when",grades:"f_grades",level:"f_level",year:"f_year",url:"f_url",q:"f_q",a:"f_a",rank:"f_rank",mrank:"f_mrank",exp:"f_exp",bio:"f_bio"};
+var LBL={kind:"f_kind",curator:"f_curator",cat:"f_cat",date:"f_date",title:"f_title",text:"f_text",img:"f_img",time:"f_time",place:"f_place",group:"f_group",name:"f_name",role:"f_role",desc:"f_desc",when:"f_when",grades:"f_grades",level:"f_level",year:"f_year",url:"f_url",q:"f_q",a:"f_a",rank:"f_rank",award:"f_award",mrank:"f_mrank",exp:"f_exp",bio:"f_bio"};
 var edImg=null,edPages=[];
 function pagesThumbs(){return edPages.map(function(u,i){return '<span class="pg"><img src="'+esc(u)+'" alt=""><span class="pgb"><button type="button" data-pgmv="'+i+':-1" aria-label="‹"'+(i?'':' disabled')+'>‹</button><b>'+(i+1)+'</b><button type="button" data-pgmv="'+i+':1" aria-label="›"'+(i<edPages.length-1?'':' disabled')+'>›</button><button type="button" class="del" data-pgdel="'+i+'" aria-label="'+esc(t("del"))+'">×</button></span></span>'}).join("")}
 function drawPages(){var b=document.getElementById("edpages");if(b)b.innerHTML=pagesThumbs()}
