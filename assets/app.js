@@ -444,7 +444,9 @@ function platBanner(){var ck='<svg viewBox="0 0 24 24" width="15" height="15" fi
 /* "Директор панелі": card on the home page that opens the principal's window */
 function director(){return DATA.staff.filter(function(x){return x.group==="admin"&&/директор|principal/i.test(pick(x.role)||"")&&!/орынбасар|заместит|deputy/i.test(pick(x.role)||"")})[0]||DATA.staff.filter(function(x){return x.group==="admin"})[0]||null}
 function dirAva(d,cls){var ini=d?(d.name||"?").split(/\s+/).slice(0,2).map(function(w){return w[0]||""}).join(""):"";return '<span class="dava '+(cls||"")+'">'+(d&&d.img?'<img src="'+esc(d.img)+'" alt="">':esc(ini)||ic("user"))+'</span>'}
-function dirCard(){var d=director();return PAGES.director?'<a class="dircard" href="#director">'+dirAva(d)+'<b>'+esc(t("dirPanel"))+'</b></a>':'<button class="dircard" data-dir="1">'+dirAva(d)+'<b>'+esc(t("dirPanel"))+'</b></button>'}
+function dirCard(wide){var d=director();if(!wide)return PAGES.director?'<a class="dircard" href="#director">'+dirAva(d)+'<b>'+esc(t("dirPanel"))+'</b></a>':'<button class="dircard" data-dir="1">'+dirAva(d)+'<b>'+esc(t("dirPanel"))+'</b></button>';
+ var inner=dirAva(d,"xl")+'<span class="dw-txt"><small>'+esc(t("dirPanel"))+'</small><b>'+esc(d?d.name:t("dirPanel"))+'</b><i>'+esc(d?pick(d.role):"")+'</i></span><span class="dw-go">'+ic("msg")+'<span>'+esc(t("dirWrite"))+'</span></span>';
+ return PAGES.director?'<a class="dircard wide" href="#director">'+inner+'</a>':'<button class="dircard wide" data-dir="1">'+inner+'</button>'}
 function openDirector(){var d=director(),msg=pick(DATA.settings.dirText||{}),paras=(msg||"").split(/\n+/).filter(Boolean).map(function(x){return '<p>'+esc(x)+'</p>'}).join("");
  openLayer('<div class="dirmodal"><div class="dm-head">'+dirAva(d,"big")+'<div><span class="eyebrow">'+esc(t("dirPanel"))+'</span><h3>'+esc(d?d.name:t("name"))+'</h3><span class="dm-role">'+esc(d?pick(d.role):"")+'</span></div></div>'+
   (paras?'<blockquote class="dm-msg">'+paras+'</blockquote>':'')+'<p class="dm-hint">'+esc(t("dirHint"))+'</p>'+
@@ -466,7 +468,7 @@ function pageHome(){var s=DATA.settings;
   s.stats.map(function(x){return '<div class="stat"><b class="tnum">'+esc(x.n)+'</b><span>'+esc(pick(x.l))+'</span></div>'}).join("")+'</div>'+(s.statsSample?'<p class="note">'+esc(t("statsNote"))+'</p>':'')+'</div></section>';
  var up=upcomingEvents().slice(0,4);
  var hp=sortedPosts().filter(function(p){return p.cat!=="ann"});if(!hp.length)hp=sortedPosts();
- var news='<section class="section hnews-sec"><div class="container"><div class="sec-head"><div><span class="eyebrow">'+esc(t("newsE"))+'</span><h2>'+esc(t("newsT"))+'</h2><p>'+esc(t("newsD"))+'</p></div><div class="hn-side"><a class="more" href="#news">'+esc(t("allNews"))+' →</a>'+dirCard()+'</div></div>'+
+ var news='<section class="section hnews-sec"><div class="container"><div class="sec-head hn-head"><div class="hn-top"><span class="eyebrow">'+esc(t("newsE"))+'</span><a class="more" href="#news">'+esc(t("allNews"))+' →</a></div><div class="hn-text"><h2>'+esc(t("newsT"))+'</h2><p>'+esc(t("newsD"))+'</p></div>'+dirCard(true)+'</div>'+
   '<div class="hnews'+(hp.length<2?' one':'')+'">'+(hp.length?newsFeat(hp[0]):'<div class="empty"><b>'+esc(t("noResults"))+'</b></div>')+(hp.length>1?'<div class="nrows">'+hp.slice(1,4).map(newsRow).join("")+'</div>':'')+
   homeProjPanel()+'</div>'+addBtn("posts",{date:todayISO(),cat:"life"})+'</div></section>';
  var partners='<section class="section alt"><div class="container"><div class="sec-head"><h2>'+esc(t("partnersT"))+'</h2>'+addBtn("partners")+'</div>'+(st.editing?'<div class="partners">':'<div class="pview"><div class="partners ptrack" id="ptrack">')+
