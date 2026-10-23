@@ -1613,3 +1613,6 @@ a.dircard{text-decoration:none}
 .ms-dots button{width:8px;height:8px;border-radius:999px;border:0;background:rgba(255,255,255,.35);cursor:pointer;padding:0;transition:.25s}
 .ms-dots button[aria-current]{width:24px;background:#fde68a}
 @media (max-width:640px){.msban{padding:18px 14px 14px;border-radius:20px}.ms-nav{display:none}.ms-card{grid-template-columns:1fr;gap:14px;padding:14px}.ms-photo{max-width:200px;width:60%}}
+.rk-mgr{background:var(--b100,#dcfce7);color:var(--b800,#166534)}
+.rk-intern{background:#f8fafc;color:#64748b;border:1px dashed #cbd5e1}
+.person .rank+.rank{margin-top:4px}
