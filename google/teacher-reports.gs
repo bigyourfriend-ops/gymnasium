@@ -72,7 +72,7 @@ function setupNewYear() {
   }
   p.setProperty('YEAR_ID', dst.getId()); p.setProperty('YEAR_NAME', name);
   log_();   // создаст журнал
-  buildSnap_();   // снимок папок нового года
+  clear_('snap'); clear_('snapjob'); scheduleMore_();   // снимок папок нового года — в фоне
   Logger.log('Готово: «' + name + '» (' + dst.getUrl() + '), учителей: ' + made);
 }
 
@@ -133,39 +133,69 @@ function load_(name) {
   try { var o = JSON.parse(s); try { CacheService.getScriptCache().put(name, s, 21600); } catch (x) {} return o; } catch (e) { return null; }
 }
 function folderUrl_(id) { return 'https://drive.google.com/drive/folders/' + id; }
-function buildSnap_() {
-  var y = yearFolder_(), items = [], it = y.getFolders();
-  while (it.hasNext()) {
-    var d = it.next(), ti = d.getFolders();
+// Обход идёт частями (по методобъединениям): если Google не успевает за отведённое время,
+// прогресс сохраняется и продолжается фоновым запуском через минуту. Пока идёт обход, сайт работает со старым снимком.
+function buildSnap_(budgetMs) {
+  var t0 = Date.now(), budget = budgetMs || 240000, year = props_().getProperty('YEAR_NAME');
+  var job = load_('snapjob');
+  if (!job || job.year !== year) {
+    var y = yearFolder_(), it = y.getFolders(), depts = [];
+    while (it.hasNext()) { var d = it.next(); depts.push({ id: d.getId(), name: d.getName() }); }
+    job = { year: year, depts: depts, di: 0, items: [] };
+  }
+  for (; job.di < job.depts.length; job.di++) {
+    if (Date.now() - t0 > budget) { store_('snapjob', job); return null; }   // не успели — продолжим позже
+    var dep = job.depts[job.di], ti = DriveApp.getFolderById(dep.id).getFolders();
     while (ti.hasNext()) {
-      var tf = ti.next(), c = {}, n = {}, any = false;
+      var tf = ti.next(), c = {}, n = {}, any = false, tn = tf.getName();
       CAT_ORDER.forEach(function (k) {
         var cf = child_(tf, CATS[k], false), m = 0;
         if (cf) { any = true; c[k] = cf.getId(); var fi = cf.getFiles(); while (fi.hasNext()) { fi.next(); m++; } }
         n[k] = m;
       });
-      if (any) items.push({ dept: d.getName(), teacher: tf.getName(), key: fioKey_(tf.getName()), f: tf.getId(), c: c, n: n });   // папка без подпапок — не учитель
+      if (any) job.items.push({ dept: dep.name, teacher: tn, key: fioKey_(tn), f: tf.getId(), c: c, n: n });   // папка без подпапок — не учитель
     }
   }
-  items.sort(function (a, b) { return a.dept.localeCompare(b.dept) || a.teacher.localeCompare(b.teacher); });
-  var s = { year: props_().getProperty('YEAR_NAME'), at: new Date().toISOString(), items: items };
+  job.items.sort(function (a, b) { return a.dept.localeCompare(b.dept) || a.teacher.localeCompare(b.teacher); });
+  var s = { year: year, at: new Date().toISOString(), items: job.items };
   store_('snap', s);
+  clear_('snapjob');
   return s;
+}
+function clear_(name) {
+  var p = props_(), n = +(p.getProperty(name + '_n') || 0);
+  for (var i = 0; i < n; i++) p.deleteProperty(name + '_' + i);
+  p.deleteProperty(name + '_n');
+  CacheService.getScriptCache().remove(name);
+}
+// продолжить обход через минуту (одноразовый фоновый запуск)
+function scheduleMore_() {
+  try {
+    ScriptApp.getProjectTriggers().forEach(function (t) { if (t.getHandlerFunction() === 'rebuildMore') ScriptApp.deleteTrigger(t); });
+    ScriptApp.newTrigger('rebuildMore').timeBased().after(60 * 1000).create();
+  } catch (e) { Logger.log('Не удалось запланировать продолжение: ' + e); }
 }
 function snap_() {
   var s = load_('snap');
-  if (!s || s.year !== props_().getProperty('YEAR_NAME')) s = buildSnap_();
-  return s;
+  if (s && s.year === props_().getProperty('YEAR_NAME')) return s;
+  if (!load_('snapjob')) scheduleMore_();   // снимка ещё нет — начать в фоне, а сайту ответить «готовится»
+  throw new Error('building');
 }
-/** Запустить один раз (выбрать setupFast → «Выполнить» → разрешить доступ): построит снимок папок
-    и включит его фоновое обновление раз в час. После этого сайт открывает отчёты за 1–2 секунды. */
+/** Запустить один раз (выбрать setupFast → «Выполнить» → разрешить доступ): включит фоновое обновление
+    снимка папок раз в час и построит первый снимок. После этого сайт открывает отчёты за 1–3 секунды. */
 function setupFast() {
-  ScriptApp.getProjectTriggers().forEach(function (t) { if (t.getHandlerFunction() === 'rebuild') ScriptApp.deleteTrigger(t); });
+  ScriptApp.getProjectTriggers().forEach(function (t) { var h = t.getHandlerFunction(); if (h === 'rebuild' || h === 'rebuildMore') ScriptApp.deleteTrigger(t); });
   ScriptApp.newTrigger('rebuild').timeBased().everyHours(1).create();
-  var s = buildSnap_();
-  Logger.log('Готово: папок учителей — ' + s.items.length + '. Фоновое обновление — раз в час.');
+  clear_('snapjob');
+  var s = buildSnap_(240000);
+  if (s) Logger.log('Готово: папок учителей — ' + s.items.length + '. Фоновое обновление — раз в час.');
+  else { scheduleMore_(); Logger.log('Папок много — первый снимок достроится в фоне за несколько минут. Ничего больше делать не нужно.'); }
 }
-function rebuild() { var lock = LockService.getScriptLock(); if (!lock.tryLock(1000)) return; try { buildSnap_(); } finally { lock.releaseLock(); } }
+function rebuild() { clear_('snapjob'); rebuildMore(); }
+function rebuildMore() {
+  var lock = LockService.getScriptLock(); if (!lock.tryLock(1000)) return;
+  try { if (!buildSnap_(240000)) scheduleMore_(); } finally { lock.releaseLock(); }
+}
 
 // ---------- веб-приложение ----------
 function out_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
@@ -202,9 +232,12 @@ function mine_(item) {
   return { year: props_().getProperty('YEAR_NAME'), dept: item.dept, teacher: item.teacher, folder: folderUrl_(item.f), cats: res };
 }
 // сводка для администратора: все учителя года и сколько файлов в каждой подпапке
+// «Жаңарту» не ждёт обхода: запускает его в фоне и сразу отдаёт текущий снимок
 function overview_(refresh) {
-  var s = refresh ? buildSnap_() : snap_();
-  return { year: s.year, at: s.at, items: s.items.map(function (x) { return { dept: x.dept, teacher: x.teacher, key: x.key, folder: folderUrl_(x.f), n: x.n }; }) };
+  var building = false;
+  if (refresh) { clear_('snapjob'); scheduleMore_(); building = true; }
+  var s = snap_();
+  return { year: s.year, at: s.at, building: building, items: s.items.map(function (x) { return { dept: x.dept, teacher: x.teacher, key: x.key, folder: folderUrl_(x.f), n: x.n }; }) };
 }
 function doGet() {   // проверка, что скрипт работает (без данных)
   return out_({ ok: true, year: props_().getProperty('YEAR_NAME') || null });
@@ -224,7 +257,8 @@ function doPost(e) {
       try { log_([new Date(), my.teacher, my.dept, CATS[b.cat], file.getName(), file.getUrl(), me.email]); } catch (x) {}
       // сразу поправить число файлов в снимке
       if (lock.tryLock(15000)) {
-        try { var s = snap_(); s.items.forEach(function (x) { if (x.f === my.f) x.n[b.cat] = (x.n[b.cat] || 0) + 1; }); store_('snap', s); } finally { lock.releaseLock(); }
+        try { var s = load_('snap'); if (s) { s.items.forEach(function (x) { if (x.f === my.f) x.n[b.cat] = (x.n[b.cat] || 0) + 1; }); store_('snap', s); } }
+        catch (x) {} finally { lock.releaseLock(); }
       }
       return out_({ ok: true, url: file.getUrl(), name: file.getName() });
     }

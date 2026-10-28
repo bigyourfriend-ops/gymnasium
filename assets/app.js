@@ -675,6 +675,8 @@ var T24={rpIntroAdm:["Мұғалімдер тоқсандық есептер м�
  rpAsHint:["Сіз мұғалімнің папкасын әкімші ретінде ашып отырсыз: жүктелген файлдар осы мұғалімнің папкасына түседі.","Вы открыли папку учителя как администратор: загруженные файлы попадут в папку этого учителя.","You are viewing this teacher's folder as administrator."],
  rpAdmNotT:["Сізде өз есеп папкаңыз жоқ (профильде «Мұғалім» белгіленбеген). «Барлық мұғалімдер» бөлімінде кез келген мұғалімнің папкасын ашуға болады.","У вас нет своей папки отчётов (в профиле не отмечено «Мұғалім»). Во вкладке «Все учителя» можно открыть папку любого учителя.","You have no own folder; use All teachers."],
  rpOvLoad:["Google Диск-тегі барлық папкалар қайта тексерілуде… Бұл 1 минутқа дейін созылуы мүмкін.","Заново проверяю все папки на Google Диске… Это может занять до минуты.","Re-checking all folders… up to a minute."],
+ rpBuilding:["Google Диск папкаларының тізімі дайындалып жатыр (алғашқы рет бірнеше минут). 2–3 минуттан кейін бетті жаңартыңыз.","Список папок Google Диска ещё готовится (в первый раз — несколько минут). Обновите страницу через 2–3 минуты.","Folder list is being prepared; reload in a few minutes."],
+ rpRebuilding:["Папкалар фондық режимде қайта тексерілуде — бірнеше минуттан кейін «Жаңарту» басыңыз.","Папки перепроверяются в фоне — через несколько минут нажмите «Обновить» ещё раз.","Re-checking in background."],
  rpOvAt:["Тексерілді: {t} (сағат сайын өзі жаңарады)","Проверено: {t} (обновляется само каждый час)","Checked {t}"],
  rpOvOld:["Google Диск скриптінің ескі нұсқасы тұр: жаңа teacher-reports.gs қойып, жаңа нұсқасын жариялаңыз.","Скрипт Google Диска старой версии: вставьте новый teacher-reports.gs и разверните новую версию.","Update the Google Drive script."],
  rpRefresh:["Жаңарту","Обновить","Refresh"],rpFiles:["Файлдар","Файлы","Files"],
@@ -1290,10 +1292,10 @@ function rpCurQ(){var m=nowTZ().m;return m>=9&&m<=10?"q1":m>=11?"q2":m<=3?"q3":m
 function rpIsTeacher(){return !!(st.profile&&st.profile.role==="teacher")}
 function rpLoad(){if(rp.loading)return;rp.loading=true;rp.err="";
  rpCall({action:"mine"}).then(function(j){rp.mine=j.mine})
- .catch(function(e){var m=e.message||"";rp.err=/notTeacher/.test(m)?t("rpNotT"):/noMatch/.test(m)?t("rpNoMatch"):/dupName/.test(m)?t("rpDup"):t("rpErr")}).then(function(){rp.loading=false;if(st.ptab==="reports")render(true)})}
+ .catch(function(e){var m=e.message||"";rp.err=/notTeacher/.test(m)?t("rpNotT"):/noMatch/.test(m)?t("rpNoMatch"):/dupName/.test(m)?t("rpDup"):/building/.test(m)?t("rpBuilding"):t("rpErr")}).then(function(){rp.loading=false;if(st.ptab==="reports")render(true)})}
 function rpLoadOv(refresh){if(rp.ovLoading)return;rp.ovLoading=true;rp.ovRef=!!refresh;rp.ovErr="";if(refresh)rp.ov=null;if(st.ptab==="reports")render(true);
- Promise.all([rpCall({action:"overview",refresh:!!refresh}),sb.rpc("drive_teachers")]).then(function(r){rp.ov=r[0].overview;rp.siteT=(r[1]&&r[1].data)||[]})
- .catch(function(e){rp.ovErr=/notAdmin|notTeacher/.test(e.message||"")?t("rpOvOld"):t("rpErr")}).then(function(){rp.ovLoading=false;if(st.ptab==="reports")render(true)})}
+ Promise.all([rpCall({action:"overview",refresh:!!refresh}),sb.rpc("drive_teachers")]).then(function(r){rp.ov=r[0].overview;rp.siteT=(r[1]&&r[1].data)||[];if(rp.ov.building)toast(t("rpRebuilding"))})
+ .catch(function(e){var m=e.message||"";rp.ovErr=/notAdmin|notTeacher/.test(m)?t("rpOvOld"):/building/.test(m)?t("rpBuilding"):t("rpErr")}).then(function(){rp.ovLoading=false;if(st.ptab==="reports")render(true)})}
 function rpGrid(){var cq=rpCurQ(),p=st.profile||{};
  return '<div class="rp-who"><div><span class="eyebrow">'+esc(rp.mine.year||"")+' · '+esc(rp.mine.dept||"")+'</span><b>'+esc(rp.mine.teacher||p.full_name||"")+'</b></div><div class="rp-who-acts">'+(rp.as?'<button class="btn btn-soft" data-rpview="all">← '+esc(t("rpBack"))+'</button>':'')+'<a class="btn btn-soft" href="'+esc(rp.mine.folder)+'" target="_blank" rel="noopener">'+esc(t("rpFolder"))+' ↗</a></div></div>'+
   (rp.as?'<p class="hint" style="text-align:left;margin:0 0 12px">'+esc(t("rpAsHint"))+'</p>':'')+
@@ -1306,7 +1308,7 @@ function rpGrid(){var cq=rpCurQ(),p=st.profile||{};
 /* сводка для администратора: кто что сдал и к какому аккаунту сайта привязана папка */
 function rpAll(){
  if(rp.ovErr)return '<div class="empty"><b>'+esc(rp.ovErr)+'</b><p><button class="btn btn-soft" data-rpref="1">'+esc(t("rpRefresh"))+'</button></p></div>';
- if(!rp.ov){if(!rp.ovLoading)setTimeout(function(){rpLoadOv(false)},0);return '<p class="hint rp-load">'+esc(t(rp.ovRef?"rpOvLoad":"rpLoading"))+'</p>'}
+ if(!rp.ov){if(!rp.ovLoading)setTimeout(function(){rpLoadOv(false)},0);return '<p class="hint rp-load">'+esc(t("rpLoading"))+'</p>'}
  var cq=rpCurQ(),items=rp.ov.items||[],site=rp.siteT||[],byKey={},fkeys={},depts=[],byDept={};
  site.forEach(function(u){(byKey[u.key]=byKey[u.key]||[]).push(u)});
  items.forEach(function(x){fkeys[x.key]=1;if(!byDept[x.dept]){byDept[x.dept]=[];depts.push(x.dept)}byDept[x.dept].push(x)});
