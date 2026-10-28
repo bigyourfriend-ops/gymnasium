@@ -147,7 +147,9 @@ function handle_drive_me(): void {
   if ($p['role'] === 'teacher' && $key !== '') {
     foreach (q("SELECT id, full_name FROM profiles WHERE role='teacher' AND id<>?", [$u['id']])->fetchAll() as $o) if (fio_key((string)$o['full_name']) === $key) { $dup = true; break; }
   }
+  // администратор сайта видит все папки учителей и может загрузить файл в любую (проверка, помощь учителю)
+  $perms = json_decode((string)qv('SELECT r.perms FROM staff s JOIN roles r ON r.id=s.role_id WHERE s.user_id=?', [$u['id']]), true) ?: [];
   echo json_encode(['ok' => true, 'id' => $u['id'], 'email' => $u['email'], 'full_name' => (string)$p['full_name'], 'fio_key' => $key,
-    'teacher' => $p['role'] === 'teacher', 'dup' => $dup], JSON_UNESCAPED_UNICODE);
+    'teacher' => $p['role'] === 'teacher', 'dup' => $dup, 'admin' => in_array('users', $perms, true)], JSON_UNESCAPED_UNICODE);
   exit;
 }

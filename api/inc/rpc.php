@@ -115,6 +115,13 @@ function rpc_admin_user_delete(array $a) {
   return null;
 }
 
+/* подтверждённые учителя сайта — чтобы администратор видел, чья папка на Google Диске к кому привязана */
+function rpc_drive_teachers(array $a) {
+  if (!is_admin()) fail('not allowed', 403);
+  return array_map(fn($r) => ['id' => $r['id'], 'full_name' => (string)$r['full_name'], 'email' => (string)$r['email'], 'key' => fio_key((string)$r['full_name'])],
+    q("SELECT id, full_name, email FROM profiles WHERE role='teacher' ORDER BY full_name")->fetchAll());
+}
+
 /* ---------- «Маған көмек керек» (буллинг) ---------- */
 function rpc_help_submit(array $a) {
   if (str_arg($a, 'p_hp') !== '') fail('bad_request');
@@ -249,7 +256,7 @@ function rpc_prof_stats(array $a) {
 
 function handle_rpc(): void {
   $b = body(); $fn = (string)($b['fn'] ?? ''); $args = is_array($b['args'] ?? null) ? $b['args'] : [];
-  $ok = ['submit_feedback', 'public_feedback', 'set_role', 'admin_user_update', 'admin_user_delete', 'help_submit', 'help_thread', 'help_student_reply', 'help_staff_reply',
+  $ok = ['submit_feedback', 'public_feedback', 'set_role', 'admin_user_update', 'admin_user_delete', 'drive_teachers', 'help_submit', 'help_thread', 'help_student_reply', 'help_staff_reply',
     'dir_submit', 'dir_thread', 'dir_my_letters', 'dir_my_seen', 'dir_author_reply', 'dir_reply', 'prof_save', 'prof_stats'];
   if (!in_array($fn, $ok, true)) fail("function $fn does not exist", 404, '42883');
   out(('rpc_' . $fn)($args));

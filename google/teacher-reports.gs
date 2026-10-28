@@ -15,6 +15,7 @@
  * Кто может загружать: только пользователь сайта, которого администратор отметил «Мұғалім».
  * Папка выбирается сама — по ФИО в профиле сайта (регистр, порядок слов, ё/е и казахские буквы не важны).
  * Если ФИО не совпало ни с одной папкой — загрузка закрыта, пока администратор не исправит ФИО на сайте.
+ * Администратор сайта видит сводку по всем учителям и может открыть любую папку и загрузить в неё файл.
  */
 
 // ---------- настройки ----------
@@ -100,9 +101,8 @@ function verify_(token) {
   if (r.getResponseCode() !== 200) throw new Error('auth');
   var u = JSON.parse(r.getContentText() || '{}');
   if (!u.ok) throw new Error('auth');
-  if (!u.teacher) throw new Error('notTeacher');
-  if (u.dup) throw new Error('dupName');
-  var me = { id: u.id, email: u.email, name: u.full_name, key: fioKey_(u.full_name) };
+  if (!u.teacher && !u.admin) throw new Error('notTeacher');
+  var me = { id: u.id, email: u.email, name: u.full_name, key: fioKey_(u.full_name), teacher: !!u.teacher, dup: !!u.dup, admin: !!u.admin };
   cache.put(key, JSON.stringify(me), 300);
   return me;
 }
@@ -114,6 +114,8 @@ function fioKey_(s) {
 }
 // папка учителя по ФИО из профиля
 function myFolder_(me) {
+  if (!me.teacher) throw new Error('notTeacher');
+  if (me.dup) throw new Error('dupName');
   if (!me.key) throw new Error('noMatch');
   var t = tree_(), hits = [];
   t.depts.forEach(function (d) { d.teachers.forEach(function (n) { if (fioKey_(n) === me.key) hits.push({ dept: d.name, teacher: n }); }); });
@@ -152,13 +154,42 @@ function mine_(dept, teacher) {
   });
   return { year: props_().getProperty('YEAR_NAME'), dept: dept, teacher: teacher, folder: f.getUrl(), cats: res };
 }
+// какая папка: администратор может выбрать любую (dept + teacher), остальные — только свою
+function target_(me, b) {
+  if (me.admin && b.dept && b.teacher) {
+    var ok = tree_().depts.some(function (d) { return d.name === b.dept && d.teachers.indexOf(b.teacher) >= 0; });
+    if (!ok) throw new Error('noTeacher');
+    return { dept: b.dept, teacher: b.teacher };
+  }
+  return myFolder_(me);
+}
+// сводка для администратора: все учителя года и сколько файлов в каждой подпапке
+function overview_(refresh) {
+  var cache = CacheService.getScriptCache(), c = !refresh && cache.get('ov'); if (c) return JSON.parse(c);
+  if (refresh) cache.remove('tree');
+  var t = tree_(), y = yearFolder_(), items = [];
+  t.depts.forEach(function (d) {
+    var df = child_(y, d.name, false); if (!df) return;
+    d.teachers.forEach(function (n) {
+      var tf = child_(df, n, false); if (!tf) return;
+      var cnt = {};
+      CAT_ORDER.forEach(function (k) { var cf = child_(tf, CATS[k], false), m = 0; if (cf) { var it = cf.getFiles(); while (it.hasNext()) { it.next(); m++; } } cnt[k] = m; });
+      items.push({ dept: d.name, teacher: n, key: fioKey_(n), folder: tf.getUrl(), n: cnt });
+    });
+  });
+  var o = { year: props_().getProperty('YEAR_NAME'), at: new Date().toISOString(), items: items };
+  try { cache.put('ov', JSON.stringify(o), 300); } catch (x) {}
+  return o;
+}
 function doGet() {   // проверка, что скрипт работает (без данных)
   return out_({ ok: true, year: props_().getProperty('YEAR_NAME') || null });
 }
 function doPost(e) {
   var lock = LockService.getScriptLock();
   try {
-    var b = JSON.parse(e.postData.contents), me = verify_(b.token), my = myFolder_(me);
+    var b = JSON.parse(e.postData.contents), me = verify_(b.token);
+    if (b.action === 'overview') { if (!me.admin) throw new Error('notAdmin'); return out_({ ok: true, overview: overview_(!!b.refresh) }); }
+    var my = target_(me, b);
     if (b.action === 'mine') return out_({ ok: true, mine: mine_(my.dept, my.teacher) });
     if (b.action === 'upload') {
       if (!CATS[b.cat]) throw new Error('badCat');
@@ -169,6 +200,7 @@ function doPost(e) {
       lock.releaseLock();
       var file = cf.createFile(Utilities.newBlob(bytes, b.mime || 'application/octet-stream', String(b.name || 'file').slice(0, 180)));
       try { log_([new Date(), my.teacher, my.dept, CATS[b.cat], file.getName(), file.getUrl(), me.email]); } catch (x) {}
+      CacheService.getScriptCache().remove('ov');
       return out_({ ok: true, url: file.getUrl(), name: file.getName() });
     }
     throw new Error('badAction');

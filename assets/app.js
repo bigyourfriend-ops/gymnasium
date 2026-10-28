@@ -670,6 +670,18 @@ var T20={p_backup:["Сақтық көшірме","Резервная копия"
  autoD:["ps.kz хостингі сайттың толық көшірмесін (деректер базасы пайдаланушылармен бірге, барлық фото мен PDF, сайт коды) кесте бойынша өзі жасайды: Plesk панелі → «Резервное копирование и восстановление» → «Расписание». Код GitHub-та да сақталады.","Хостинг ps.kz сам делает полную копию сайта (база данных вместе с пользователями, все фото и PDF, код) по расписанию: панель Plesk → «Резервное копирование и восстановление» → «Расписание». Код сайта дополнительно хранится в GitHub.","ps.kz hosting makes scheduled full backups (Plesk → Backup → Schedule)."],
  autoGo:["GitHub-тағы көшірмелер","Копии на GitHub","Backups on GitHub"]};
 for(var _k20 in T20)T[_k20]=T20[_k20];
+var T24={rpIntroAdm:["Мұғалімдер тоқсандық есептер мен жетістіктерін осында жүктейді — файлдар Google Диск-тегі өз папкасына түседі. Әкімші барлық мұғалімдердің папкаларын көреді және кез келгеніне файл жүктей алады.","Учителя загружают сюда отчёты за четверти и достижения — файлы попадают в их папки на Google Диске. Администратор видит папки всех учителей и может загрузить файл в любую.","Teachers upload reports here; the administrator sees every folder."],
+ rpMine:["Менің папкам","Моя папка","My folder"],rpAll:["Барлық мұғалімдер","Все учителя","All teachers"],rpBack:["Барлық мұғалімдер","Все учителя","All teachers"],
+ rpAsHint:["Сіз мұғалімнің папкасын әкімші ретінде ашып отырсыз: жүктелген файлдар осы мұғалімнің папкасына түседі.","Вы открыли папку учителя как администратор: загруженные файлы попадут в папку этого учителя.","You are viewing this teacher's folder as administrator."],
+ rpAdmNotT:["Сізде өз есеп папкаңыз жоқ (профильде «Мұғалім» белгіленбеген). «Барлық мұғалімдер» бөлімінде кез келген мұғалімнің папкасын ашуға болады.","У вас нет своей папки отчётов (в профиле не отмечено «Мұғалім»). Во вкладке «Все учителя» можно открыть папку любого учителя.","You have no own folder; use All teachers."],
+ rpOvLoad:["Барлық мұғалімдердің папкалары тексерілуде… Бұл 1 минутқа дейін созылуы мүмкін.","Проверяю папки всех учителей… Это может занять до минуты.","Checking all teacher folders… up to a minute."],
+ rpOvOld:["Google Диск скриптінің ескі нұсқасы тұр: жаңа teacher-reports.gs қойып, жаңа нұсқасын жариялаңыз.","Скрипт Google Диска старой версии: вставьте новый teacher-reports.gs и разверните новую версию.","Update the Google Drive script."],
+ rpRefresh:["Жаңарту","Обновить","Refresh"],rpFiles:["Файлдар","Файлы","Files"],
+ rpStF:["мұғалім папкасы","папок учителей","teacher folders"],rpStL:["сайттағы аккаунтқа байланған","привязаны к аккаунтам сайта","linked to site accounts"],rpStQ:["{q} есебін тапсырды","сдали отчёт: {q}","submitted {q}"],
+ rpOnSite:["Сайтта","На сайте","On site"],rpNoSite:["Сайтта расталған мұғалім жоқ","Нет подтверждённого учителя на сайте","No confirmed teacher on the site"],rpDupSite:["Сайтта осы аты-жөнімен {n} мұғалім — біреуін түзетіңіз","На сайте {n} учителя с этим ФИО — исправьте одного","{n} site teachers share this name"],
+ rpLostT:["Папкасы табылмаған мұғалімдер","Учителя, для которых не найдена папка","Teachers without a folder"],
+ rpLostD:["Бұл мұғалімдер «Мұғалім» деп расталған, бірақ аты-жөні Google Диск папкаларының ешқайсысымен сәйкес келмейді. Аты-жөнін папка атауындай етіп түзетіңіз.","Эти учителя подтверждены, но их ФИО не совпадает ни с одной папкой на Google Диске. Исправьте ФИО так, как названа папка.","These confirmed teachers' names match no Drive folder."]};
+for(var _k24 in T24)T[_k24]=T24[_k24];
 var T23={roleNone:["Белгіленбеген","Не указан","Not set"],roleByAdmin:["Мұны әкімші белгілейді","Это отмечает администратор","Set by the administrator"],
  nameLocked:["Аты-жөніңіз Google Диск папкасына байланған — өзгерту үшін әкімшіге жазыңыз.","ФИО привязано к папке на Google Диске — изменить его может администратор.","Your name is linked to your Drive folder; ask the administrator to change it."],
  uEdit:["Өңдеу","Изменить","Edit"],uEditT:["Пайдаланушыны өңдеу","Изменить пользователя","Edit user"],uNewPass:["Жаңа құпия сөз","Новый пароль","New password"],uPassKeep:["Бос қалдырсаңыз — өзгермейді","Оставьте пустым, чтобы не менять","Leave empty to keep"],
@@ -1264,9 +1276,13 @@ function pageProfile(){
  return banner("cabinet","pd_profile")+'<div class="container page"><div class="prof">'+side+'<section class="pmain">'+body+'</section></div></div>'}
 /* ------------------------------------------------------------ teacher reports → Google Drive (google/teacher-reports.gs) */
 var RP_CATS=["q1","q2","q3","q4","ach"],RP_LBL={q1:"rpQ1",q2:"rpQ2",q3:"rpQ3",q4:"rpQ4",ach:"rpAch"};
-var rp={mine:null,loading:false,err:"",busy:{},msg:{}};
-/* Папка выбирается сама: по ФИО в профиле. Загружать может только пользователь, которого администратор отметил «Мұғалім». */
+var rp={mine:null,loading:false,err:"",busy:{},msg:{},view:"",as:null,ov:null,ovLoading:false,ovErr:"",siteT:null};
+/* Папка выбирается сама: по ФИО в профиле. Загружать может только пользователь, которого администратор отметил «Мұғалім».
+   Администратор видит сводку по всем папкам и может открыть любую папку (rp.as) и загрузить в неё файл. */
+function fioKey(x){var m={"Ё":"Е","Ә":"А","І":"И","Ң":"Н","Ғ":"Г","Ү":"У","Ұ":"У","Қ":"К","Ө":"О","Һ":"Х","Й":"И"};
+ return String(x||"").toUpperCase().replace(/[ЁӘІҢҒҮҰҚӨҺЙ]/g,function(c){return m[c]}).split(/[^A-ZА-Я]+/).filter(String).sort().join(" ")}
 function rpCall(body){var url=(DATA.settings||{}).driveUrl;if(!url||!sb)return Promise.reject(new Error("nourl"));
+ if(rp.as&&body.action!=="overview"){body.dept=rp.as.dept;body.teacher=rp.as.teacher}
  return sb.auth.getSession().then(function(r){var tok=r&&r.data&&r.data.session&&r.data.session.access_token;if(!tok)throw new Error("auth");body.token=tok;
   return fetch(url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body)})}).then(function(r){return r.json()}).then(function(j){if(!j||!j.ok)throw new Error(j&&j.error||"err");return j})}
 function rpCurQ(){var m=nowTZ().m;return m>=9&&m<=10?"q1":m>=11?"q2":m<=3?"q3":m<=6?"q4":""}
@@ -1274,26 +1290,56 @@ function rpIsTeacher(){return !!(st.profile&&st.profile.role==="teacher")}
 function rpLoad(){if(rp.loading)return;rp.loading=true;rp.err="";
  rpCall({action:"mine"}).then(function(j){rp.mine=j.mine})
  .catch(function(e){var m=e.message||"";rp.err=/notTeacher/.test(m)?t("rpNotT"):/noMatch/.test(m)?t("rpNoMatch"):/dupName/.test(m)?t("rpDup"):t("rpErr")}).then(function(){rp.loading=false;if(st.ptab==="reports")render(true)})}
-function tabReports(){var url=(DATA.settings||{}).driveUrl,p=st.profile||{};
- var head='<div class="panel rp"><h3>'+ic("file")+esc(t("p_rep"))+'</h3><p class="rp-intro">'+esc(t("rpIntro"))+'</p>';
- if(!url)return head+'<div class="empty"><b>'+esc(t("rpNoUrl"))+'</b></div></div>';
- if(!st.profile)return head+'<p class="hint rp-load">'+esc(t("loading"))+'</p></div>';
- if(!rpIsTeacher())return head+'<div class="empty"><b>'+esc(t("rpNotT"))+'</b></div></div>';
- if(rp.err)return head+'<div class="empty"><b>'+esc(rp.err)+'</b>'+(rp.err!==t("rpErr")?'<p class="hint">'+esc(t("fullName"))+': '+esc(p.full_name||"—")+'</p>':'')+'</div></div>';
- if(!rp.mine){setTimeout(rpLoad,0);return head+'<p class="hint rp-load">'+esc(t("rpLoading"))+'</p></div>'}
- var cq=rpCurQ();
- return head+'<div class="rp-who"><div><span class="eyebrow">'+esc(rp.mine.year||"")+' · '+esc(rp.mine.dept||"")+'</span><b>'+esc(rp.mine.teacher||p.full_name||"")+'</b></div><div class="rp-who-acts"><a class="btn btn-soft" href="'+esc(rp.mine.folder)+'" target="_blank" rel="noopener">'+esc(t("rpFolder"))+' ↗</a></div></div>'+
+function rpLoadOv(refresh){if(rp.ovLoading)return;rp.ovLoading=true;rp.ovErr="";if(refresh)rp.ov=null;if(st.ptab==="reports")render(true);
+ Promise.all([rpCall({action:"overview",refresh:!!refresh}),sb.rpc("drive_teachers")]).then(function(r){rp.ov=r[0].overview;rp.siteT=(r[1]&&r[1].data)||[]})
+ .catch(function(e){rp.ovErr=/notAdmin|notTeacher/.test(e.message||"")?t("rpOvOld"):t("rpErr")}).then(function(){rp.ovLoading=false;if(st.ptab==="reports")render(true)})}
+function rpGrid(){var cq=rpCurQ(),p=st.profile||{};
+ return '<div class="rp-who"><div><span class="eyebrow">'+esc(rp.mine.year||"")+' · '+esc(rp.mine.dept||"")+'</span><b>'+esc(rp.mine.teacher||p.full_name||"")+'</b></div><div class="rp-who-acts">'+(rp.as?'<button class="btn btn-soft" data-rpview="all">← '+esc(t("rpBack"))+'</button>':'')+'<a class="btn btn-soft" href="'+esc(rp.mine.folder)+'" target="_blank" rel="noopener">'+esc(t("rpFolder"))+' ↗</a></div></div>'+
+  (rp.as?'<p class="hint" style="text-align:left;margin:0 0 12px">'+esc(t("rpAsHint"))+'</p>':'')+
   '<div class="rp-grid">'+RP_CATS.map(function(k){var fl=(rp.mine.cats||{})[k]||[];
    return '<section class="rp-card'+(k===cq?" cur":"")+(k==="ach"?" ach":"")+'"><div class="rp-h"><h4>'+(k==="ach"?ic("trophy"):'')+esc(t(RP_LBL[k]))+'</h4>'+(k===cq?'<span class="chip">'+esc(t("rpCur"))+'</span>':'')+'</div>'+
     '<p class="rp-n'+(fl.length?" ok":"")+'">'+esc(fl.length?f(t("rpN"),{n:fl.length}):t("rpNone"))+'</p>'+
     (fl.length?'<ul>'+fl.slice(0,3).map(function(x){return '<li><a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.name)+'</a></li>'}).join("")+'</ul>':'')+
     '<label class="btn '+(k===cq?"btn-primary":"btn-outline")+' rp-up'+(rp.busy[k]?" dis":"")+'">'+ic("plus")+esc(t("rpUp"))+'<input type="file" multiple data-rpup="'+k+'"'+(rp.busy[k]?" disabled":"")+'></label>'+
-    '<small class="rp-msg" id="rpmsg-'+k+'">'+esc(rp.msg[k]||"")+'</small></section>'}).join("")+'</div></div>'}
+    '<small class="rp-msg" id="rpmsg-'+k+'">'+esc(rp.msg[k]||"")+'</small></section>'}).join("")+'</div>'}
+/* сводка для администратора: кто что сдал и к какому аккаунту сайта привязана папка */
+function rpAll(){
+ if(rp.ovErr)return '<div class="empty"><b>'+esc(rp.ovErr)+'</b><p><button class="btn btn-soft" data-rpref="1">'+esc(t("rpRefresh"))+'</button></p></div>';
+ if(!rp.ov){if(!rp.ovLoading)setTimeout(function(){rpLoadOv(false)},0);return '<p class="hint rp-load">'+esc(t("rpOvLoad"))+'</p>'}
+ var cq=rpCurQ(),items=rp.ov.items||[],site=rp.siteT||[],byKey={},fkeys={},depts=[],byDept={};
+ site.forEach(function(u){(byKey[u.key]=byKey[u.key]||[]).push(u)});
+ items.forEach(function(x){fkeys[x.key]=1;if(!byDept[x.dept]){byDept[x.dept]=[];depts.push(x.dept)}byDept[x.dept].push(x)});
+ var linked=items.filter(function(x){return (byKey[x.key]||[]).length===1}).length,done=cq?items.filter(function(x){return x.n[cq]>0}).length:0;
+ var lost=site.filter(function(u){return !u.key||!fkeys[u.key]});
+ var out='<div class="rp-ovhead"><div class="rp-stats"><span><b class="tnum">'+items.length+'</b>'+esc(t("rpStF"))+'</span><span><b class="tnum">'+linked+'</b>'+esc(t("rpStL"))+'</span>'+(cq?'<span><b class="tnum">'+done+'</b>'+esc(f(t("rpStQ"),{q:t(RP_LBL[cq])}))+'</span>':'')+'</div>'+
+  '<button class="btn btn-soft" data-rpref="1"'+(rp.ovLoading?' disabled':'')+'>'+esc(t("rpRefresh"))+'</button></div>';
+ if(lost.length)out+='<div class="rp-lost"><b>'+esc(t("rpLostT"))+'</b><p class="hint" style="text-align:left;margin:4px 0 8px">'+esc(t("rpLostD"))+'</p>'+lost.map(function(u){return '<div class="rp-lrow"><span>'+esc(u.full_name||"—")+' <small>'+esc(u.email)+'</small></span><button class="btn btn-soft" data-uedit="'+esc(u.id)+'">'+ic("edit")+esc(t("uEdit"))+'</button></div>'}).join("")+'</div>';
+ out+=depts.map(function(d){return '<details class="rp-dept" open><summary>'+esc(d)+' <span class="chip">'+byDept[d].length+'</span></summary>'+byDept[d].map(function(x){var us=byKey[x.key]||[];
+   return '<div class="rp-row"><div class="rp-name"><b>'+esc(x.teacher)+'</b>'+(us.length===1?'<small class="ok">'+esc(t("rpOnSite"))+': '+esc(us[0].email)+'</small>':us.length>1?'<small class="warn">'+esc(f(t("rpDupSite"),{n:us.length}))+'</small>':'<small>'+esc(t("rpNoSite"))+'</small>')+'</div>'+
+    '<div class="rp-cnt">'+RP_CATS.map(function(k){var n=x.n[k]||0;return '<span class="'+(n?"has":"")+(k===cq?" cur":"")+'" title="'+esc(t(RP_LBL[k]))+'">'+esc(k==="ach"?"Ж":k.slice(1))+(n?' · '+n:'')+'</span>'}).join("")+'</div>'+
+    '<div class="rp-acts"><button class="btn btn-soft" data-rpas="'+esc(x.dept)+'|'+esc(x.teacher)+'">'+esc(t("rpFiles"))+'</button><a class="btn btn-soft" href="'+esc(x.folder)+'" target="_blank" rel="noopener" aria-label="'+esc(t("rpFolder"))+'">↗</a></div></div>'}).join("")+'</details>'}).join("");
+ return out}
+function tabReports(){var url=(DATA.settings||{}).driveUrl,p=st.profile||{},adm=st.isAdmin;
+ var head='<div class="panel rp"><h3>'+ic("file")+esc(t("p_rep"))+'</h3><p class="rp-intro">'+esc(t(adm?"rpIntroAdm":"rpIntro"))+'</p>';
+ if(!url)return head+'<div class="empty"><b>'+esc(t("rpNoUrl"))+'</b></div></div>';
+ if(!st.profile)return head+'<p class="hint rp-load">'+esc(t("loading"))+'</p></div>';
+ if(!adm&&!rpIsTeacher())return head+'<div class="empty"><b>'+esc(t("rpNotT"))+'</b></div></div>';
+ if(adm){if(!st.admin)loadAdmin();var v=rp.as?"mine":(rp.view||(rpIsTeacher()?"mine":"all"));
+  head+='<div class="pills" style="display:inline-flex;margin-bottom:16px"><button data-rpview="mine" aria-pressed="'+(v==="mine"&&!rp.as)+'">'+esc(t("rpMine"))+'</button><button data-rpview="all" aria-pressed="'+(v==="all"||!!rp.as)+'">'+esc(t("rpAll"))+'</button></div>';
+  if(v==="all")return head+rpAll()+'</div>';
+  if(!rp.as&&!rpIsTeacher())return head+'<div class="empty"><b>'+esc(t("rpAdmNotT"))+'</b></div></div>'}
+ if(rp.err)return head+'<div class="empty"><b>'+esc(rp.err)+'</b>'+(rp.err!==t("rpErr")?'<p class="hint">'+esc(t("fullName"))+': '+esc(p.full_name||"—")+'</p>':'')+(adm?'<p><button class="btn btn-soft" data-rpview="all">'+esc(t("rpAll"))+'</button></p>':'')+'</div></div>';
+ if(!rp.mine){setTimeout(rpLoad,0);return head+'<p class="hint rp-load">'+esc(t("rpLoading"))+'</p></div>'}
+ return head+rpGrid()+'</div>'}
+document.addEventListener("click",function(e){var b=e.target.closest("[data-rpview],[data-rpas],[data-rpref]");if(!b)return;e.preventDefault();var d=b.dataset;
+ if(d.rpref){rpLoadOv(true);return}
+ if(d.rpas){var i=d.rpas.indexOf("|");rp.as={dept:d.rpas.slice(0,i),teacher:d.rpas.slice(i+1)};rp.mine=null;rp.err="";rp.msg={};render(true);return}
+ rp.view=d.rpview;rp.as=null;rp.mine=null;rp.err="";rp.msg={};render(true)});
 function rpUpload(k,files){var list=[].slice.call(files||[]),i=0,bad=[];if(!list.length)return;rp.busy[k]=true;
  function msg(x){rp.msg[k]=x;var el=document.getElementById("rpmsg-"+k);if(el)el.textContent=x}
  render(true);
  (function next(){if(i>=list.length){rp.busy[k]=false;msg(bad.length?bad.join("; "):t("rpDone"));
-   return rpCall({action:"mine"}).then(function(j){rp.mine=j.mine},function(){}).then(function(){if(st.ptab==="reports")render(true)})}
+   rp.ov=null;return rpCall({action:"mine"}).then(function(j){rp.mine=j.mine},function(){}).then(function(){if(st.ptab==="reports")render(true)})}
   var fl=list[i++];msg(f(t("rpUping"),{a:i,b:list.length,f:fl.name}));
   if(fl.size>25*1048576){bad.push(f(t("rpBig"),{f:fl.name}));return next()}
   new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(String(r.result).split(",")[1]||"")};r.onerror=rej;r.readAsDataURL(fl)})
