@@ -79,7 +79,16 @@ function db_connect(string $host, string $name, string $user, string $pass, int 
   $pdo->exec("SET time_zone = '+00:00', NAMES utf8mb4 COLLATE utf8mb4_unicode_ci");
   return $pdo;
 }
-function q(string $sql, array $p = []): PDOStatement { $s = db()->prepare($sql); $s->execute($p); return $s; }
+/* Все таблицы сайта в базе называются с приставкой gm_ (gm_users, gm_roles, …), чтобы не путаться
+   с другими таблицами, которые уже лежат в этой базе. В коде пишем имена без приставки — её добавляет sql_t(). */
+const GM_TABLES = 'users|sessions|auth_tokens|roles|staff|site_content|profiles|admin_emails|feedback_badwords|feedback|rate_log|help_reports|help_messages|dir_letters|dir_messages|prof_results|prof_favs';
+function tbl_prefix(): string { $p = (string)cfg('db_prefix', 'gm_'); return preg_match('/^[a-z0-9_]{0,10}$/', $p) ? $p : 'gm_'; }
+function sql_t(string $sql): string {
+  $p = tbl_prefix(); if ($p === '') return $sql;
+  $sql = preg_replace('/\b(FROM|INTO|UPDATE|JOIN|TABLE IF NOT EXISTS)\s+(' . GM_TABLES . ')\b/i', '$1 ' . $p . '$2', $sql);
+  return preg_replace('/(?<![\w.])(profiles)\.(?=\w)/', $p . '$1.', $sql);
+}
+function q(string $sql, array $p = []): PDOStatement { $s = db()->prepare(sql_t($sql)); $s->execute($p); return $s; }
 function q1(string $sql, array $p = []) { $r = q($sql, $p)->fetch(); return $r === false ? null : $r; }
 function qv(string $sql, array $p = []) { $r = q($sql, $p)->fetchColumn(); return $r === false ? null : $r; }
 

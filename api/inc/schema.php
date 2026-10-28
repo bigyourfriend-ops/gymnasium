@@ -169,7 +169,7 @@ function schema_sqlite(): array {
   }, schema_sql());
 }
 function schema_install(): void {
-  foreach (is_sqlite() ? schema_sqlite() : schema_sql() as $s) db()->exec($s);
+  foreach (is_sqlite() ? schema_sqlite() : schema_sql() as $s) db()->exec(sql_t($s));
   schema_seed();
 }
 
