@@ -157,7 +157,7 @@ function buildSnap_(budgetMs) {
     }
   }
   job.items.sort(function (a, b) { return a.dept.localeCompare(b.dept) || a.teacher.localeCompare(b.teacher); });
-  var s = { year: year, at: new Date().toISOString(), items: job.items };
+  var s = { year: year, at: new Date().toISOString(), depts: job.depts, items: job.items };
   store_('snap', s);
   clear_('snapjob');
   return s;
@@ -237,7 +237,46 @@ function overview_(refresh) {
   var building = false;
   if (refresh) { clear_('snapjob'); scheduleMore_(); building = true; }
   var s = snap_();
-  return { year: s.year, at: s.at, building: building, items: s.items.map(function (x) { return { dept: x.dept, teacher: x.teacher, key: x.key, folder: folderUrl_(x.f), n: x.n }; }) };
+  var depts = (s.depts || []).map(function (d) { return d.name; });
+  s.items.forEach(function (x) { if (depts.indexOf(x.dept) < 0) depts.push(x.dept); });
+  depts.sort(function (a, b) { return a.localeCompare(b); });
+  return { year: s.year, at: s.at, building: building, depts: depts, items: s.items.map(function (x) { return { dept: x.dept, teacher: x.teacher, key: x.key, folder: folderUrl_(x.f), n: x.n }; }) };
+}
+
+// ---------- правка папок учителей с сайта (только администратор) ----------
+// addTeacher — новая папка учителя с подпапками; renameTeacher — исправить ФИО в названии; moveTeacher — в другое методобъединение
+function cleanName_(x) { return String(x || '').trim().replace(/\s+/g, ' ').toUpperCase(); }
+function deptFolder_(s, name) {
+  var d = (s.depts || []).filter(function (x) { return x.name === name; })[0];
+  if (d) { try { return DriveApp.getFolderById(d.id); } catch (e) {} }
+  var f = child_(yearFolder_(), name, false); if (!f) throw new Error('noDept');
+  return f;
+}
+function editFolders_(b) {
+  var s = snap_(), it, nn, nk;
+  if (b.action === 'addTeacher') {
+    nn = cleanName_(b.name); nk = fioKey_(nn);
+    if (nk.split(' ').length < 2) throw new Error('badName');
+    if (s.items.some(function (x) { return x.key === nk; })) throw new Error('exists');
+    var tf = child_(deptFolder_(s, b.dept), nn, true), c = {}, n = {};
+    CAT_ORDER.forEach(function (k) { c[k] = child_(tf, CATS[k], true).getId(); n[k] = 0; });
+    s.items.push({ dept: b.dept, teacher: nn, key: nk, f: tf.getId(), c: c, n: n });
+  } else {
+    it = s.items.filter(function (x) { return x.dept === b.dept && x.teacher === b.teacher; })[0];
+    if (!it) throw new Error('noTeacher');
+    var f = DriveApp.getFolderById(it.f);
+    if (b.action === 'renameTeacher') {
+      nn = cleanName_(b.name); nk = fioKey_(nn);
+      if (nk.split(' ').length < 2) throw new Error('badName');
+      if (s.items.some(function (x) { return x.key === nk && x.f !== it.f; })) throw new Error('exists');
+      f.setName(nn); it.teacher = nn; it.key = nk;
+    } else if (b.action === 'moveTeacher') {
+      if (b.toDept === it.dept) return;
+      f.moveTo(deptFolder_(s, b.toDept)); it.dept = b.toDept;
+    }
+  }
+  s.items.sort(function (a, b) { return a.dept.localeCompare(b.dept) || a.teacher.localeCompare(b.teacher); });
+  store_('snap', s);
 }
 function doGet() {   // проверка, что скрипт работает (без данных)
   return out_({ ok: true, year: props_().getProperty('YEAR_NAME') || null });
@@ -247,6 +286,12 @@ function doPost(e) {
   try {
     var b = JSON.parse(e.postData.contents), me = verify_(b.token);
     if (b.action === 'overview') { if (!me.admin) throw new Error('notAdmin'); return out_({ ok: true, overview: overview_(!!b.refresh) }); }
+    if (/^(addTeacher|renameTeacher|moveTeacher)$/.test(b.action)) {
+      if (!me.admin) throw new Error('notAdmin');
+      if (!lock.tryLock(30000)) throw new Error('busy');
+      try { editFolders_(b); } finally { lock.releaseLock(); }
+      return out_({ ok: true, overview: overview_(false) });
+    }
     var my = target_(me, b);
     if (b.action === 'mine') return out_({ ok: true, mine: mine_(my) });
     if (b.action === 'upload') {
