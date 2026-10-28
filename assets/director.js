@@ -3,7 +3,7 @@
    Письмо получает код DR-XXXX-XXXX → по нему автор видит ответ директора и может дописать.
    Если автор вошёл на сайт и не выбрал «анонимно», письма видны ему в блоке «Менің хаттарым» без кода.
    Читать письма может только роль с правом «director» («Басқару панелі» → «Директорға хаттар»).
-   База: supabase/director.sql */
+   База: MySQL на ps.kz, сервер — api/inc/rpc.php */
 (window.GMPlugins = window.GMPlugins || []).push(function (A) {
   "use strict";
 
@@ -89,7 +89,7 @@
     da_reply: ["Жауап беру", "Ответить", "Reply"], da_replyPh: ["Жауабыңызды жазыңыз — автор оны код арқылы көреді", "Напишите ответ — автор увидит его по коду", "Write a reply"],
     da_author: ["Автор", "Автор", "Author"], da_anon: ["Жасырын", "Анонимно", "Anonymous"], da_contact: ["Байланыс", "Контакт", "Contact"],
     da_signed: ["сайттағы аккаунттан", "с аккаунта на сайте", "signed in"],
-    da_noDB: ["Дерекқор әлі бапталмаған: supabase/director.sql файлын Supabase SQL Editor-да іске қосыңыз.", "База ещё не настроена: запустите файл supabase/director.sql в Supabase → SQL Editor.", "Run supabase/director.sql."],
+    da_noDB: ["Сервермен байланыс болмады. Бетті жаңартып көріңіз.", "Нет связи с сервером сайта. Обновите страницу.", "Server unavailable."],
     da_noRight: ["Бұл бөлімді тек «Директор» рөлі көреді.", "Этот раздел видит только роль «Директор».", "Only the director role can see this."]
   };
   for (var k in S) A.T[k] = S[k];

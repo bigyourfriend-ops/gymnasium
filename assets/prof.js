@@ -1,7 +1,7 @@
 /* Мамандықтар әлемі — профориентация (#prof)
    Вкладки: тест (#prof.test), профессии (#prof.catalog), ЕНТ-навигатор (#prof.ent),
    карьерный паспорт (#prof.passport), статистика для школы (#prof.stats).
-   Данные: assets/prof-data.js. База: supabase/prof.sql */
+   Данные: assets/prof-data.js. База: MySQL на ps.kz, сервер — api/inc/rpc.php */
 (window.GMPlugins = window.GMPlugins || []).push(function (A) {
   "use strict";
   var PD = window.PROF_DATA; if (!PD) return;
@@ -50,7 +50,7 @@
     prStatsT: ["Мектеп статистикасы", "Статистика школы", "School statistics"],
     prStatsD: ["Оқушылардың соңғы тест нәтижелері бойынша: қандай бағыттарға бейім. Тек психолог, директор және әкімшіге көрінеді.", "По последним результатам учеников: к каким направлениям они склонны. Видят только психолог, директор и администратор.", "Visible to staff only."],
     prTotal: ["Барлық нәтиже: {n}", "Всего результатов: {n}", "Results: {n}"], prByGrade: ["Сыныптар бойынша", "По классам", "By grade"],
-    prTopType: ["Басым тип", "Ведущий тип", "Leading type"], prNoDB: ["Дерекқор әлі бапталмаған: supabase/prof.sql файлын іске қосыңыз.", "База не настроена: запустите supabase/prof.sql.", "Run supabase/prof.sql."],
+    prTopType: ["Басым тип", "Ведущий тип", "Leading type"], prNoDB: ["Сервермен байланыс болмады. Бетті жаңартып көріңіз.", "Нет связи с сервером сайта. Обновите страницу.", "Server unavailable."],
     prVideos: ["Мамандар туралы видео мен материалдар", "Видео и материалы о профессиях", "Videos and materials"],
     prToolsT: ["Кәсіптік бағдар құралдары", "Инструменты профориентации", "Career tools"],
     prTool_test: ["7–10 минутта өз типіңді анықта", "Узнай свой тип за 7–10 минут", ""], prTool_catalog: ["{n} мамандық, ішінде цифрлық бағыттар", "{n} профессий, в том числе цифровые", ""],

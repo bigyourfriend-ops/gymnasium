@@ -2,7 +2,7 @@
 "use strict";
 var DATA=JSON.parse(JSON.stringify(window.DEFAULT_DATA||{}));
 var CFG=window.SITE_CONFIG||{},sb=null;
-try{if(CFG.supabaseUrl&&CFG.supabaseAnonKey&&window.supabase&&CFG.supabaseUrl.indexOf("YOUR_")<0)sb=window.supabase.createClient(CFG.supabaseUrl,CFG.supabaseAnonKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:"implicit"}})}catch(e){sb=null}
+sb=window.GMDB||null; /* сервер сайта на ps.kz (assets/db.js → api/) */
 var TZ="Asia/Qyzylorda", LI={kk:0,ru:1,en:2}, LANGS=["kk","ru"]; /* English removed from the site */
 
 /* ------------------------------------------------------------ i18n */
@@ -634,7 +634,9 @@ var T22={p_rep:["Есептер мен жетістіктер","Отчёты и 
  rpIntro:["Тоқсандық есептер мен жетістіктеріңізді осында жүктеңіз — файлдар гимназияның Google Drive-ындағы өз папкаңызға өздігінен түседі.","Загружайте сюда отчёты за четверти и достижения — файлы сами попадут в вашу папку на Google Диске гимназии.","Upload term reports and achievements; files go to your folder on the school Google Drive."],
  rpNoUrl:["Әкімші Google Drive байланысын әлі қоспаған. Кейінірек кіріңіз.","Администратор ещё не подключил Google Диск. Загляните позже.","Google Drive is not connected yet."],
  rpLoading:["Google Drive-пен байланыс…","Связываюсь с Google Диском…","Connecting to Google Drive…"],rpErr:["Google Drive-пен байланыс болмады. Бетті жаңартып көріңіз.","Не удалось связаться с Google Диском. Обновите страницу.","Couldn't reach Google Drive."],
- rpNotT:["Бұл бөлім тек мұғалімдерге арналған: «Профиль» бөлімінде «Мен — Мұғалім» деп белгілеңіз.","Раздел только для учителей: в «Профиле» выберите «Мен — Мұғалім».","Teachers only: set your role to Teacher in Profile."],
+ rpNotT:["Бұл бөлім әкімші «Мұғалім» деп растаған пайдаланушыларға ғана ашық. Әкімшіге жазыңыз.","Раздел доступен только учителям, которых подтвердил администратор. Напишите администратору.","Only teachers confirmed by the administrator can upload."],
+ rpNoMatch:["Профильдегі аты-жөніңіз Google Диск папкаларының ешқайсысымен сәйкес келмейді. Әкімшіге хабарласыңыз: ол аты-жөніңізді папка атауымен бірдей етіп түзетеді.","ФИО в профиле не совпадает ни с одной папкой учителя на Google Диске. Обратитесь к администратору: он исправит ФИО так, как названа ваша папка.","Your profile name doesn't match any teacher folder."],
+ rpDup:["Сайтта дәл осындай аты-жөнімен басқа мұғалім бар. Әкімшіге хабарласыңыз.","На сайте есть другой учитель с точно таким же ФИО. Обратитесь к администратору.","Another teacher has the same name."],
  rpWho:["Бірінші рет: өзіңізді таңдаңыз","В первый раз: выберите себя","First time: choose yourself"],rpDept:["Әдістемелік бірлестік","Методобъединение","Department"],rpName:["Аты-жөніңіз","Ваше ФИО","Your name"],
  rpNotList:["— Тізімде жоқпын —","— Меня нет в списке —","— Not in the list —"],rpNewName:["Толық аты-жөніңіз (папка осы атпен ашылады)","Полное ФИО (так будет названа папка)","Full name (folder name)"],
  rpSave:["Сақтау","Сохранить","Save"],rpChange:["Өзгерту","Изменить","Change"],rpFolder:["Папканы ашу","Открыть папку","Open folder"],
@@ -665,9 +667,16 @@ var T20={p_backup:["Сақтық көшірме","Резервная копия"
  rsGo:["Қалпына келтіру","Восстановить","Restore"],rsFiles:["Файлдар қайтарылуда: {a} / {b}","Возвращаю файлы: {a} из {b}","Restoring files {a} / {b}"],rsSave:["Мазмұн сақталуда…","Сохраняю содержимое…","Saving content…"],
  rsDone:["Қалпына келтірілді! Бет жаңартылады…","Восстановлено! Страница обновится…","Restored! Reloading…"],rsErr:["Қалпына келтіру кезінде қате шықты. Әкімші ретінде кіргеніңізді тексеріңіз.","Ошибка при восстановлении. Проверьте, что вы вошли как администратор.","Restore failed."],
  autoT:["Автоматты апталық көшірме","Автоматическая еженедельная копия","Automatic weekly backup"],
- autoD:["Әр жексенбі түнде GitHub өзі толық көшірме жасайды: деректер базасы (пайдаланушылармен бірге), барлық файлдар және сайт коды. Көшірме құпиясөзбен шифрланған, 90 күн сақталады.","Каждое воскресенье ночью GitHub сам делает полную копию: база данных (вместе с пользователями), все файлы и код сайта. Копия зашифрована паролем и хранится 90 дней.","Every Sunday night GitHub makes a full encrypted backup, kept 90 days."],
+ autoD:["ps.kz хостингі сайттың толық көшірмесін (деректер базасы пайдаланушылармен бірге, барлық фото мен PDF, сайт коды) кесте бойынша өзі жасайды: Plesk панелі → «Резервное копирование и восстановление» → «Расписание». Код GitHub-та да сақталады.","Хостинг ps.kz сам делает полную копию сайта (база данных вместе с пользователями, все фото и PDF, код) по расписанию: панель Plesk → «Резервное копирование и восстановление» → «Расписание». Код сайта дополнительно хранится в GitHub.","ps.kz hosting makes scheduled full backups (Plesk → Backup → Schedule)."],
  autoGo:["GitHub-тағы көшірмелер","Копии на GitHub","Backups on GitHub"]};
 for(var _k20 in T20)T[_k20]=T20[_k20];
+var T23={roleNone:["Белгіленбеген","Не указан","Not set"],roleByAdmin:["Мұны әкімші белгілейді","Это отмечает администратор","Set by the administrator"],
+ nameLocked:["Аты-жөніңіз Google Диск папкасына байланған — өзгерту үшін әкімшіге жазыңыз.","ФИО привязано к папке на Google Диске — изменить его может администратор.","Your name is linked to your Drive folder; ask the administrator to change it."],
+ uEdit:["Өңдеу","Изменить","Edit"],uEditT:["Пайдаланушыны өңдеу","Изменить пользователя","Edit user"],uNewPass:["Жаңа құпия сөз","Новый пароль","New password"],uPassKeep:["Бос қалдырсаңыз — өзгермейді","Оставьте пустым, чтобы не менять","Leave empty to keep"],
+ uTeacherHint:["«Мұғалім» — расталған мұғалім: тоқсандық есептерді Google Дискідегі өз папкасына жүктей алады (аты-жөні папка атауымен бірдей болуы керек).","«Мұғалім» — подтверждённый учитель: загружает отчёты в свою папку на Google Диске (ФИО должно совпадать с названием папки).","Teacher = confirmed teacher; name must match the Drive folder."],
+ uConfirm:["Поштаны растау (хат келмесе)","Подтвердить почту (если письмо не дошло)","Confirm email"],notConf:["Пошта расталмаған","Почта не подтверждена","Email not confirmed"],notConfD:["Пайдаланушы хаттағы сілтемені баспаған. «Өңдеу» арқылы растауға болады.","Пользователь не перешёл по ссылке из письма. Подтвердить можно через «Изменить».","Not confirmed yet"],
+ uType:["Түрі","Тип","Type"],uDel:["Пайдаланушыны жою","Удалить пользователя","Delete user"],uDeleted:["Пайдаланушы жойылды","Пользователь удалён","User deleted"],uSaved:["Сақталды","Сохранено","Saved"],uBadEmail:["Поштаны тексеріңіз","Проверьте почту","Check the email"]};
+for(var _k23 in T23)T[_k23]=T23[_k23];
 var T19={heroAbout:["Гимназия туралы","О гимназии","About the gymnasium"],heroPlat:["Гимназиялық бақылау","Гимназиялық бақылау","Gymnasium tests"],
  dirPanel:["Директор панелі","Панель директора","Principal's desk"],dirWrite:["Директорға жазу","Написать директору","Write to the principal"],dirAdm:["Әкімшілік","Администрация","Administration"],
  dirHint:["Ұсыныс, сұрақ немесе алғысыңызды жазыңыз — хатыңыз директорға жетеді.","Напишите предложение, вопрос или благодарность — письмо дойдёт до директора.","Send a suggestion, question or thanks — it reaches the principal."],
@@ -1004,7 +1013,7 @@ function msgBox(){return '<p class="formmsg" id="fmsg" hidden></p>'}
 function showMsg(k,ok,extra){var m=document.getElementById("fmsg");if(!m)return;m.hidden=false;m.className="formmsg "+(ok?"ok":"err");m.textContent=t(k)+(extra?" ("+extra+")":"")}
 function authErr(e){var s=(e&&e.message)||"";if(/invalid login/i.test(s))return["e_cred"];if(/not confirmed/i.test(s))return["e_confirm"];if(/already|exists/i.test(s))return["e_exists"];if(/rate|too many|security purposes/i.test(s))return["e_rate"];if(/password/i.test(s))return["e_short"];return["e_generic",s]}
 function busy(form,on){var b=form.querySelector('button[type="submit"]');if(b){b.disabled=on;b.style.opacity=on?.6:1}}
-function bilimBtn(){return '<div class="divider">'+esc(t("or"))+'</div><a class="btn btn-bilim" href="https://bilimclass.kz" target="_blank" rel="noopener"><span class="bmark">B</span>'+esc(t("viaBilim"))+'</a><p class="hint">'+esc(t("bilimNote"))+'</p>'}
+function bilimBtn(){return ""} /* «Войти через BilimClass» убрано: у сайта нет связи с BilimClass */
 function authHead(k){return '<div style="text-align:center">'+emblem()+'<h3 style="padding:0">'+esc(t(k))+'</h3></div>'}
 function openLogin(){var dis=sb?'':' disabled';
  openLayer(authHead("loginT2")+(sb?'':'<p class="formmsg err">'+esc(t("noAuth"))+'</p>')+'<form class="form" id="authLogin" novalidate>'+
@@ -1016,7 +1025,6 @@ function openLogin(){var dis=sb?'':' disabled';
 function openRegister(){var dis=sb?'':' disabled';
  openLayer(authHead("regT")+(sb?'':'<p class="formmsg err">'+esc(t("noAuth"))+'</p>')+'<form class="form" id="authReg" novalidate>'+
  '<label>'+esc(t("fullName"))+'<input id="ar-name" autocomplete="name" required'+dis+'></label>'+
- '<label>'+esc(t("roleF"))+'<select id="ar-role"'+dis+'>'+["student","parent","teacher"].map(function(r){return '<option value="'+r+'">'+esc(t("r_"+r))+'</option>'}).join("")+'</select></label>'+
  '<label>'+esc(t("emailF"))+'<input id="ar-email" type="email" autocomplete="email" required'+dis+'></label>'+
  '<div class="row2"><label>'+esc(t("passF"))+'<input id="ar-pass" type="password" autocomplete="new-password" minlength="8" required'+dis+'></label><label>'+esc(t("pass2F"))+'<input id="ar-pass2" type="password" autocomplete="new-password" required'+dis+'></label></div>'+msgBox()+
  '<button class="btn btn-primary btn-lg" type="submit" style="width:100%"'+dis+'>'+esc(t("signUp"))+'</button></form>'+
@@ -1030,7 +1038,6 @@ function openAccount(){var u=st.user;if(!u){openLogin();return}var m=u.user_meta
  '<div class="tags" style="margin-top:6px">'+(m.role?'<span>'+esc(t("r_"+m.role))+'</span>':'')+(st.canEdit?'<span class="adm">'+esc(t("adminBadge"))+'</span>':'')+'</div></div></div>'+
  '<div class="login-opts">'+(st.canEdit?'<button class="lnk" data-act="edit" style="text-align:left;width:100%"><span class="ico">'+ic("edit")+'</span><div><b>'+esc(t("enterEdit"))+'</b><span>'+esc(t("optAdmin"))+'</span></div></button>'+
  '<button class="lnk" data-auth="users" style="text-align:left;width:100%"><span class="ico">'+ic("users")+'</span><div><b>'+esc(t("usersT"))+'</b></div></button>':'')+
- '<a class="lnk" href="https://bilimclass.kz" target="_blank" rel="noopener"><span class="ico">'+ic("book")+'</span><div><b>BilimClass</b><span>'+esc(t("bilimNote"))+'</span></div></a>'+
  '<button class="btn btn-soft" data-auth="signout" style="width:100%;margin-top:4px">'+esc(t("signOut"))+'</button></div>')}
 function openUsers(){openLayer('<h3>'+esc(t("usersT"))+'</h3><div id="ulist" class="ulist"><p class="hint">…</p></div>');
  sb.from("profiles").select("full_name,email,role,created_at").order("created_at",{ascending:false}).limit(300).then(function(r){var el=document.getElementById("ulist");if(!el)return;
@@ -1042,7 +1049,7 @@ function submitAuth(form){var id=form.id,v=function(x){return document.getElemen
  if(id==="authLogin"){sb.auth.signInWithPassword({email:v("au-email"),password:document.getElementById("au-pass").value}).then(function(r){done();if(r.error){var e=authErr(r.error);showMsg(e[0],false,e[1]);return}closeLayer();location.hash="profile"})}
  else if(id==="authReg"){var p1=document.getElementById("ar-pass").value,p2=document.getElementById("ar-pass2").value;
   if(!v("ar-name")){showMsg("needTitle",false);done();return} if(p1.length<8){showMsg("e_short",false);done();return} if(p1!==p2){showMsg("e_match",false);done();return}
-  sb.auth.signUp({email:v("ar-email"),password:p1,options:{data:{full_name:v("ar-name"),role:document.getElementById("ar-role").value},emailRedirectTo:redirectURL()}}).then(function(r){done();
+  sb.auth.signUp({email:v("ar-email"),password:p1,options:{data:{full_name:v("ar-name")},emailRedirectTo:redirectURL()}}).then(function(r){done();
    if(r.error){var e=authErr(r.error);showMsg(e[0],false,e[1]);return}
    if(r.data&&r.data.user&&r.data.user.identities&&r.data.user.identities.length===0){showMsg("e_exists",false);return}
    if(r.data&&r.data.session){closeLayer();return} form.querySelectorAll("input,select,button").forEach(function(x){x.disabled=true});showMsg("regDone",true)})}
@@ -1143,10 +1150,9 @@ function shrink(file,M){return new Promise(function(res){var r=new FileReader();
 
 /* ------------------------------------------------------------ events */
 document.addEventListener("click",function(e){
- var el=e.target.closest("[data-rpchange],[data-tvgo],[data-tvfs],[data-bkpdo],[data-rsgo],[data-dir],[data-flip],[data-bk],[data-bkgo],[data-pgmv],[data-pgdel],[data-mtab],[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
+ var el=e.target.closest("[data-tvgo],[data-tvfs],[data-bkpdo],[data-rsgo],[data-dir],[data-flip],[data-bk],[data-bkgo],[data-pgmv],[data-pgdel],[data-mtab],[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
  if(!el)return;var d=el.dataset;
- if(d.rpchange){rp.picking=true;render(true);return}
- if(d.tvgo){tvFull();location.hash="tv."+d.tvgo;return}
+  if(d.tvgo){tvFull();location.hash="tv."+d.tvgo;return}
  if(d.tvfs){tvFull();return}
  if(d.bkpdo){doBackup();return}
  if(d.rsgo){doRestore();return}
@@ -1223,8 +1229,6 @@ document.addEventListener("change",function(e){var d=e.target.dataset;
   pv2.textContent=t("uploading");var fpath="files/"+new Date().getFullYear()+"/"+uid("doc")+".pdf";
   sb.storage.from("media").upload(fpath,fl2,{contentType:"application/pdf",cacheControl:"31536000",upsert:false}).then(function(r){if(r.error)throw r.error;ui.value=sb.storage.from("media").getPublicUrl(fpath).data.publicUrl;pv2.textContent="✓ "+fl2.name}).catch(function(){pv2.textContent=t("upErr")});return}
  if(d.rpup){rpUpload(d.rpup,e.target.files);return}
- if(e.target.id==="rp-dept"){rp.selDept=e.target.value;render(true);return}
- if(e.target.id==="rp-teacher"){var rn=document.querySelector(".rp-new");if(rn)rn.hidden=e.target.value!=="__new";return}
  if(d.bkprs){pickRestore(e.target.files[0]);e.target.value="";return}
  if(d.edpdf){var pfl=e.target.files[0];if(pfl)pdfToPages(pfl,e.target);return}
  if(d.edpages){var fs=[].slice.call(e.target.files).sort(function(x,y){return x.name.localeCompare(y.name,undefined,{numeric:true})}),inp=e.target,stl=document.getElementById("edpagesst"),k=0;if(!fs.length)return;inp.disabled=true;
@@ -1233,7 +1237,7 @@ document.addEventListener("change",function(e){var d=e.target.dataset;
  if(d.edimg){var fl=e.target.files[0];if(!fl)return;var pv=document.getElementById("edprev");pv.textContent=t("uploading");(d.edimg==="logo"?shrinkLogo(fl,400):shrink(fl,1400)).then(uploadImg).then(function(src){if(!src){pv.textContent=t("upErr");return}edImg=src;pv.innerHTML='<img class="prev" src="'+esc(src)+'" alt="">'});return}
  if(d.upload){var al=DATA.albums.filter(function(x){return x.id===d.upload})[0],files=[].slice.call(e.target.files||[]);
   toast(t("uploading"));Promise.all(files.map(function(fl){return shrink(fl,1600).then(uploadImg)})).then(function(srcs){var n=0;srcs.forEach(function(s){if(s){al.photos.push({src:s,cap:{}});n++}});if(n<srcs.length)toast(t("upErr"));if(n){delete al.sample;dirty();render(true)}})}});
-document.addEventListener("submit",function(e){if(/^auth/.test(e.target.id)){e.preventDefault();e.stopPropagation();submitAuth(e.target)}else if(e.target.dataset&&e.target.dataset.roleform!==undefined){e.preventDefault();e.stopPropagation();saveRole(e.target)}else if(e.target.id==="ttAddForm"){e.preventDefault();e.stopPropagation();var gg=parseInt(document.getElementById("tta-g").value,10),lt=document.getElementById("tta-l").value,nm2=gg+lt;if(gg>=1&&gg<=11&&!DATA.classes[nm2]){DATA.classes[nm2]={shift:+document.getElementById("tta-s").value,days:[[],[],[],[],[]]};st.cls=nm2;dirty();render(true)}}else if(e.target.id==="fbForm"){e.preventDefault();e.stopPropagation();if(sb)submitFb(e.target)}else if(e.target.dataset&&e.target.dataset.fbreply){e.preventDefault();e.stopPropagation();var fid=e.target.dataset.fbreply;fbUpdate(fid,{reply:document.getElementById("rep-"+fid).value.trim()||null})}else if(e.target.id==="profForm"){e.preventDefault();e.stopPropagation();saveProfile(e.target)}else if(e.target.id==="rpPick"){e.preventDefault();e.stopPropagation();rpSavePick(e.target)}},true);
+document.addEventListener("submit",function(e){if(/^auth/.test(e.target.id)){e.preventDefault();e.stopPropagation();submitAuth(e.target)}else if(e.target.dataset&&e.target.dataset.roleform!==undefined){e.preventDefault();e.stopPropagation();saveRole(e.target)}else if(e.target.id==="ttAddForm"){e.preventDefault();e.stopPropagation();var gg=parseInt(document.getElementById("tta-g").value,10),lt=document.getElementById("tta-l").value,nm2=gg+lt;if(gg>=1&&gg<=11&&!DATA.classes[nm2]){DATA.classes[nm2]={shift:+document.getElementById("tta-s").value,days:[[],[],[],[],[]]};st.cls=nm2;dirty();render(true)}}else if(e.target.id==="fbForm"){e.preventDefault();e.stopPropagation();if(sb)submitFb(e.target)}else if(e.target.dataset&&e.target.dataset.fbreply){e.preventDefault();e.stopPropagation();var fid=e.target.dataset.fbreply;fbUpdate(fid,{reply:document.getElementById("rep-"+fid).value.trim()||null})}else if(e.target.id==="profForm"){e.preventDefault();e.stopPropagation();saveProfile(e.target)}},true);
 document.addEventListener("input",function(e){if(e.target.id==="fb-text"){var c=document.getElementById("fb-cnt");if(c)c.textContent=e.target.value.length+" / 1500"}if(e.target.id==="uq"){st.uq=e.target.value;var l=document.getElementById("ulistP");if(l)l.innerHTML=userRows()}});
 document.addEventListener("change",function(e){if(e.target.dataset&&e.target.dataset.setrole){var sel=e.target,uid=sel.dataset.setrole;sel.disabled=true;sb.rpc("set_role",{target:uid,role:sel.value||null}).then(function(r){sel.disabled=false;if(r.error){toast(/last/i.test(r.error.message)?t("lastAdmin"):t("e_generic"));st.admin=null;render(true);return}st.admin.staff[uid]=sel.value||undefined;if(!sel.value)delete st.admin.staff[uid];toast(t("adminChanged"))});return}
  if(e.target.dataset&&e.target.dataset.avatar){var f=e.target.files[0];if(f)uploadAvatar(f)}});
@@ -1255,62 +1259,51 @@ function pageProfile(){
   '<div class="tags" style="justify-content:center;margin-top:8px">'+(role?'<span>'+esc(t("r_"+role))+'</span>':'')+(p.grade?'<span>'+esc(p.grade)+'</span>':'')+(st.roleName?'<span class="adm">'+esc(st.roleName)+'</span>':'')+'</div>'+
   '<small class="since">'+esc(t("memberSince"))+': '+esc(fmtDate(String(p.created_at||u.created_at||"").slice(0,10)))+'</small>'+
   '<nav class="ptabs">'+tabs.map(function(x){return '<button data-ptab="'+x[0]+'" aria-pressed="'+(st.ptab===x[0])+'">'+ic(x[2])+esc(t(x[1]))+'</button>'}).join("")+'</nav>'+
-  (st.canEdit?'<a class="btn btn-primary" href="#admin" style="width:100%;margin-bottom:8px">'+ic("star")+esc(t("adminPanel"))+'</a>':'')+(PAGES.tests?'<a class="btn btn-outline" href="#tests" style="width:100%;margin-bottom:8px">'+ic("flask")+esc(t("navGT"))+'</a>':'')+'<button class="btn btn-soft" data-auth="signout" style="width:100%">'+esc(t("signOut"))+'</button></aside>';
+  (st.canEdit?'<a class="btn btn-primary" href="#admin" style="width:100%;margin-bottom:8px">'+ic("star")+esc(t("adminPanel"))+'</a>':'')+'<button class="btn btn-soft" data-auth="signout" style="width:100%">'+esc(t("signOut"))+'</button></aside>';
  var body={me:tabMe,reports:tabReports,security:tabSec,dash:tabDash,users:tabUsers,feedback:tabFb,roles:tabRoles}[st.ptab]();
  return banner("cabinet","pd_profile")+'<div class="container page"><div class="prof">'+side+'<section class="pmain">'+body+'</section></div></div>'}
 /* ------------------------------------------------------------ teacher reports → Google Drive (google/teacher-reports.gs) */
 var RP_CATS=["q1","q2","q3","q4","ach"],RP_LBL={q1:"rpQ1",q2:"rpQ2",q3:"rpQ3",q4:"rpQ4",ach:"rpAch"};
-var rp={tree:null,mine:null,loading:false,err:"",busy:{},msg:{},picking:false};
-function rpMe(){var m=(st.user&&st.user.user_metadata)||{},l={};try{l=JSON.parse(localStorage.getItem("gm-drive")||"{}")}catch(e){}return{dept:m.drive_dept||l.dept||"",teacher:m.drive_teacher||l.teacher||""}}
+var rp={mine:null,loading:false,err:"",busy:{},msg:{}};
+/* Папка выбирается сама: по ФИО в профиле. Загружать может только пользователь, которого администратор отметил «Мұғалім». */
 function rpCall(body){var url=(DATA.settings||{}).driveUrl;if(!url||!sb)return Promise.reject(new Error("nourl"));
  return sb.auth.getSession().then(function(r){var tok=r&&r.data&&r.data.session&&r.data.session.access_token;if(!tok)throw new Error("auth");body.token=tok;
   return fetch(url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body)})}).then(function(r){return r.json()}).then(function(j){if(!j||!j.ok)throw new Error(j&&j.error||"err");return j})}
 function rpCurQ(){var m=nowTZ().m;return m>=9&&m<=10?"q1":m>=11?"q2":m<=3?"q3":m<=6?"q4":""}
-function rpLoad(){if(rp.loading)return;rp.loading=true;rp.err="";var me=rpMe();
- rpCall({action:"tree"}).then(function(j){rp.tree=j.tree;if(me.dept&&me.teacher&&!rp.picking)return rpCall({action:"mine",dept:me.dept,teacher:me.teacher}).then(function(k){rp.mine=k.mine},function(e){if(/noTeacher|noDept/.test(e.message))rp.picking=true;else throw e})})
- .catch(function(e){rp.err=/notTeacher/.test(e.message)?t("rpNotT"):t("rpErr")}).then(function(){rp.loading=false;if(st.ptab==="reports")render(true)})}
-function tabReports(){var url=(DATA.settings||{}).driveUrl,me=rpMe();
+function rpIsTeacher(){return !!(st.profile&&st.profile.role==="teacher")}
+function rpLoad(){if(rp.loading)return;rp.loading=true;rp.err="";
+ rpCall({action:"mine"}).then(function(j){rp.mine=j.mine})
+ .catch(function(e){var m=e.message||"";rp.err=/notTeacher/.test(m)?t("rpNotT"):/noMatch/.test(m)?t("rpNoMatch"):/dupName/.test(m)?t("rpDup"):t("rpErr")}).then(function(){rp.loading=false;if(st.ptab==="reports")render(true)})}
+function tabReports(){var url=(DATA.settings||{}).driveUrl,p=st.profile||{};
  var head='<div class="panel rp"><h3>'+ic("file")+esc(t("p_rep"))+'</h3><p class="rp-intro">'+esc(t("rpIntro"))+'</p>';
  if(!url)return head+'<div class="empty"><b>'+esc(t("rpNoUrl"))+'</b></div></div>';
- if(rp.err)return head+'<div class="empty"><b>'+esc(rp.err)+'</b></div></div>';
- if(!rp.tree){setTimeout(rpLoad,0);return head+'<p class="hint rp-load">'+esc(t("rpLoading"))+'</p></div>'}
- if(!me.dept||!me.teacher||rp.picking){var dep=rp.selDept||me.dept||"",dl=rp.tree.depts||[],cur=dl.filter(function(d){return d.name===dep})[0];
-  return head+'<form class="form rp-pick" id="rpPick"><b>'+esc(t("rpWho"))+'</b><label>'+esc(t("rpDept"))+'<select id="rp-dept"><option value="">—</option>'+dl.map(function(d){return '<option'+(d.name===dep?" selected":"")+'>'+esc(d.name)+'</option>'}).join("")+'</select></label>'+
-   (cur?'<label>'+esc(t("rpName"))+'<select id="rp-teacher"><option value="">—</option>'+cur.teachers.map(function(n){return '<option'+(n===me.teacher?" selected":"")+'>'+esc(n)+'</option>'}).join("")+'<option value="__new">'+esc(t("rpNotList"))+'</option></select></label>'+
-    '<label class="rp-new" hidden>'+esc(t("rpNewName"))+'<input id="rp-newname" autocomplete="name"></label><button class="btn btn-primary" type="submit">'+esc(t("rpSave"))+'</button>':'')+'</form></div>'}
+ if(!st.profile)return head+'<p class="hint rp-load">'+esc(t("loading"))+'</p></div>';
+ if(!rpIsTeacher())return head+'<div class="empty"><b>'+esc(t("rpNotT"))+'</b></div></div>';
+ if(rp.err)return head+'<div class="empty"><b>'+esc(rp.err)+'</b>'+(rp.err!==t("rpErr")?'<p class="hint">'+esc(t("fullName"))+': '+esc(p.full_name||"—")+'</p>':'')+'</div></div>';
  if(!rp.mine){setTimeout(rpLoad,0);return head+'<p class="hint rp-load">'+esc(t("rpLoading"))+'</p></div>'}
  var cq=rpCurQ();
- return head+'<div class="rp-who"><div><span class="eyebrow">'+esc(rp.mine.year||"")+' · '+esc(me.dept)+'</span><b>'+esc(me.teacher)+'</b></div><div class="rp-who-acts"><a class="btn btn-soft" href="'+esc(rp.mine.folder)+'" target="_blank" rel="noopener">'+esc(t("rpFolder"))+' ↗</a><button class="btn btn-soft" data-rpchange="1">'+esc(t("rpChange"))+'</button></div></div>'+
+ return head+'<div class="rp-who"><div><span class="eyebrow">'+esc(rp.mine.year||"")+' · '+esc(rp.mine.dept||"")+'</span><b>'+esc(rp.mine.teacher||p.full_name||"")+'</b></div><div class="rp-who-acts"><a class="btn btn-soft" href="'+esc(rp.mine.folder)+'" target="_blank" rel="noopener">'+esc(t("rpFolder"))+' ↗</a></div></div>'+
   '<div class="rp-grid">'+RP_CATS.map(function(k){var fl=(rp.mine.cats||{})[k]||[];
    return '<section class="rp-card'+(k===cq?" cur":"")+(k==="ach"?" ach":"")+'"><div class="rp-h"><h4>'+(k==="ach"?ic("trophy"):'')+esc(t(RP_LBL[k]))+'</h4>'+(k===cq?'<span class="chip">'+esc(t("rpCur"))+'</span>':'')+'</div>'+
     '<p class="rp-n'+(fl.length?" ok":"")+'">'+esc(fl.length?f(t("rpN"),{n:fl.length}):t("rpNone"))+'</p>'+
     (fl.length?'<ul>'+fl.slice(0,3).map(function(x){return '<li><a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.name)+'</a></li>'}).join("")+'</ul>':'')+
     '<label class="btn '+(k===cq?"btn-primary":"btn-outline")+' rp-up'+(rp.busy[k]?" dis":"")+'">'+ic("plus")+esc(t("rpUp"))+'<input type="file" multiple data-rpup="'+k+'"'+(rp.busy[k]?" disabled":"")+'></label>'+
     '<small class="rp-msg" id="rpmsg-'+k+'">'+esc(rp.msg[k]||"")+'</small></section>'}).join("")+'</div></div>'}
-function rpUpload(k,files){var me=rpMe(),list=[].slice.call(files||[]),i=0,bad=[];if(!list.length)return;rp.busy[k]=true;
+function rpUpload(k,files){var list=[].slice.call(files||[]),i=0,bad=[];if(!list.length)return;rp.busy[k]=true;
  function msg(x){rp.msg[k]=x;var el=document.getElementById("rpmsg-"+k);if(el)el.textContent=x}
  render(true);
  (function next(){if(i>=list.length){rp.busy[k]=false;msg(bad.length?bad.join("; "):t("rpDone"));
-   return rpCall({action:"mine",dept:me.dept,teacher:me.teacher}).then(function(j){rp.mine=j.mine},function(){}).then(function(){if(st.ptab==="reports")render(true)})}
+   return rpCall({action:"mine"}).then(function(j){rp.mine=j.mine},function(){}).then(function(){if(st.ptab==="reports")render(true)})}
   var fl=list[i++];msg(f(t("rpUping"),{a:i,b:list.length,f:fl.name}));
   if(fl.size>25*1048576){bad.push(f(t("rpBig"),{f:fl.name}));return next()}
   new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(String(r.result).split(",")[1]||"")};r.onerror=rej;r.readAsDataURL(fl)})
-  .then(function(b64){return rpCall({action:"upload",dept:me.dept,teacher:me.teacher,cat:k,name:fl.name,mime:fl.type||"application/octet-stream",data:b64})})
+  .then(function(b64){return rpCall({action:"upload",cat:k,name:fl.name,mime:fl.type||"application/octet-stream",data:b64})})
   .catch(function(){bad.push(f(t("rpFail"),{f:fl.name}))}).then(next)})()}
-function rpSavePick(form){var dept=(document.getElementById("rp-dept")||{}).value,sel=(document.getElementById("rp-teacher")||{}).value,nn=((document.getElementById("rp-newname")||{}).value||"").trim();
- if(!dept||!sel||(sel==="__new"&&nn.length<5)){toast(t("needTitle"));return}
- busy(form,true);
- var p=sel==="__new"?rpCall({action:"addTeacher",dept:dept,teacher:nn}).then(function(j){return j.teacher}):Promise.resolve(sel);
- p.then(function(name){try{localStorage.setItem("gm-drive",JSON.stringify({dept:dept,teacher:name}))}catch(e){}
-   st.user.user_metadata=Object.assign({},st.user.user_metadata,{drive_dept:dept,drive_teacher:name});
-   return sb.auth.updateUser({data:{drive_dept:dept,drive_teacher:name}}).catch(function(){})})
- .then(function(){busy(form,false);rp.picking=false;rp.mine=null;rp.tree=null;render(true)})
- .catch(function(){busy(form,false);toast(t("rpErr"))})}
-function tabMe(){var p=st.profile||{},m=st.user.user_metadata||{},role=p.role||m.role||"student";
+function tabMe(){var p=st.profile||{},m=st.user.user_metadata||{},role=p.role||"",nameLock=role==="teacher"&&!st.isAdmin;
  return '<div class="panel"><h3>'+esc(t("p_me"))+'</h3><form class="form" id="profForm">'+
   '<div class="avrow"><div class="pava sm">'+(avatarURL()?'<img src="'+esc(avatarURL())+'" alt="">':esc(uname().charAt(0).toUpperCase()))+'</div><label class="addbtn" style="cursor:pointer">'+esc(t("changePhoto"))+'<input type="file" accept="image/*" class="sr" data-avatar="1"></label></div>'+
-  '<label>'+esc(t("fullName"))+'<input id="pf-name" value="'+esc(p.full_name||m.full_name||"")+'" autocomplete="name"></label>'+
-  '<div class="row2"><label>'+esc(t("roleF"))+'<select id="pf-role">'+["student","parent","teacher"].map(function(r){return '<option value="'+r+'"'+(r===role?" selected":"")+'>'+esc(t("r_"+r))+'</option>'}).join("")+'</select></label>'+
+  '<label>'+esc(t("fullName"))+'<input id="pf-name" value="'+esc(p.full_name||m.full_name||"")+'" autocomplete="name"'+(nameLock?' disabled':'')+'>'+(nameLock?'<small class="hint" style="text-align:left;margin:4px 0 0">'+esc(t("nameLocked"))+'</small>':'')+'</label>'+
+  '<div class="row2"><label>'+esc(t("uType"))+'<input value="'+esc(role?t("r_"+role):t("roleNone"))+'" disabled title="'+esc(t("roleByAdmin"))+'"></label>'+
   '<label>'+esc(t("gradeF"))+'<input id="pf-grade" value="'+esc(p.grade||"")+'" maxlength="12"></label></div>'+
   '<div class="row2"><label>'+esc(t("emailF"))+'<input value="'+esc(st.user.email)+'" disabled></label><label>'+esc(t("phoneF"))+'<input id="pf-phone" type="tel" value="'+esc(p.phone||"")+'" autocomplete="tel"></label></div>'+
   msgBox()+'<div class="acts"><button class="btn btn-primary" type="submit">'+esc(t("ok"))+'</button></div></form></div>'}
@@ -1337,7 +1330,30 @@ function roleOf(uid){var A=st.admin;var rid=A&&A.staff[uid];if(!rid)return null;
 function urow(u,withCtl){var rl=roleOf(u.id),me=u.id===st.user.id,A=st.admin;
  var ctl=withCtl?'<select class="rolesel" data-setrole="'+esc(u.id)+'"'+(me?' disabled title="'+esc(t("you"))+'"':'')+' aria-label="'+esc(t("p_roles"))+'"><option value="">'+esc(t("noRole"))+'</option>'+A.roles.map(function(r){return '<option value="'+esc(r.id)+'"'+(rl&&rl.id===r.id?" selected":"")+'>'+esc(r.name)+'</option>'}).join("")+'</select>':'';
  return '<div class="urow"><div class="person" style="min-width:0"><div class="ava" style="width:40px;height:40px;font-size:15px">'+(u.avatar_url?'<img src="'+esc(u.avatar_url)+'" alt="">':esc((u.full_name||u.email||"?").charAt(0).toUpperCase()))+'</div><div style="min-width:0"><b>'+esc(u.full_name||"—")+(me?' · '+esc(t("you")):'')+'</b><span>'+esc(u.email||"")+(u.grade?' · '+esc(u.grade):'')+'</span></div></div>'+
-  '<div class="uside"><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">'+(u.role?'<span class="chip">'+esc(t("r_"+u.role))+'</span>':'')+(rl&&!withCtl?'<span class="chip sample">'+esc(rl.name)+'</span>':'')+'</div><small>'+esc(fmtDate(String(u.created_at).slice(0,10)))+'</small>'+ctl+'</div></div>'}
+  '<div class="uside"><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">'+(u.role?'<span class="chip">'+esc(t("r_"+u.role))+'</span>':'')+(rl&&!withCtl?'<span class="chip sample">'+esc(rl.name)+'</span>':'')+(withCtl&&u.confirmed===null?'<span class="chip sample" title="'+esc(t("notConfD"))+'">'+esc(t("notConf"))+'</span>':'')+'</div><small>'+esc(fmtDate(String(u.created_at).slice(0,10)))+'</small>'+ctl+(withCtl?'<button type="button" class="btn btn-soft" data-uedit="'+esc(u.id)+'" style="padding:6px 12px;font-size:13px;min-height:0">'+ic("edit")+esc(t("uEdit"))+'</button>':'')+'</div></div>'}
+/* администратор: изменить ФИО, почту, пароль, тип (ученик/родитель/учитель) и класс пользователя */
+function openUserEdit(id){var u=(st.admin&&st.admin.users||[]).filter(function(x){return x.id===id})[0];if(!u)return;var me=id===st.user.id;
+ openLayer('<h3>'+esc(t("uEditT"))+'</h3><form class="form" id="uEditForm" data-uid="'+esc(id)+'" novalidate autocomplete="off">'+
+  '<label>'+esc(t("fullName"))+'<input id="ue-name" value="'+esc(u.full_name||"")+'" maxlength="100" required></label>'+
+  '<label>'+esc(t("emailF"))+'<input id="ue-email" type="email" value="'+esc(u.email||"")+'" maxlength="190" required></label>'+
+  '<div class="row2"><label>'+esc(t("uType"))+'<select id="ue-role"><option value="">'+esc(t("roleNone"))+'</option>'+["student","parent","teacher"].map(function(r){return '<option value="'+r+'"'+(u.role===r?" selected":"")+'>'+esc(t("r_"+r))+'</option>'}).join("")+'</select></label>'+
+  '<label>'+esc(t("gradeF"))+'<input id="ue-grade" value="'+esc(u.grade||"")+'" maxlength="12"></label></div>'+
+  '<p class="hint" style="text-align:left;margin:-4px 0 4px">'+esc(t("uTeacherHint"))+'</p>'+
+  '<label>'+esc(t("uNewPass"))+'<input id="ue-pass" type="text" minlength="8" autocomplete="new-password" placeholder="'+esc(t("uPassKeep"))+'"></label>'+
+  (u.confirmed===null?'<label class="check"><input type="checkbox" id="ue-confirm" checked><span>'+esc(t("uConfirm"))+'</span></label>':'')+
+  msgBox()+'<div class="acts" style="justify-content:space-between;flex-wrap:wrap;gap:8px">'+(me?'<span></span>':'<button type="button" class="btn btn-danger" data-udel="'+esc(id)+'">'+esc(st.sureId==="udel"+id?t("sure"):t("uDel"))+'</button>')+'<button class="btn btn-primary" type="submit">'+esc(t("ok"))+'</button></div></form>')}
+function saveUserEdit(form){var id=form.dataset.uid,g=function(x){var el=document.getElementById(x);return el?el.value.trim():""};
+ var a={id:id,full_name:g("ue-name"),email:g("ue-email"),role:document.getElementById("ue-role").value,grade:g("ue-grade")},pw=document.getElementById("ue-pass").value,cf=document.getElementById("ue-confirm");
+ if(!a.full_name){showMsg("needTitle",false);return}if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(a.email)){showMsg("uBadEmail",false);return}
+ if(pw){if(pw.length<8){showMsg("e_short",false);return}a.password=pw}if(cf&&cf.checked)a.confirm=true;
+ busy(form,true);sb.rpc("admin_user_update",a).then(function(r){busy(form,false);
+  if(r.error){var m=r.error.message||"";showMsg(/email_exists/.test(m)?"e_exists":/bad_email/.test(m)?"uBadEmail":/short/.test(m)?"e_short":"e_generic",false);return}
+  closeLayer();toast(t("uSaved"));if(id===st.user.id){st.profile=null;loadProfile()}st.admin=null;render(true)})}
+document.addEventListener("click",function(e){var b=e.target.closest("[data-uedit],[data-udel]");if(!b||!st.isAdmin)return;e.preventDefault();
+ if(b.dataset.uedit){st.sureId=null;openUserEdit(b.dataset.uedit);return}
+ var id=b.dataset.udel;if(st.sureId!=="udel"+id){st.sureId="udel"+id;b.textContent=t("sure");return}st.sureId=null;b.disabled=true;
+ sb.rpc("admin_user_delete",{id:id}).then(function(r){b.disabled=false;if(r.error){toast(/last/i.test(r.error.message)?t("lastAdmin"):t("e_generic"));return}closeLayer();toast(t("uDeleted"));st.admin=null;render(true)})});
+document.addEventListener("submit",function(e){if(e.target.id!=="uEditForm")return;e.preventDefault();e.stopPropagation();saveUserEdit(e.target)},true);
 function tabUsers(){var A=st.admin;if(!A){loadAdmin();return '<div class="panel"><p class="hint">'+esc(t("loading"))+'</p></div>'}
  return '<div class="panel"><div class="toolbar" style="margin-bottom:14px"><h3 style="margin:0">'+esc(t("p_users"))+' <span class="chip">'+A.users.length+'</span></h3><label class="search">'+ic("search")+'<span class="sr">'+esc(t("usersSearch"))+'</span><input id="uq" type="search" placeholder="'+esc(t("usersSearch"))+'" value="'+esc(st.uq)+'"></label></div>'+
   '<div class="pills" style="margin-bottom:14px;align-self:flex-start;display:inline-flex">'+["all","staff","student","parent","teacher"].map(function(r){return '<button data-urole="'+r+'" aria-pressed="'+(st.urole===r)+'">'+esc(r==="all"?t("all"):r==="staff"?t("staffF"):t("r_"+r))+'</button>'}).join("")+'</div>'+
@@ -1348,7 +1364,7 @@ function userRows(){var A=st.admin,q=st.uq.trim().toLowerCase();var list=A.users
  return list.length?list.map(function(u){return urow(u,true)}).join(""):'<div class="empty"><b>'+esc(t(A.users.length?"noResults":"noUsers"))+'</b></div>'}
 var adminLoading=false;
 function loadAdmin(){if(adminLoading||!sb||!st.isAdmin)return;adminLoading=true;
- Promise.all([sb.from("profiles").select("id,full_name,email,role,grade,avatar_url,created_at").order("created_at",{ascending:false}).limit(1000),sb.from("staff").select("user_id,role_id"),sb.from("roles").select("id,name,perms,is_system").order("created_at")]).then(function(r){adminLoading=false;
+ Promise.all([sb.from("profiles").select("id,full_name,email,role,grade,phone,avatar_url,created_at,confirmed,last_sign_in").order("created_at",{ascending:false}).limit(1000),sb.from("staff").select("user_id,role_id"),sb.from("roles").select("id,name,perms,is_system").order("created_at")]).then(function(r){adminLoading=false;
   var staff={};(r[1].data||[]).forEach(function(x){staff[x.user_id]=x.role_id});
   st.admin={users:(r[0].data||[]),staff:staff,roles:(r[2].data||[])};if(st.route.page==="profile"||st.route.page==="admin")render(true)})}
 function tabRoles(){var A=st.admin;if(!A){loadAdmin();return '<div class="panel"><p class="hint">'+esc(t("loading"))+'</p></div>'}
@@ -1365,11 +1381,11 @@ function saveRole(form){var id=form.dataset.roleform,name=form.querySelector(".r
  sb.from("roles").upsert(row).then(function(r){busy(form,false);if(r.error){toast(t("e_generic"));return}st.admin=null;toast(t("roleSaved"));render(true)})}
 
 function loadProfile(){if(!sb||!st.user)return;sb.from("profiles").select("*").eq("id",st.user.id).maybeSingle().then(function(r){st.profile=r&&r.data||null;render(true)})}
-function saveProfile(form){var g=function(x){return document.getElementById(x).value.trim()},row={full_name:g("pf-name"),role:document.getElementById("pf-role").value,grade:g("pf-grade"),phone:g("pf-phone")};
+function saveProfile(form){var g=function(x){return document.getElementById(x).value.trim()},row={full_name:g("pf-name"),grade:g("pf-grade"),phone:g("pf-phone")};
  if(!row.full_name){showMsg("needTitle",false);return}busy(form,true);
  sb.from("profiles").upsert(Object.assign({id:st.user.id,email:st.user.email},row)).then(function(r){
   if(r.error){busy(form,false);showMsg("e_generic",false,r.error.message);return}
-  sb.auth.updateUser({data:{full_name:row.full_name,role:row.role}}).then(function(){busy(form,false);st.profile=Object.assign(st.profile||{},row);st.admin=null;toast(t("profSaved"));render(true)})})}
+  busy(form,false);if(st.profile&&st.profile.role==="teacher"&&!st.isAdmin)row.full_name=st.profile.full_name;st.profile=Object.assign(st.profile||{},row);st.user.user_metadata=Object.assign({},st.user.user_metadata,{full_name:row.full_name});st.admin=null;toast(t("profSaved"));render(true)})}
 function uploadAvatar(file){shrink(file,400).then(function(src){return fetch(src)}).then(function(r){return r.blob()}).then(function(b){var path="avatars/"+st.user.id+"/avatar.jpg";
  return sb.storage.from("media").upload(path,b,{contentType:"image/jpeg",upsert:true,cacheControl:"60"}).then(function(r){if(r.error)throw r.error;var url=sb.storage.from("media").getPublicUrl(path).data.publicUrl+"?v="+Date.now();
   return sb.from("profiles").upsert({id:st.user.id,email:st.user.email,avatar_url:url}).then(function(r2){if(r2.error)throw r2.error;st.profile=Object.assign(st.profile||{},{avatar_url:url});st.admin=null;toast(t("profSaved"));render(true)})})}).catch(function(){toast(t("upErr"))})}
@@ -1387,11 +1403,11 @@ function adminTabs(){var tb=[["dash","p_dash","star"],["content","a_content","bo
 /* ------------------------------------------------------------ backup & restore (admin) */
 var bkp={busy:false,msg:""};
 function loadJs(src,name){return new Promise(function(res,rej){if(window[name])return res();var s=document.createElement("script");s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
-var MEDIA_RE=/https:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\/media\/[^"'\s?)\\<>]+/g;
+var MEDIA_RE=/https?:\/\/[^"'\s\/]+(?:\/storage\/v1\/object\/public\/media|\/uploads\/media)\/[^"'\s?)\\<>]+/g;
 function tabBackup(){var last="";try{last=localStorage.getItem("gm-lastbk")||""}catch(e){}
  return '<div class="bkp"><section class="panel"><h3>'+ic("file")+esc(t("bkT"))+'</h3><p>'+esc(t("bkD"))+'</p><button class="btn btn-primary" data-bkpdo="1"'+(bkp.busy?' disabled':'')+'>'+esc(t("bkGo"))+'</button><p class="hint bkmsg" id="bkpmsg">'+esc(bkp.msg||(last?f(t("bkLast"),{d:fmtDate(last)}):""))+'</p></section>'+
  '<section class="panel"><h3>'+ic("gear")+esc(t("rsT"))+'</h3><p>'+esc(t("rsD"))+'</p><label class="filepick">'+esc(t("rsPick"))+'<input type="file" accept=".zip,application/zip" data-bkprs="1"></label><div class="hint bkmsg" id="rsmsg"></div></section>'+
- '<section class="panel"><h3>'+ic("shield")+esc(t("autoT"))+'</h3><p>'+esc(t("autoD"))+'</p><a class="btn btn-soft" href="https://github.com/bigyourfriend-ops/gymnasium/actions/workflows/backup.yml" target="_blank" rel="noopener">'+esc(t("autoGo"))+' ↗</a></section></div>'}
+ '<section class="panel"><h3>'+ic("shield")+esc(t("autoT"))+'</h3><p>'+esc(t("autoD"))+'</p></section></div>'}
 function bkMsg(id,x){if(id==="bkpmsg")bkp.msg=x;var el=document.getElementById(id);if(el)el.textContent=x}
 function doBackup(){if(bkp.busy||!sb)return;bkp.busy=true;var b0=document.querySelector("[data-bkpdo]");if(b0)b0.disabled=true;bkMsg("bkpmsg",t("bkPrep"));
  var names=["site_content","roles","staff","profiles","feedback","feedback_badwords"],list=[],fail=0,zip;
@@ -1422,7 +1438,7 @@ function doRestore(){var p=rsPending;if(!p||!sb||!st.user)return;rsPending=null;
  new Promise(function(res){(function next(){if(k>=files.length)return res();var n=files[k++];bkMsg("rsmsg",f(t("rsFiles"),{a:k,b:files.length}));
    zip.file(n).async("blob").then(function(bl){var path=n.slice(6),e=(path.split(".").pop()||"").toLowerCase();return sb.storage.from("media").upload(path,bl,{contentType:ct[e]||"application/octet-stream",cacheControl:"31536000",upsert:false})}).catch(function(){}).then(next)})()})
  .then(function(){bkMsg("rsmsg",t("rsSave"));var now=new Date().toISOString();
-  var rows=b.db.site_content.map(function(r){var j=JSON.stringify(r.data).replace(/https:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\/media\//g,newBase);return{id:r.id,data:JSON.parse(j),updated_at:now,updated_by:st.user.id}});
+  var rows=b.db.site_content.map(function(r){var j=JSON.stringify(r.data).replace(/https?:\/\/[^"'\s\/]+(?:\/storage\/v1\/object\/public\/media|\/uploads\/media)\//g,newBase);return{id:r.id,data:JSON.parse(j),updated_at:now,updated_by:st.user.id}});
   return sb.from("site_content").upsert(rows).then(function(r){if(r.error)throw r.error;
    var roles=(b.db.roles||[]).filter(function(x){return !x.is_system}).map(function(x){return{id:x.id,name:x.name,perms:x.perms}});
    return roles.length?sb.from("roles").upsert(roles).then(function(){},function(){}):null})})
@@ -1587,7 +1603,7 @@ function setUser(u){var was=st.user&&st.user.id;st.user=u||null;
  if(!u){st.canEdit=false;st.isAdmin=false;st.perms=[];st.roleName="";st.editing=false;st.profile=null;st.admin=null;st.fbAdmin=null;userHooks();render(true);return}
  if(was===u.id)return;
  sb.from("staff").select("role_id,roles(name,perms)").eq("user_id",u.id).maybeSingle().then(function(r){var ro=r&&r.data&&r.data.roles;
-  st.perms=(ro&&ro.perms)||[];st.roleName=(ro&&ro.name)||"";st.canEdit=st.perms.some(function(p){return p!=="tests"&&p!=="tests_all"});st.isAdmin=can("users");
+  st.perms=(ro&&ro.perms)||[];st.roleName=(ro&&ro.name)||"";st.canEdit=st.perms.length>0;st.isAdmin=can("users");
   userHooks();render(true);loadProfile()})}
 if(sb){
  sb.from("site_content").select("id,data,updated_at,updated_by").then(function(r){if(!r||r.error||!r.data||!r.data.length||st.dirty)return;

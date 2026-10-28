@@ -1,0 +1,5 @@
+# файлы, которые живут только на хостинге
+/uploads/media/
+/api/data/gm-config.php
+/api/data/*.json
+.DS_Store

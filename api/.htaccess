@@ -1,0 +1,8 @@
+# Сервер сайта. Передаём заголовок Authorization в PHP (на некоторых настройках Apache он теряется).
+Options -Indexes
+<IfModule mod_setenvif.c>
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+</IfModule>
+<FilesMatch "^\.user\.ini$">
+  Require all denied
+</FilesMatch>

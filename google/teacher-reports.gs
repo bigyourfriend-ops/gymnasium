@@ -11,12 +11,15 @@
  *   3. «Развернуть» → «Новое развертывание» → тип «Веб-приложение»:
  *      Выполнять как: «Я»;  У кого есть доступ: «Все».  Скопировать ссылку …/exec.
  *   4. На сайте: Әкімші панелі → Баптаулар → «Google Drive скрипті» → вставить ссылку → Сақтау → Жариялау.
+ *
+ * Кто может загружать: только пользователь сайта, которого администратор отметил «Мұғалім».
+ * Папка выбирается сама — по ФИО в профиле сайта (регистр, порядок слов, ё/е и казахские буквы не важны).
+ * Если ФИО не совпало ни с одной папкой — загрузка закрыта, пока администратор не исправит ФИО на сайте.
  */
 
 // ---------- настройки ----------
 var CONFIG = {
-  SUPABASE_URL: 'https://nrtfzmaxpeqqzfmrlnro.supabase.co',
-  SUPABASE_KEY: 'sb_publishable_GzWeyuE9sOaot5H1IiEJTA_Gs6AQ83m',   // публичный ключ (как в config.js)
+  SITE_API: 'https://gmonline.kz/api/',                                // сервер сайта на ps.kz
   FIRST_YEAR_FOLDER_ID: '1E0AiU9ZZK1sgaGWv3LQCD0ng7O6T_1Kj',        // папка «2025-2026» — образец структуры
   MAX_MB: 25
 };
@@ -88,21 +91,34 @@ function log_(row) {
 }
 
 // ---------- проверка, что запрос от учителя сайта ----------
+// Сайт отвечает: вошёл ли человек, отметил ли его администратор «Мұғалім», его ФИО и нет ли второго учителя с таким же ФИО.
 function verify_(token) {
   if (!token) throw new Error('auth');
-  var cache = CacheService.getScriptCache(), key = 'u_' + Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, token));
+  var cache = CacheService.getScriptCache(), key = 'v_' + Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, token));
   var hit = cache.get(key); if (hit) return JSON.parse(hit);
-  var h = { apikey: CONFIG.SUPABASE_KEY, Authorization: 'Bearer ' + token };
-  var r = UrlFetchApp.fetch(CONFIG.SUPABASE_URL + '/auth/v1/user', { headers: h, muteHttpExceptions: true });
+  var r = UrlFetchApp.fetch(CONFIG.SITE_API + '?a=drive_me', { method: 'post', contentType: 'application/json', payload: JSON.stringify({ token: token }), muteHttpExceptions: true });
   if (r.getResponseCode() !== 200) throw new Error('auth');
-  var u = JSON.parse(r.getContentText());
-  var pr = JSON.parse(UrlFetchApp.fetch(CONFIG.SUPABASE_URL + '/rest/v1/profiles?select=full_name,role&id=eq.' + u.id, { headers: h, muteHttpExceptions: true }).getContentText() || '[]');
-  var staff = JSON.parse(UrlFetchApp.fetch(CONFIG.SUPABASE_URL + '/rest/v1/staff?select=role_id&user_id=eq.' + u.id, { headers: h, muteHttpExceptions: true }).getContentText() || '[]');
-  var role = (pr[0] && pr[0].role) || (u.user_metadata && u.user_metadata.role);
-  if (role !== 'teacher' && !(Array.isArray(staff) && staff.length)) throw new Error('notTeacher');
-  var me = { id: u.id, email: u.email };
-  cache.put(key, JSON.stringify(me), 600);
+  var u = JSON.parse(r.getContentText() || '{}');
+  if (!u.ok) throw new Error('auth');
+  if (!u.teacher) throw new Error('notTeacher');
+  if (u.dup) throw new Error('dupName');
+  var me = { id: u.id, email: u.email, name: u.full_name, key: fioKey_(u.full_name) };
+  cache.put(key, JSON.stringify(me), 300);
   return me;
+}
+// ФИО → ключ для сравнения (как на сайте): верхний регистр, ё→е, казахские буквы → русские, слова по алфавиту
+function fioKey_(s) {
+  var map = { 'Ё': 'Е', 'Ә': 'А', 'І': 'И', 'Ң': 'Н', 'Ғ': 'Г', 'Ү': 'У', 'Ұ': 'У', 'Қ': 'К', 'Ө': 'О', 'Һ': 'Х', 'Й': 'И' };
+  s = String(s || '').toUpperCase().replace(/[ЁӘІҢҒҮҰҚӨҺЙ]/g, function (c) { return map[c]; });
+  return s.split(/[^A-ZА-Я]+/).filter(String).sort().join(' ');
+}
+// папка учителя по ФИО из профиля
+function myFolder_(me) {
+  if (!me.key) throw new Error('noMatch');
+  var t = tree_(), hits = [];
+  t.depts.forEach(function (d) { d.teachers.forEach(function (n) { if (fioKey_(n) === me.key) hits.push({ dept: d.name, teacher: n }); }); });
+  if (!hits.length) throw new Error('noMatch');
+  return hits[0];
 }
 
 // ---------- веб-приложение ----------
@@ -134,7 +150,7 @@ function mine_(dept, teacher) {
     files.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
     res[k] = files;
   });
-  return { year: props_().getProperty('YEAR_NAME'), folder: f.getUrl(), cats: res };
+  return { year: props_().getProperty('YEAR_NAME'), dept: dept, teacher: teacher, folder: f.getUrl(), cats: res };
 }
 function doGet() {   // проверка, что скрипт работает (без данных)
   return out_({ ok: true, year: props_().getProperty('YEAR_NAME') || null });
@@ -142,24 +158,17 @@ function doGet() {   // проверка, что скрипт работает (
 function doPost(e) {
   var lock = LockService.getScriptLock();
   try {
-    var b = JSON.parse(e.postData.contents), me = verify_(b.token);
-    if (b.action === 'tree') return out_({ ok: true, tree: tree_() });
-    if (b.action === 'mine') return out_({ ok: true, mine: mine_(b.dept, b.teacher) });
-    if (b.action === 'addTeacher') {
-      var name = String(b.teacher || '').trim().replace(/\s+/g, ' ').toUpperCase();
-      if (name.length < 5) throw new Error('badName');
-      lock.waitLock(20000); teacherFolder_(b.dept, name, true); lock.releaseLock();
-      return out_({ ok: true, teacher: name });
-    }
+    var b = JSON.parse(e.postData.contents), me = verify_(b.token), my = myFolder_(me);
+    if (b.action === 'mine') return out_({ ok: true, mine: mine_(my.dept, my.teacher) });
     if (b.action === 'upload') {
       if (!CATS[b.cat]) throw new Error('badCat');
       var bytes = Utilities.base64Decode(b.data);
       if (bytes.length > CONFIG.MAX_MB * 1048576) throw new Error('tooBig');
       lock.waitLock(20000);
-      var tf = teacherFolder_(b.dept, b.teacher, false), cf = child_(tf, CATS[b.cat], true);
+      var tf = teacherFolder_(my.dept, my.teacher, false), cf = child_(tf, CATS[b.cat], true);
       lock.releaseLock();
       var file = cf.createFile(Utilities.newBlob(bytes, b.mime || 'application/octet-stream', String(b.name || 'file').slice(0, 180)));
-      try { log_([new Date(), b.teacher, b.dept, CATS[b.cat], file.getName(), file.getUrl(), me.email]); } catch (x) {}
+      try { log_([new Date(), my.teacher, my.dept, CATS[b.cat], file.getName(), file.getUrl(), me.email]); } catch (x) {}
       return out_({ ok: true, url: file.getUrl(), name: file.getName() });
     }
     throw new Error('badAction');

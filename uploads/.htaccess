@@ -1,0 +1,11 @@
+# Здесь только фото и PDF сайта. Скрипты в этой папке не выполняются.
+Options -Indexes -ExecCGI
+<FilesMatch "\.(php\d?|phtml|phar|pl|py|cgi|sh|htaccess|ini)$">
+  Require all denied
+</FilesMatch>
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  <FilesMatch "\.(jpe?g|png|webp|pdf)$">
+    Header set Cache-Control "public, max-age=31536000"
+  </FilesMatch>
+</IfModule>

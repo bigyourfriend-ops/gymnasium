@@ -1,19 +1,27 @@
 # Выгрузка сайта на хостинг PS.kz (gmonline.kz) по FTP.
-# Запуск вручную: GitHub → Actions → «Выгрузка на gmonline.kz» → Run workflow.
-# Режим «zaglushka» — на домене страница «Сайт в разработке» (файлы сайта с хостинга убираются).
-# Режим «sait» — выкладывается полный сайт.
-# Нужны секреты репозитория: FTP_SERVER, FTP_USERNAME, FTP_PASSWORD
-# (домашняя папка FTP-учётки — /httpdocs).
+# Автоматически — после каждого изменения в ветке main (через 1–2 минуты сайт обновится).
+# Вручную: GitHub → Actions → «Выгрузка на gmonline.kz» → Run workflow.
+#   sait      — полный сайт (обычный режим);
+#   zaglushka — страница «Сайт в разработке» (файлы сайта с хостинга убираются,
+#               но база MySQL, загруженные фото/PDF и файл настроек gm-config.php остаются).
+# Нужны секреты репозитория: FTP_SERVER, FTP_USERNAME, FTP_PASSWORD (домашняя папка FTP-учётки — /httpdocs).
+# Пароль базы данных сюда НЕ кладётся: он только в gm-config.php на хостинге.
 name: Выгрузка на gmonline.kz
 
 on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "README.md"
+      - "google/**"
+      - "docs/**"
   workflow_dispatch:
     inputs:
       mode:
-        description: "Что выложить: zaglushka — «Сайт в разработке», sait — полный сайт"
+        description: "Что выложить: sait — полный сайт, zaglushka — «Сайт в разработке»"
         type: choice
-        options: [zaglushka, sait]
-        default: zaglushka
+        options: [sait, zaglushka]
+        default: sait
 
 concurrency:
   group: deploy-pskz
@@ -22,6 +30,8 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      MODE: ${{ inputs.mode || 'sait' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -36,11 +46,16 @@ jobs:
             exit 1
           fi
 
+      - name: Проверка PHP
+        if: env.MODE == 'sait'
+        run: for f in $(find api -name '*.php'); do php -l "$f" || exit 1; done
+
       - name: Подготовка файлов
         run: |
           mkdir -p _out
-          if [ "${{ inputs.mode }}" = "sait" ]; then
-            cp -r index.html config.js assets .nojekyll _out/
+          if [ "$MODE" = "sait" ]; then
+            cp -r index.html config.js assets api uploads _out/
+            rm -f _out/api/data/gm-config.php _out/api/data/*.json
           else
             cp maintenance/index.html maintenance/logo.png _out/
             printf 'User-agent: *\nDisallow: /\n' > _out/robots.txt
@@ -56,3 +71,8 @@ jobs:
           protocol: ftps
           local-dir: ./_out/
           server-dir: ./
+          exclude: |
+            **/.git*
+            **/.git*/**
+            uploads/media/**
+            api/data/gm-config.php
