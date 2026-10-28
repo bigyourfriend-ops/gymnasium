@@ -11,6 +11,7 @@
  *   3. «Развернуть» → «Новое развертывание» → тип «Веб-приложение»:
  *      Выполнять как: «Я»;  У кого есть доступ: «Все».  Скопировать ссылку …/exec.
  *   4. На сайте: Әкімші панелі → Баптаулар → «Google Drive скрипті» → вставить ссылку → Сақтау → Жариялау.
+ *   5. Выбрать функцию setupFast → «Выполнить» → разрешить доступ: включит быструю работу (снимок папок, обновление раз в час).
  *
  * Кто может загружать: только пользователь сайта, которого администратор отметил «Мұғалім».
  * Папка выбирается сама — по ФИО в профиле сайта (регистр, порядок слов, ё/е и казахские буквы не важны).
@@ -71,7 +72,7 @@ function setupNewYear() {
   }
   p.setProperty('YEAR_ID', dst.getId()); p.setProperty('YEAR_NAME', name);
   log_();   // создаст журнал
-  CacheService.getScriptCache().remove('tree');
+  buildSnap_();   // снимок папок нового года
   Logger.log('Готово: «' + name + '» (' + dst.getUrl() + '), учителей: ' + made);
 }
 
@@ -112,74 +113,98 @@ function fioKey_(s) {
   s = String(s || '').toUpperCase().replace(/[ЁӘІҢҒҮҰҚӨҺЙ]/g, function (c) { return map[c]; });
   return s.split(/[^A-ZА-Я]+/).filter(String).sort().join(' ');
 }
+// ---------- снимок папок: хранится в скрипте, поэтому сайт получает его сразу ----------
+// Снимок = список папок учителей года (методобъединение, ФИО, id папок) и число файлов в каждой подпапке.
+// Обновляется: после каждой загрузки с сайта (сразу), раз в час в фоне (setupFast) и по кнопке «Жаңарту» на сайте.
+var SNAP_CHUNK = 4000;
+function store_(name, obj) {
+  var p = props_(), s = JSON.stringify(obj), n = Math.ceil(s.length / SNAP_CHUNK), old = +(p.getProperty(name + '_n') || 0), all = {};
+  for (var i = 0; i < n; i++) all[name + '_' + i] = s.slice(i * SNAP_CHUNK, (i + 1) * SNAP_CHUNK);
+  all[name + '_n'] = String(n);
+  p.setProperties(all);
+  for (var j = n; j < old; j++) p.deleteProperty(name + '_' + j);
+  try { CacheService.getScriptCache().put(name, s, 21600); } catch (x) {}
+}
+function load_(name) {
+  var c = CacheService.getScriptCache().get(name); if (c) return JSON.parse(c);
+  var p = props_(), n = +(p.getProperty(name + '_n') || 0); if (!n) return null;
+  var all = p.getProperties(), s = '';
+  for (var i = 0; i < n; i++) s += all[name + '_' + i] || '';
+  try { var o = JSON.parse(s); try { CacheService.getScriptCache().put(name, s, 21600); } catch (x) {} return o; } catch (e) { return null; }
+}
+function folderUrl_(id) { return 'https://drive.google.com/drive/folders/' + id; }
+function buildSnap_() {
+  var y = yearFolder_(), items = [], it = y.getFolders();
+  while (it.hasNext()) {
+    var d = it.next(), ti = d.getFolders();
+    while (ti.hasNext()) {
+      var tf = ti.next(), c = {}, n = {}, any = false;
+      CAT_ORDER.forEach(function (k) {
+        var cf = child_(tf, CATS[k], false), m = 0;
+        if (cf) { any = true; c[k] = cf.getId(); var fi = cf.getFiles(); while (fi.hasNext()) { fi.next(); m++; } }
+        n[k] = m;
+      });
+      if (any) items.push({ dept: d.getName(), teacher: tf.getName(), key: fioKey_(tf.getName()), f: tf.getId(), c: c, n: n });   // папка без подпапок — не учитель
+    }
+  }
+  items.sort(function (a, b) { return a.dept.localeCompare(b.dept) || a.teacher.localeCompare(b.teacher); });
+  var s = { year: props_().getProperty('YEAR_NAME'), at: new Date().toISOString(), items: items };
+  store_('snap', s);
+  return s;
+}
+function snap_() {
+  var s = load_('snap');
+  if (!s || s.year !== props_().getProperty('YEAR_NAME')) s = buildSnap_();
+  return s;
+}
+/** Запустить один раз (выбрать setupFast → «Выполнить» → разрешить доступ): построит снимок папок
+    и включит его фоновое обновление раз в час. После этого сайт открывает отчёты за 1–2 секунды. */
+function setupFast() {
+  ScriptApp.getProjectTriggers().forEach(function (t) { if (t.getHandlerFunction() === 'rebuild') ScriptApp.deleteTrigger(t); });
+  ScriptApp.newTrigger('rebuild').timeBased().everyHours(1).create();
+  var s = buildSnap_();
+  Logger.log('Готово: папок учителей — ' + s.items.length + '. Фоновое обновление — раз в час.');
+}
+function rebuild() { var lock = LockService.getScriptLock(); if (!lock.tryLock(1000)) return; try { buildSnap_(); } finally { lock.releaseLock(); } }
+
+// ---------- веб-приложение ----------
+function out_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 // папка учителя по ФИО из профиля
 function myFolder_(me) {
   if (!me.teacher) throw new Error('notTeacher');
   if (me.dup) throw new Error('dupName');
   if (!me.key) throw new Error('noMatch');
-  var t = tree_(), hits = [];
-  t.depts.forEach(function (d) { d.teachers.forEach(function (n) { if (fioKey_(n) === me.key) hits.push({ dept: d.name, teacher: n }); }); });
-  if (!hits.length) throw new Error('noMatch');
-  return hits[0];
-}
-
-// ---------- веб-приложение ----------
-function out_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
-function tree_() {
-  var cache = CacheService.getScriptCache(), c = cache.get('tree'); if (c) return JSON.parse(c);
-  var y = yearFolder_(), depts = [], it = y.getFolders();
-  while (it.hasNext()) {
-    var d = it.next(), ts = [], ti = d.getFolders();
-    while (ti.hasNext()) { var tf = ti.next(); if (isTeacherFolder_(tf)) ts.push(tf.getName()); }
-    if (ts.length) depts.push({ name: d.getName(), teachers: ts.sort() });
-  }
-  depts.sort(function (a, b) { return a.name.localeCompare(b.name); });
-  var t = { year: props_().getProperty('YEAR_NAME'), depts: depts };
-  cache.put('tree', JSON.stringify(t), 600);
-  return t;
-}
-function teacherFolder_(dept, teacher, create) {
-  var d = child_(yearFolder_(), dept, false); if (!d) throw new Error('noDept');
-  var f = child_(d, teacher, create); if (!f) throw new Error('noTeacher');
-  if (create) { ensureCats_(f); CacheService.getScriptCache().remove('tree'); }
-  return f;
-}
-function mine_(dept, teacher) {
-  var f = teacherFolder_(dept, teacher, false), res = {};
-  CAT_ORDER.forEach(function (k) {
-    var cf = child_(f, CATS[k], true), files = [], it = cf.getFiles();
-    while (it.hasNext()) { var x = it.next(); files.push({ name: x.getName(), url: x.getUrl(), date: x.getDateCreated().toISOString() }); }
-    files.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
-    res[k] = files;
-  });
-  return { year: props_().getProperty('YEAR_NAME'), dept: dept, teacher: teacher, folder: f.getUrl(), cats: res };
+  var hit = snap_().items.filter(function (x) { return x.key === me.key; })[0];
+  if (!hit) throw new Error('noMatch');
+  return hit;
 }
 // какая папка: администратор может выбрать любую (dept + teacher), остальные — только свою
 function target_(me, b) {
   if (me.admin && b.dept && b.teacher) {
-    var ok = tree_().depts.some(function (d) { return d.name === b.dept && d.teachers.indexOf(b.teacher) >= 0; });
-    if (!ok) throw new Error('noTeacher');
-    return { dept: b.dept, teacher: b.teacher };
+    var hit = snap_().items.filter(function (x) { return x.dept === b.dept && x.teacher === b.teacher; })[0];
+    if (!hit) throw new Error('noTeacher');
+    return hit;
   }
   return myFolder_(me);
 }
+function catFolder_(item, k) {
+  if (item.c && item.c[k]) { try { return DriveApp.getFolderById(item.c[k]); } catch (e) {} }
+  return child_(DriveApp.getFolderById(item.f), CATS[k], true);
+}
+function mine_(item) {
+  var res = {};
+  CAT_ORDER.forEach(function (k) {
+    var files = [], it = catFolder_(item, k).getFiles();
+    while (it.hasNext()) { var x = it.next(); files.push({ name: x.getName(), url: x.getUrl(), date: x.getDateCreated().toISOString() }); }
+    files.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+    res[k] = files;
+  });
+  return { year: props_().getProperty('YEAR_NAME'), dept: item.dept, teacher: item.teacher, folder: folderUrl_(item.f), cats: res };
+}
 // сводка для администратора: все учителя года и сколько файлов в каждой подпапке
 function overview_(refresh) {
-  var cache = CacheService.getScriptCache(), c = !refresh && cache.get('ov'); if (c) return JSON.parse(c);
-  if (refresh) cache.remove('tree');
-  var t = tree_(), y = yearFolder_(), items = [];
-  t.depts.forEach(function (d) {
-    var df = child_(y, d.name, false); if (!df) return;
-    d.teachers.forEach(function (n) {
-      var tf = child_(df, n, false); if (!tf) return;
-      var cnt = {};
-      CAT_ORDER.forEach(function (k) { var cf = child_(tf, CATS[k], false), m = 0; if (cf) { var it = cf.getFiles(); while (it.hasNext()) { it.next(); m++; } } cnt[k] = m; });
-      items.push({ dept: d.name, teacher: n, key: fioKey_(n), folder: tf.getUrl(), n: cnt });
-    });
-  });
-  var o = { year: props_().getProperty('YEAR_NAME'), at: new Date().toISOString(), items: items };
-  try { cache.put('ov', JSON.stringify(o), 300); } catch (x) {}
-  return o;
+  var s = refresh ? buildSnap_() : snap_();
+  return { year: s.year, at: s.at, items: s.items.map(function (x) { return { dept: x.dept, teacher: x.teacher, key: x.key, folder: folderUrl_(x.f), n: x.n }; }) };
 }
 function doGet() {   // проверка, что скрипт работает (без данных)
   return out_({ ok: true, year: props_().getProperty('YEAR_NAME') || null });
@@ -190,17 +215,17 @@ function doPost(e) {
     var b = JSON.parse(e.postData.contents), me = verify_(b.token);
     if (b.action === 'overview') { if (!me.admin) throw new Error('notAdmin'); return out_({ ok: true, overview: overview_(!!b.refresh) }); }
     var my = target_(me, b);
-    if (b.action === 'mine') return out_({ ok: true, mine: mine_(my.dept, my.teacher) });
+    if (b.action === 'mine') return out_({ ok: true, mine: mine_(my) });
     if (b.action === 'upload') {
       if (!CATS[b.cat]) throw new Error('badCat');
       var bytes = Utilities.base64Decode(b.data);
       if (bytes.length > CONFIG.MAX_MB * 1048576) throw new Error('tooBig');
-      lock.waitLock(20000);
-      var tf = teacherFolder_(my.dept, my.teacher, false), cf = child_(tf, CATS[b.cat], true);
-      lock.releaseLock();
-      var file = cf.createFile(Utilities.newBlob(bytes, b.mime || 'application/octet-stream', String(b.name || 'file').slice(0, 180)));
+      var file = catFolder_(my, b.cat).createFile(Utilities.newBlob(bytes, b.mime || 'application/octet-stream', String(b.name || 'file').slice(0, 180)));
       try { log_([new Date(), my.teacher, my.dept, CATS[b.cat], file.getName(), file.getUrl(), me.email]); } catch (x) {}
-      CacheService.getScriptCache().remove('ov');
+      // сразу поправить число файлов в снимке
+      if (lock.tryLock(15000)) {
+        try { var s = snap_(); s.items.forEach(function (x) { if (x.f === my.f) x.n[b.cat] = (x.n[b.cat] || 0) + 1; }); store_('snap', s); } finally { lock.releaseLock(); }
+      }
       return out_({ ok: true, url: file.getUrl(), name: file.getName() });
     }
     throw new Error('badAction');
