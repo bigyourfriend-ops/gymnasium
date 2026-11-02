@@ -37,7 +37,7 @@ var T={
  d3:["Жалпы орта білім","Общее среднее образование","Upper secondary"], d3d:["Бейіндік пәндер және ҰБТ-ға дайындық.","Профильные предметы и подготовка к ЕНТ.","Specialised subjects and national exam (UNT) preparation."],
  d4:["Цифрлық жобалар","Цифровые проекты","Digital projects"], d4d:["Оқушылар газеті, бейнелер және шығармашылық жобалар.","Газета, видео и творческие проекты учеников.","Sports, chess, robotics, dombra and more."],
  d5:["Олимпиадалар","Олимпиады","Olympiads"], d5d:["Пәндік олимпиадалар мен байқаулардағы жетістіктер.","Достижения в предметных олимпиадах и конкурсах.","Results in subject olympiads and competitions."],
- d6:["Түлектер","Выпускники","Alumni"], d6d:["Асхана жұмысы мен тамақ сапасына қатысты құжаттар.","Документы о питании и контроле качества.","Documents about meals and quality control."],
+ d6:["Тамақтану","Питание","Nutrition"], d6d:["Асхана жұмысы мен тамақ сапасына қатысты құжаттар.","Документы о питании и контроле качества.","Documents about meals and quality control."],
  grades14:["1–4 сынып","1–4 классы","Grades 1–4"], grades59:["5–9 сынып","5–9 классы","Grades 5–9"], grades1011:["10–11 сынып","10–11 классы","Grades 10–11"], allGrades:["Барлық сыныптар","Все классы","All grades"],
  open:["Ашу","Открыть","Open"],
  statsT:["Гимназия сандарда","Гимназия в цифрах","The gymnasium in numbers"],
@@ -55,7 +55,7 @@ var T={
  pd_events:["Гимназияның алдағы және өткен іс-шаралары.","Предстоящие и прошедшие мероприятия гимназии.","Upcoming and past school events."],
 
  pd_gallery:["Оқу жылдары бойынша фотоальбомдар.","Фотоальбомы по учебным годам.","Photo albums by academic year."],
- pd_alumni:["Гимназия түлектері: қайда оқиды, қандай жетістікке жетті.","Выпускники гимназии: где учатся и чего достигли.","Our graduates: where they study and what they've achieved."],
+ pd_alumni:["Асхана жұмысы, тамақтану сапасы және бақылау құжаттары.","Документы по организации питания, качеству и контролю школьного питания.","School meals, food quality and inspection documents."],
  pd_news:["Гимназия өміріндегі оқиғалар, жетістіктер мен хабарландырулар.","События, достижения и объявления гимназии.","Events, achievements and announcements."],
  pd_docs:["Нормативтік құжаттар мен пайдалы электронды ресурстар.","Нормативные документы и полезные электронные ресурсы.","Regulations and useful online resources."],
  pd_contacts:["Мекенжай, телефон, жұмыс уақыты және жиі қойылатын сұрақтар.","Адрес, телефон, часы работы и частые вопросы.","Address, phone, office hours and common questions."],
@@ -705,7 +705,7 @@ var T19={heroAbout:["Гимназия туралы","О гимназии","About
  dirHint:["Ұсыныс, сұрақ немесе алғысыңызды жазыңыз — хатыңыз директорға жетеді.","Напишите предложение, вопрос или благодарность — письмо дойдёт до директора.","Send a suggestion, question or thanks — it reaches the principal."],
  f_dirText:["Директордың сөзі («Директор панелі» терезесінде)","Обращение директора (в окне «Панель директора»)","Principal's message"]};
 for(var _k19 in T19)T[_k19]=T19[_k19];
-var T18={f_foodcat:["Бөлім","Раздел","Category"],acYearT:["{y} оқу жылының шығарылымдары","Выпуски {y} учебного года","{y} school year"],acOther:["Күні көрсетілмеген","Без даты","Undated"],nIssues:["{n} шығарылым","Выпусков: {n}","{n} issues"],
+var T18={f_foodcat:["Бөлім","Раздел","Category"],food_order:["Жылдық бұйрық","Годовой приказ","Annual order"],food_events:["Мероприятия","Мероприятия","Activities"],food_inspection:["Бракераж","Бракераж","Food inspection"],acYearT:["{y} оқу жылының шығарылымдары","Выпуски {y} учебного года","{y} school year"],acOther:["Күні көрсетілмеген","Без даты","Undated"],nIssues:["{n} шығарылым","Выпусков: {n}","{n} issues"],
  f_pages:["Газет беттері","Страницы выпуска","Issue pages"],addPages:["+ Беттерді қосу (суреттер)","+ Добавить страницы (картинки)","+ Add pages (images)"],
  pagesHint:["Бірнеше суретті бірден таңдауға болады — олар файл аты бойынша ретімен қойылады. Ретін ‹ › батырмаларымен өзгертіңіз.","Можно выбрать сразу несколько картинок — они встанут по порядку имён файлов. Порядок меняется кнопками ‹ ›.","Pick several images at once — they are ordered by file name. Reorder with ‹ ›."],
  upPages:["Жүктелуде: {a} / {b}","Загрузка: {a} / {b}","Uploading {a} / {b}"],nPages:["{n} бет","{n} стр.","{n} pages"],pageN:["{n}-бет","Страница {n}","Page {n}"],
@@ -1617,7 +1617,7 @@ function pageAdmin(){
 function tabContent(){var photos=DATA.albums.reduce(function(s,a){return s+a.photos.length},0);
  var cards=[["news","mega","navNews","news",DATA.posts.length],["gallery","image","navGallery","gallery",photos],
   ["schedule","cal","navSched","schedule",f(t("nClasses"),{n:Object.keys(DATA.classes).length})],["about","build","navAbout","about",DATA.staff.length+DATA.facilities.length],["about","users","navTeachers","about.teachers",DATA.staff.filter(function(x){return x.group==="teacher"}).length],
-  ["life","trophy","navOlymp","olympiad",DATA.achievements.length],["life","cap","navAlumni","alumni",DATA.alumni.length],
+  ["life","trophy","navOlymp","olympiad",DATA.achievements.length],["life","file","navAlumni","alumni",DATA.alumni.length],
   ["docs","link","navRes","docs",DATA.docs.length],["about","msg","faqT","contacts.faq",DATA.faq.length],["about","build","partnersT","home",DATA.partners.length],["projects","star","navProj","projects",DATA.projects.length]].filter(function(c){return can(c[0])});
  if(!can("projects"))DATA.projects.forEach(function(p){if(can("p_"+p.id))cards.push(["p_"+p.id,"star","","project."+p.id,(DATA["pi_"+p.id]||[]).length,pick(p.title)])});
  return '<p class="hint" style="text-align:left;margin:0 0 16px">'+esc(t("a_contentHint"))+'</p><div class="acards">'+cards.map(function(c){
