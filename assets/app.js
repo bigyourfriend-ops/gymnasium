@@ -14,7 +14,7 @@ var T={
  navProg:["Оқу бағдарламалары","Учебные программы","Programmes"], navSched:["Сабақ кестесі","Расписание уроков","Timetable"],
  navOlymp:["Олимпиадалар мен жетістіктер","Олимпиады и достижения","Olympiads & achievements"], navRes:["Электронды ресурстар","Электронные ресурсы","Online resources"],
  navEvents:["Іс-шаралар күнтізбесі","Календарь мероприятий","Events calendar"],
- navGallery:["Фотогалерея","Фотогалерея","Photo gallery"], navAlumni:["Түлектер","Выпускники","Alumni"],
+ navGallery:["Фотогалерея","Фотогалерея","Photo gallery"], navAlumni:["Тамақтану","Питание","Nutrition"],
  home:["Басты бет","Главная","Home"], login:["Кіру","Войти","Sign in"], menu:["Мәзір","Меню","Menu"],
  name:["Ғани Мұратбаев атындағы гимназия","Гимназия имени Гани Муратбаева","Gani Muratbayev Gymnasium"],
  region:["Жамбыл облысы, Сарыкемер","Жамбылская область, Сарыкемер","Zhambyl region, Sarykemer"],
@@ -37,7 +37,7 @@ var T={
  d3:["Жалпы орта білім","Общее среднее образование","Upper secondary"], d3d:["Бейіндік пәндер және ҰБТ-ға дайындық.","Профильные предметы и подготовка к ЕНТ.","Specialised subjects and national exam (UNT) preparation."],
  d4:["Цифрлық жобалар","Цифровые проекты","Digital projects"], d4d:["Оқушылар газеті, бейнелер және шығармашылық жобалар.","Газета, видео и творческие проекты учеников.","Sports, chess, robotics, dombra and more."],
  d5:["Олимпиадалар","Олимпиады","Olympiads"], d5d:["Пәндік олимпиадалар мен байқаулардағы жетістіктер.","Достижения в предметных олимпиадах и конкурсах.","Results in subject olympiads and competitions."],
- d6:["Түлектер","Выпускники","Alumni"], d6d:["Гимназия түлектерінің жолы мен жетістіктері.","Путь и успехи выпускников гимназии.","Where our graduates go and what they achieve."],
+ d6:["Түлектер","Выпускники","Alumni"], d6d:["Асхана жұмысы мен тамақ сапасына қатысты құжаттар.","Документы о питании и контроле качества.","Documents about meals and quality control."],
  grades14:["1–4 сынып","1–4 классы","Grades 1–4"], grades59:["5–9 сынып","5–9 классы","Grades 5–9"], grades1011:["10–11 сынып","10–11 классы","Grades 10–11"], allGrades:["Барлық сыныптар","Все классы","All grades"],
  open:["Ашу","Открыть","Open"],
  statsT:["Гимназия сандарда","Гимназия в цифрах","The gymnasium in numbers"],
@@ -705,7 +705,7 @@ var T19={heroAbout:["Гимназия туралы","О гимназии","About
  dirHint:["Ұсыныс, сұрақ немесе алғысыңызды жазыңыз — хатыңыз директорға жетеді.","Напишите предложение, вопрос или благодарность — письмо дойдёт до директора.","Send a suggestion, question or thanks — it reaches the principal."],
  f_dirText:["Директордың сөзі («Директор панелі» терезесінде)","Обращение директора (в окне «Панель директора»)","Principal's message"]};
 for(var _k19 in T19)T[_k19]=T19[_k19];
-var T18={acYearT:["{y} оқу жылының шығарылымдары","Выпуски {y} учебного года","{y} school year"],acOther:["Күні көрсетілмеген","Без даты","Undated"],nIssues:["{n} шығарылым","Выпусков: {n}","{n} issues"],
+var T18={f_foodcat:["Бөлім","Раздел","Category"],acYearT:["{y} оқу жылының шығарылымдары","Выпуски {y} учебного года","{y} school year"],acOther:["Күні көрсетілмеген","Без даты","Undated"],nIssues:["{n} шығарылым","Выпусков: {n}","{n} issues"],
  f_pages:["Газет беттері","Страницы выпуска","Issue pages"],addPages:["+ Беттерді қосу (суреттер)","+ Добавить страницы (картинки)","+ Add pages (images)"],
  pagesHint:["Бірнеше суретті бірден таңдауға болады — олар файл аты бойынша ретімен қойылады. Ретін ‹ › батырмаларымен өзгертіңіз.","Можно выбрать сразу несколько картинок — они встанут по порядку имён файлов. Порядок меняется кнопками ‹ ›.","Pick several images at once — they are ordered by file name. Reorder with ‹ ›."],
  upPages:["Жүктелуде: {a} / {b}","Загрузка: {a} / {b}","Uploading {a} / {b}"],nPages:["{n} бет","{n} стр.","{n} pages"],pageN:["{n}-бет","Страница {n}","Page {n}"],
@@ -756,8 +756,13 @@ function pageAlbum(){var a=DATA.albums.filter(function(x){return x.id===st.route
   (a.photos.length?'<div class="photos">'+a.photos.map(function(p,i){return '<figure class="photo"><img src="'+p.src+'" alt="'+esc(pick(p.cap))+'" data-lb="'+esc(a.id)+':'+i+'" loading="lazy">'+(pick(p.cap)?'<figcaption>'+esc(pick(p.cap))+'</figcaption>':'')+((st.editing&&can("gallery"))?'<button class="copy x" data-delph="'+esc(a.id)+':'+i+'">'+esc(t("del"))+'</button>':'')+'</figure>'}).join("")+'</div>':empty("noPhotos"))+
   '<p><a class="more" href="#gallery">← '+esc(t("toGallery"))+'</a></p></section></div>'}
 
-function pageAlumni(){return banner("navAlumni","pd_alumni")+'<div class="container page"><section><h2 class="h2">'+esc(t("navAlumni"))+' '+addBtn("alumni",{year:String(nowTZ().y)})+'</h2>'+
- (DATA.alumni.length?'<div class="grid3">'+DATA.alumni.map(function(a){return '<div class="box">'+ed("alumni",a.id)+'<div class="person" style="margin-bottom:10px"><div class="ava">'+esc((a.name||"?")[0])+'</div><div><b>'+esc(a.name)+'</b><span>'+esc(t("gradYear"))+' '+esc(a.year)+'</span></div></div><p>'+esc(pick(a.text))+'</p></div>'}).join("")+'</div>':empty("emptyAlumni"))+'</section></div>'}
+var TFOOD={foodOrderT:["Жылдық бұйрық","Ежегодный приказ","Annual order"],foodOrderD:["Оқу жылына арналған бұйрық","Приказ на учебный год","Order for the school year"],foodEventsT:["Іс-шаралар","Мероприятия","Activities"],foodEventsD:["Ай сайынғы іс-шаралар туралы есептер","Ежемесячные отчёты о мероприятиях","Monthly activity reports"],foodInspectT:["Бракераж","Бракераж","Food inspection"],foodInspectD:["Апталық бракераж құжаттары","Еженедельные документы бракеража","Weekly food inspection records"],foodEmpty:["Бұл бөлімде әзірге құжат жоқ","В этом разделе пока нет документов","No documents in this section yet"]};for(var _fk in TFOOD)T[_fk]=TFOOD[_fk];
+var FOOD_SECTIONS=[["order","foodOrderT","foodOrderD"],["events","foodEventsT","foodEventsD"],["inspection","foodInspectT","foodInspectD"]];
+function pageAlumni(){var p={id:"nutrition",logo:"assets/logo.png",title:{kk:"Тамақтану",ru:"Питание"}};
+ var body=FOOD_SECTIONS.map(function(x){var items=(DATA.alumni||[]).filter(function(i){return i.cat===x[0]&&i.kind==="issue"}).sort(function(a,b){return(a.date||"")<(b.date||"")?1:-1});
+  return '<section class="food-section" id="food-'+x[0]+'"><div class="food-head"><div><span class="eyebrow">'+esc(t(x[2]))+'</span><h2 class="h2">'+esc(t(x[1]))+'</h2></div>'+(st.editing?addBtn("alumni",{kind:"issue",cat:x[0],date:todayISO()}):"")+'</div>'+
+  (items.length?issueYears(items,"alumni",p):'<div class="empty food-empty"><b>'+esc(t("foodEmpty"))+'</b></div>')+'</section>'}).join("");
+ return banner("navAlumni","pd_alumni")+'<div class="container page food-page">'+body+'</div>'}
 
 function linkList(items,icon,col){return '<div class="links">'+items.map(function(d){var host="";try{host=new URL(d.url).hostname.replace(/^www\./,"")}catch(e){}
  var inner=ed(col,d.id)+'<span class="ico">'+ic(icon)+'</span><div style="min-width:0"><b>'+esc(pick(d.title))+'</b><span>'+esc(host)+'</span></div><span class="arr">'+ic("arrow").replace('<svg','<svg width="18" height="18"')+'</span>';
@@ -1098,11 +1103,11 @@ var SCHEMA={
  docs:[["cat","select",["docs","res"],"k_"],["title","ml"],["url","url"]],
  faq:[["q","ml"],["a","mlarea"]],
  albums:[["year","text"],["title","ml"]],
- alumni:[["name","text"],["year","text"],["text","mlarea"]],
+ alumni:[["cat","select",["order","events","inspection"],"food_"],["kind","select",["issue"],"pk_"],["date","date"],["title","ml"],["text","mlarea"],["img","media","url"],["url","urlfile"],["pages","pages"]],
  partners:[["title","ml"],["url","url"],["img","logo"]],
  projects:[["title","ml"],["desc","mlarea"],["kind","select",["video","news","paper","blog","articles","tests","mixed"],"pt_"],["curator","text"],["url","url"],["img","logo"]],
  pitem:[["kind","select",["video","post","issue","link"],"pk_"],["date","date"],["title","ml"],["text","mlarea"],["img","media","url"],["url","urlfile"],["pages","pages"]]};
-var LBL={kind:"f_kind",curator:"f_curator",cat:"f_cat",date:"f_date",title:"f_title",text:"f_text",img:"f_img",time:"f_time",place:"f_place",group:"f_group",name:"f_name",role:"f_role",desc:"f_desc",when:"f_when",grades:"f_grades",level:"f_level",year:"f_year",url:"f_url",q:"f_q",a:"f_a",rank:"f_rank",award:"f_award",mrank:"f_mrank",exp:"f_exp",bio:"f_bio"};
+var LBL={kind:"f_kind",cat:"f_foodcat",curator:"f_curator",cat:"f_cat",date:"f_date",title:"f_title",text:"f_text",img:"f_img",time:"f_time",place:"f_place",group:"f_group",name:"f_name",role:"f_role",desc:"f_desc",when:"f_when",grades:"f_grades",level:"f_level",year:"f_year",url:"f_url",q:"f_q",a:"f_a",rank:"f_rank",award:"f_award",mrank:"f_mrank",exp:"f_exp",bio:"f_bio"};
 var edImg=null,edPages=[];
 function pagesThumbs(){return edPages.map(function(u,i){return '<span class="pg"><img src="'+esc(u)+'" alt=""><span class="pgb"><button type="button" data-pgmv="'+i+':-1" aria-label="‹"'+(i?'':' disabled')+'>‹</button><b>'+(i+1)+'</b><button type="button" data-pgmv="'+i+':1" aria-label="›"'+(i<edPages.length-1?'':' disabled')+'>›</button><button type="button" class="del" data-pgdel="'+i+'" aria-label="'+esc(t("del"))+'">×</button></span></span>'}).join("")}
 function drawPages(){var b=document.getElementById("edpages");if(b)b.innerHTML=pagesThumbs()}
