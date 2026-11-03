@@ -69,6 +69,7 @@ var T={
  pd_documents:["Гимназияның құжаттары мен нормативтік құжаттар.","Документы гимназии и нормативные документы.","School documents and regulations."], schDocsT:["Гимназия құжаттары","Документы гимназии","School documents"], emptyDocs:["Құжаттар жақында жарияланады","Документы скоро появятся","Documents are coming soon"],
  f_docPages:["Құжат (PDF, міндетті емес)","Документ (PDF, необязательно)","Document (PDF, optional)"], docPdfHint:["PDF таңдасаңыз, әр бет сурет болып сақталып, газет сияқты парақталады. Сілтеме мен атауы өздігінен толтырылады. Тек сілтеме болса — төмендегі өріске қойыңыз.","Если выбрать PDF, каждая страница сохранится картинкой и будет листаться, как газета; ссылка и название заполнятся сами. Если документ — только ссылка, вставьте её в поле ниже.","Pick a PDF to show it as a page-turning document, or paste a link below."],
  f_ordPages:["Бұйрық (PDF)","Приказ (PDF)","Order (PDF)"], ordPdfHint:["Бұйрықты PDF күйінде таңдаңыз: әр бет сурет болып сақталып, газет сияқты парақталады. Атауы файл атынан толтырылады — тексеріңіз.","Выберите приказ в PDF: каждая страница сохранится картинкой и будет листаться, как газета. Название заполнится из имени файла — проверьте его.","Pick the order PDF; pages turn like the newspaper."],
+ rpXls:["Excel","Excel","Excel"], rpXlsT:["Мұғалімдер","Учителя","Teachers"],
  fmOrig:["Түпнұсқа (қол қойылған)","Оригинал с подписью","Signed original"], fmEditWeek:["Апта баптаулары","Настройки недели","Week settings"], fmSchool:["Мектептің ас мәзірі","Школьное меню","School menu"], fmLoading:["Жүктелуде…","Загрузка…","Loading…"],
  pd_news:["Гимназия өміріндегі оқиғалар, жетістіктер мен хабарландырулар.","События, достижения и объявления гимназии.","Events, achievements and announcements."],
  pd_docs:["Оқушылар мен ата-аналарға арналған пайдалы электронды ресурстар.","Полезные электронные ресурсы для учеников и родителей.","Useful online resources."],
@@ -795,6 +796,17 @@ function fmMenu(){var wk=DATA.food_menu.slice().sort(byDate),m=fmCur(),ed=st.edi
     return '<li><span class="n">'+(i+1)+'</span><span><span class="s">'+esc(x.n||"")+'</span><span class="fm-g">'+["a","b","c"].map(function(c){return '<span class="tnum">'+esc(String(x[c]||"—").replace(/\s*гр\.?$/i,""))+'</span>'}).join("")+'</span>'+(x.p?'<span class="rm">'+esc(t("fmPrice"))+': '+esc(x.p)+'</span>':'')+'</span></li>'}).join("")+'</ol>':'<p class="hint" style="text-align:left">'+esc(t("fmNoDish"))+'</p>')+
    (ed?'<button class="copy" data-fmadd="'+di+'" style="margin-top:8px">'+esc(t("fmAddDish"))+'</button>':'')+'</div>'}).join("")+'</div>';
  return pick_+head+grid}
+/* список учителей из папок Google Диска → Excel: ФИО | Почта (пусто) | Пароль */
+function rpExport(){var items=((rp.ov||{}).items||[]).slice();if(!items.length)return;toast(t("fmLoading"));
+ var names=[],seen={};items.forEach(function(x){var n=String(x.teacher||"").trim();if(n&&!seen[n.toUpperCase()]){seen[n.toUpperCase()]=1;names.push(n)}});
+ names.sort(function(a,b){return a.localeCompare(b,"kk")});
+ fmLib().then(function(){var wb=new ExcelJS.Workbook(),ws=wb.addWorksheet(t("rpXlsT"));
+  ws.columns=[{header:"ФИО / Аты-жөні",width:44},{header:"Почта / Email",width:34},{header:"Пароль / Құпиясөз",width:20}];
+  var thin={style:"thin",color:{argb:"FF94A3B8"}},bd={top:thin,left:thin,bottom:thin,right:thin};
+  names.forEach(function(n){ws.addRow([n,"","Qwerty123+"])});
+  ws.eachRow(function(r,ri){r.eachCell({includeEmpty:true},function(c,ci){if(ci>3)return;c.border=bd;c.alignment={vertical:"middle"};if(ri===1){c.font={bold:true};c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFDCFCE7"}}}})});
+  ws.views=[{state:"frozen",ySplit:1}];ws.autoFilter="A1:C1";
+  return wb.xlsx.writeBuffer()}).then(function(buf){if(!buf)return;var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([buf],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}));a.download="uchitelya-"+todayISO()+".xlsx";document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},2000)}).catch(function(){toast(t("e_generic"))})}
 /* Excel: экспорт в формате бумажного меню, импорт того же формата */
 function fmLib(){return loadJs("assets/vendor/exceljs.min.js","ExcelJS")}
 function fmExport(){var m=fmCur();if(!m)return;toast(t("fmLoading"));fmLib().then(function(){var wb=new ExcelJS.Workbook(),ws=wb.addWorksheet("Меню");
@@ -1256,7 +1268,7 @@ function shrink(file,M){return new Promise(function(res){var r=new FileReader();
 
 /* ------------------------------------------------------------ events */
 document.addEventListener("click",function(e){
- var el=e.target.closest("[data-fmw],[data-fmxls],[data-fmadd],[data-fmdel],[data-tvgo],[data-tvfs],[data-bkpdo],[data-rsgo],[data-dir],[data-flip],[data-bk],[data-bkgo],[data-pgmv],[data-pgdel],[data-mtab],[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
+ var el=e.target.closest("[data-rpxls],[data-fmw],[data-fmxls],[data-fmadd],[data-fmdel],[data-tvgo],[data-tvfs],[data-bkpdo],[data-rsgo],[data-dir],[data-flip],[data-bk],[data-bkgo],[data-pgmv],[data-pgdel],[data-mtab],[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
  if(!el)return;var d=el.dataset;
   if(d.tvgo){tvFull();location.hash="tv."+d.tvgo;return}
  if(d.tvfs){tvFull();return}
@@ -1302,6 +1314,7 @@ document.addEventListener("click",function(e){
  if(d.prog){openProg(d.prog);return}
  if(d.ttgrade){var nm=Object.keys(DATA.classes).sort(clsSort).filter(function(n){return parseInt(n,10)===+d.ttgrade});if(nm.length){st.cls=nm[0];store("gm-cls",st.cls)}render(true);return}
  if(d.ttcls){st.cls=d.ttcls;store("gm-cls",st.cls);render(true);return}
+ if(d.rpxls){rpExport();return}
  if(d.fmw){st.fmW=d.fmw;render(true);return}
  if(d.fmxls){fmExport();return}
  if(d.fmadd!==undefined){var fw=fmCur();if(fw){fmDays(fw)[+d.fmadd].push({n:"",a:"",b:"",c:""});dirty();render(true);var ins=document.querySelectorAll('[data-fm^="'+d.fmadd+':"][data-fm$=":n"]');if(ins.length)ins[ins.length-1].focus()}return}
@@ -1413,7 +1426,7 @@ function rpAll(){
  var linked=items.filter(function(x){return (byKey[x.key]||[]).length===1}).length,done=cq?items.filter(function(x){return x.n[cq]>0}).length:0;
  var lost=site.filter(function(u){return !u.key||!fkeys[u.key]});
  var out='<div class="rp-ovhead"><div class="rp-stats"><span><b class="tnum">'+items.length+'</b>'+esc(t("rpStF"))+'</span><span><b class="tnum">'+linked+'</b>'+esc(t("rpStL"))+'</span>'+(cq?'<span><b class="tnum">'+done+'</b>'+esc(f(t("rpStQ"),{q:t(RP_LBL[cq])}))+'</span>':'')+'</div>'+
-  '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="btn btn-primary" data-rpnew="1">'+ic("plus")+esc(t("rpNewT"))+'</button><button class="btn btn-soft" data-rpref="1"'+(rp.ovLoading?' disabled':'')+'>'+esc(t("rpRefresh"))+'</button></div>'+(rp.ov.at?'<small class="hint" style="margin:0">'+esc(f(t("rpOvAt"),{t:new Date(rp.ov.at).toLocaleString(st.lang==="ru"?"ru-RU":"kk-KZ",{timeZone:TZ,day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}))+'</small>':'')+'</div></div>';
+  '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="btn btn-primary" data-rpnew="1">'+ic("plus")+esc(t("rpNewT"))+'</button><button class="btn btn-soft" data-rpref="1"'+(rp.ovLoading?' disabled':'')+'>'+esc(t("rpRefresh"))+'</button><button class="btn btn-soft" data-rpxls="1">'+ic("down")+esc(t("rpXls"))+'</button></div>'+(rp.ov.at?'<small class="hint" style="margin:0">'+esc(f(t("rpOvAt"),{t:new Date(rp.ov.at).toLocaleString(st.lang==="ru"?"ru-RU":"kk-KZ",{timeZone:TZ,day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}))+'</small>':'')+'</div></div>';
  if(lost.length)out+='<div class="rp-lost"><b>'+esc(t("rpLostT"))+'</b><p class="hint" style="text-align:left;margin:4px 0 8px">'+esc(t("rpLostD"))+'</p>'+lost.map(function(u){return '<div class="rp-lrow"><span>'+esc(u.full_name||"—")+' <small>'+esc(u.email)+'</small></span><span style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="btn btn-soft" data-rpnew="'+esc(u.id)+'">'+ic("plus")+esc(t("rpMkFolder"))+'</button><button class="btn btn-soft" data-rplink="'+esc(u.id)+'">'+esc(t("rpLinkB"))+'</button><button class="btn btn-soft" data-uedit="'+esc(u.id)+'">'+ic("edit")+esc(t("uEdit"))+'</button></span></div>'}).join("")+'</div>';
  out+=depts.map(function(d){return '<details class="rp-dept" open><summary>'+esc(d)+' <span class="chip">'+byDept[d].length+'</span></summary>'+byDept[d].map(function(x){var us=byKey[x.key]||[];
    return '<div class="rp-row"><div class="rp-name"><b>'+esc(x.teacher)+'</b>'+(us.length===1?'<small class="ok">'+esc(t("rpOnSite"))+': '+esc(us[0].email)+'</small>':us.length>1?'<small class="warn">'+esc(f(t("rpDupSite"),{n:us.length}))+'</small>':'<small>'+esc(t("rpNoSite"))+'</small>')+'</div>'+
