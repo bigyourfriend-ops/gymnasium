@@ -102,6 +102,34 @@ function rpc_admin_user_update(array $a) {
   q('UPDATE users SET meta=? WHERE id=?', [json_encode($meta, JSON_UNESCAPED_UNICODE), $id]);
   return null;
 }
+/* массовое создание аккаунтов учителей из Excel (только полный администратор).
+   rows: [{full_name, email, password}] — до 50 за вызов; почта сразу подтверждена, тип «Мұғалім». Существующие почты не трогаются. */
+function rpc_admin_bulk_users(array $a) {
+  if (!is_admin()) fail('not allowed', 403);
+  $rows = is_array($a['rows'] ?? null) ? array_values($a['rows']) : [];
+  if (count($rows) > 50) fail('too_many');
+  $res = []; $now = now_db();
+  foreach ($rows as $r) {
+    $r = is_array($r) ? $r : [];
+    $em = norm_email((string)($r['email'] ?? ''));
+    $fn = mb_substr(preg_replace('/\s+/u', ' ', trim((string)($r['full_name'] ?? ''))), 0, 100);
+    $pw = (string)($r['password'] ?? '');
+    $st = 'created';
+    if ($fn === '') $st = 'no_name';
+    elseif (!filter_var($em, FILTER_VALIDATE_EMAIL) || mb_strlen($em) > 190) $st = 'bad_email';
+    elseif (strlen($pw) < 8) $st = 'bad_password';
+    elseif (qv('SELECT 1 FROM users WHERE email=?', [$em])) $st = 'exists';
+    if ($st === 'created') {
+      $id = uuid4();
+      q('INSERT INTO users (id,email,pass,confirmed_at,meta,created_at) VALUES (?,?,?,?,?,?)',
+        [$id, $em, password_hash($pw, PASSWORD_BCRYPT), $now, json_encode(['full_name' => $fn, 'email' => $em, 'role' => 'teacher'], JSON_UNESCAPED_UNICODE), $now]);
+      q('INSERT INTO profiles (id,email,full_name,role,created_at) VALUES (?,?,?,?,?)', [$id, $em, $fn, 'teacher', $now]);
+    }
+    $res[] = ['email' => $em, 'full_name' => $fn, 'status' => $st];
+  }
+  return $res;
+}
+
 function rpc_admin_user_delete(array $a) {
   if (!is_admin()) fail('not allowed', 403);
   $id = (string)($a['id'] ?? '');
@@ -256,7 +284,7 @@ function rpc_prof_stats(array $a) {
 
 function handle_rpc(): void {
   $b = body(); $fn = (string)($b['fn'] ?? ''); $args = is_array($b['args'] ?? null) ? $b['args'] : [];
-  $ok = ['submit_feedback', 'public_feedback', 'set_role', 'admin_user_update', 'admin_user_delete', 'drive_teachers', 'help_submit', 'help_thread', 'help_student_reply', 'help_staff_reply',
+  $ok = ['submit_feedback', 'public_feedback', 'set_role', 'admin_user_update', 'admin_user_delete', 'admin_bulk_users', 'drive_teachers', 'help_submit', 'help_thread', 'help_student_reply', 'help_staff_reply',
     'dir_submit', 'dir_thread', 'dir_my_letters', 'dir_my_seen', 'dir_author_reply', 'dir_reply', 'prof_save', 'prof_stats'];
   if (!in_array($fn, $ok, true)) fail("function $fn does not exist", 404, '42883');
   out(('rpc_' . $fn)($args));

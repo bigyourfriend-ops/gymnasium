@@ -69,6 +69,12 @@ var T={
  pd_documents:["Гимназияның құжаттары мен нормативтік құжаттар.","Документы гимназии и нормативные документы.","School documents and regulations."], schDocsT:["Гимназия құжаттары","Документы гимназии","School documents"], emptyDocs:["Құжаттар жақында жарияланады","Документы скоро появятся","Documents are coming soon"],
  f_docPages:["Құжат (PDF, міндетті емес)","Документ (PDF, необязательно)","Document (PDF, optional)"], docPdfHint:["PDF таңдасаңыз, әр бет сурет болып сақталып, газет сияқты парақталады. Сілтеме мен атауы өздігінен толтырылады. Тек сілтеме болса — төмендегі өріске қойыңыз.","Если выбрать PDF, каждая страница сохранится картинкой и будет листаться, как газета; ссылка и название заполнятся сами. Если документ — только ссылка, вставьте её в поле ниже.","Pick a PDF to show it as a page-turning document, or paste a link below."],
  f_ordPages:["Бұйрық (PDF)","Приказ (PDF)","Order (PDF)"], ordPdfHint:["Бұйрықты PDF күйінде таңдаңыз: әр бет сурет болып сақталып, газет сияқты парақталады. Атауы файл атынан толтырылады — тексеріңіз.","Выберите приказ в PDF: каждая страница сохранится картинкой и будет листаться, как газета. Название заполнится из имени файла — проверьте его.","Pick the order PDF; pages turn like the newspaper."],
+ buBtn:["Excel-ден аккаунттар жасау","Создать аккаунты из Excel","Create accounts from Excel"], buT:["Мұғалімдердің аккаунттары","Аккаунты учителей","Teacher accounts"],
+ buHint:["Excel файлы: A — аты-жөні, B — пошта, C — құпиясөз (кемінде 8 таңба). Поштасы бос жолдар өткізіледі. Аккаунттар бірден расталады, түрі — «Мұғалім». Бар пошталар өзгертілмейді.","Файл Excel: A — ФИО, B — почта, C — пароль (не короче 8 символов). Строки без почты пропускаются. Аккаунты сразу подтверждены, тип — «Мұғалім». Уже существующие почты не меняются.","Excel: A — name, B — email, C — password (8+ chars). Rows without email are skipped."],
+ buSum:["Жасалады: {n}. Поштасыз өткізіледі: {s}.","Будет создано: {n}. Пропущено без почты: {s}.","To create: {n}. Skipped without email: {s}."], buGo:["Жасау","Создать","Create"], buProg:["Жасалуда… {a} / {b}","Создаётся… {a} / {b}","Creating… {a} / {b}"],
+ buDone:["Дайын! Жасалды: {n}.","Готово! Создано аккаунтов: {n}.","Done! Created: {n}."], buNone:["Файлда поштасы бар жол табылмады.","В файле не найдено строк с почтой.","No rows with an email found."],
+ bu_exists:["бұл пошта бұрыннан бар","такая почта уже есть","already registered"], bu_bad_email:["пошта қате","неверная почта","bad email"], bu_bad_password:["құпиясөз 8 таңбадан қысқа","пароль короче 8 символов","password too short"], bu_no_name:["аты-жөні жоқ","нет ФИО","no name"], bu_err:["қате","ошибка","error"],
+ buErrT:["Жасалмағандар:","Не созданы:","Not created:"],
  rpXls:["Excel","Excel","Excel"], rpXlsT:["Мұғалімдер","Учителя","Teachers"],
  fmOrig:["Түпнұсқа (қол қойылған)","Оригинал с подписью","Signed original"], fmEditWeek:["Апта баптаулары","Настройки недели","Week settings"], fmSchool:["Мектептің ас мәзірі","Школьное меню","School menu"], fmLoading:["Жүктелуде…","Загрузка…","Loading…"],
  pd_news:["Гимназия өміріндегі оқиғалар, жетістіктер мен хабарландырулар.","События, достижения и объявления гимназии.","Events, achievements and announcements."],
@@ -1268,7 +1274,7 @@ function shrink(file,M){return new Promise(function(res){var r=new FileReader();
 
 /* ------------------------------------------------------------ events */
 document.addEventListener("click",function(e){
- var el=e.target.closest("[data-rpxls],[data-fmw],[data-fmxls],[data-fmadd],[data-fmdel],[data-tvgo],[data-tvfs],[data-bkpdo],[data-rsgo],[data-dir],[data-flip],[data-bk],[data-bkgo],[data-pgmv],[data-pgdel],[data-mtab],[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
+ var el=e.target.closest("[data-bugo],[data-rpxls],[data-fmw],[data-fmxls],[data-fmadd],[data-fmdel],[data-tvgo],[data-tvfs],[data-bkpdo],[data-rsgo],[data-dir],[data-flip],[data-bk],[data-bkgo],[data-pgmv],[data-pgdel],[data-mtab],[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
  if(!el)return;var d=el.dataset;
   if(d.tvgo){tvFull();location.hash="tv."+d.tvgo;return}
  if(d.tvfs){tvFull();return}
@@ -1315,6 +1321,7 @@ document.addEventListener("click",function(e){
  if(d.ttgrade){var nm=Object.keys(DATA.classes).sort(clsSort).filter(function(n){return parseInt(n,10)===+d.ttgrade});if(nm.length){st.cls=nm[0];store("gm-cls",st.cls)}render(true);return}
  if(d.ttcls){st.cls=d.ttcls;store("gm-cls",st.cls);render(true);return}
  if(d.rpxls){rpExport();return}
+ if(d.bugo){buRun(el);return}
  if(d.fmw){st.fmW=d.fmw;render(true);return}
  if(d.fmxls){fmExport();return}
  if(d.fmadd!==undefined){var fw=fmCur();if(fw){fmDays(fw)[+d.fmadd].push({n:"",a:"",b:"",c:""});dirty();render(true);var ins=document.querySelectorAll('[data-fm^="'+d.fmadd+':"][data-fm$=":n"]');if(ins.length)ins[ins.length-1].focus()}return}
@@ -1346,6 +1353,7 @@ document.addEventListener("change",function(e){var d=e.target.dataset;
  
  if(d.fm){var fp=d.fm.split(":"),fw3=fmCur(),it=fw3&&fmDays(fw3)[+fp[0]][+fp[1]];if(it){it[fp[2]]=e.target.value.trim();dirty();refreshBar()}return}
  if(d.fmimp){fmImport(e.target);return}
+ if(d.buimp){buImport(e.target);return}
  if(d.ttsel){var px=d.ttsel.split(":"),lx=DATA.classes[st.cls].days[+px[0]][+px[1]];if(e.target.value==="__new__"){st.ttCustom=st.ttCustom||{};st.ttCustom[d.ttsel]=1;render(true);var inp=document.querySelector('[data-tts="'+d.ttsel+'"]');if(inp)inp.focus();return}lx.s=e.target.value;dirty();refreshBar();return}
  if(d.tts){var pp=d.tts.split(":"),ll=DATA.classes[st.cls].days[+pp[0]][+pp[1]],v=e.target.value.trim();if(v){ll.s=v;st.ttExtra=st.ttExtra||[];if(st.ttExtra.indexOf(v)<0)st.ttExtra.push(v)}if(st.ttCustom)delete st.ttCustom[d.tts];dirty();render(true);return}
  if(d.ttshift){DATA.classes[st.cls].shift=+e.target.value;dirty();render(true);return}
@@ -1557,7 +1565,27 @@ document.addEventListener("submit",function(e){if(e.target.id!=="uEditForm")retu
 function tabUsers(){var A=st.admin;if(!A){loadAdmin();return '<div class="panel"><p class="hint">'+esc(t("loading"))+'</p></div>'}
  return '<div class="panel"><div class="toolbar" style="margin-bottom:14px"><h3 style="margin:0">'+esc(t("p_users"))+' <span class="chip">'+A.users.length+'</span></h3><label class="search">'+ic("search")+'<span class="sr">'+esc(t("usersSearch"))+'</span><input id="uq" type="search" placeholder="'+esc(t("usersSearch"))+'" value="'+esc(st.uq)+'"></label></div>'+
   '<div class="pills" style="margin-bottom:14px;align-self:flex-start;display:inline-flex">'+["all","staff","student","parent","teacher"].map(function(r){return '<button data-urole="'+r+'" aria-pressed="'+(st.urole===r)+'">'+esc(r==="all"?t("all"):r==="staff"?t("staffF"):t("r_"+r))+'</button>'}).join("")+'</div>'+
+  '<div class="bu-bar"><label class="btn btn-soft bu-btn">'+ic("up")+esc(t("buBtn"))+'<input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-buimp="1" hidden></label></div>'+
   '<div class="ulist" id="ulistP" style="margin:0">'+userRows()+'</div></div>'}
+/* массовое создание аккаунтов учителей из Excel (ФИО | почта | пароль) */
+var buRows=null;
+function buImport(inp){var file=inp.files&&inp.files[0];inp.value="";if(!file)return;
+ fmLib().then(function(){return file.arrayBuffer()}).then(function(b){var wb=new ExcelJS.Workbook();return wb.xlsx.load(b).then(function(){return wb})}).then(function(wb){
+  var ws=wb.worksheets[0],rows=[],skip=0,seen={};if(!ws)throw 0;
+  ws.eachRow({includeEmpty:false},function(r,rn){var v=[1,2,3].map(function(ci){var c=r.getCell(ci),x=c.text;if(x&&typeof x==="object")x=x.text||"";return String(x==null?"":x).replace(/\s+/g," ").trim()});
+   if(!v[0]&&!v[1])return;if(rn===1&&v[1].indexOf("@")<0)return;
+   var em=v[1].toLowerCase().replace(/^mailto:/,"");if(!em){skip++;return}if(seen[em])return;seen[em]=1;rows.push({full_name:v[0],email:em,password:v[2]})});
+  if(!rows.length){toast(t("buNone"));return}
+  buRows=rows;openLayer('<h3>'+esc(t("buT"))+'</h3><p class="hint" style="text-align:left">'+esc(t("buHint"))+'</p><p style="font-weight:700;margin:12px 0">'+esc(f(t("buSum"),{n:rows.length,s:skip}))+'</p>'+
+   '<div class="bu-prev">'+rows.slice(0,8).map(function(r){return '<div><b>'+esc(r.full_name||"—")+'</b><span>'+esc(r.email)+'</span></div>'}).join("")+(rows.length>8?'<div><span>… +'+(rows.length-8)+'</span></div>':'')+'</div>'+
+   '<p class="hint" id="buSt" style="text-align:left;margin:12px 0 0"></p><div id="buRes"></div><div class="acts" style="margin-top:14px"><button type="button" class="btn btn-soft" data-close="1">'+esc(t("cancel"))+'</button><button type="button" class="btn btn-primary" data-bugo="1">'+esc(t("buGo"))+'</button></div>')}).catch(function(){toast(t("e_generic"))})}
+function buRun(btn){if(!buRows||!sb)return;var rows=buRows,i=0,made=0,bad=[],stl=document.getElementById("buSt");btn.disabled=true;
+ (function next(){if(i>=rows.length){stl.textContent=f(t("buDone"),{n:made});buRows=null;
+   document.getElementById("buRes").innerHTML=bad.length?'<p style="font-weight:700;margin:10px 0 6px">'+esc(t("buErrT"))+'</p><div class="bu-prev bu-bad">'+bad.map(function(r){return '<div><b>'+esc(r.full_name||"—")+'</b><span>'+esc(r.email)+' — '+esc(t("bu_"+r.status)||r.status)+'</span></div>'}).join("")+'</div>':'';
+   btn.style.display="none";var cb=btn.parentNode.querySelector("[data-close]");if(cb)cb.textContent=t("close");st.admin=null;loadAdmin();return}
+  stl.textContent=f(t("buProg"),{a:i,b:rows.length});var part=rows.slice(i,i+25);
+  sb.rpc("admin_bulk_users",{rows:part}).then(function(r){if(r.error||!Array.isArray(r.data)){part.forEach(function(x){bad.push({full_name:x.full_name,email:x.email,status:"err"})})}
+   else r.data.forEach(function(x){if(x.status==="created")made++;else bad.push(x)});i+=part.length;next()})})()}
 function userRows(){var A=st.admin,q=st.uq.trim().toLowerCase();var list=A.users.filter(function(u){
   if(st.urole==="staff"&&!A.staff[u.id])return false;if(st.urole!=="all"&&st.urole!=="staff"&&u.role!==st.urole)return false;
   return !q||((u.full_name||"")+" "+(u.email||"")).toLowerCase().indexOf(q)>=0});

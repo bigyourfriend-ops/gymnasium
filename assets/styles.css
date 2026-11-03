@@ -1932,3 +1932,11 @@ form[data-col=docs]:not([data-cat=res]) .f-pages{display:flex}
 form[data-col=docs] .f-pages .pdfauto svg{width:22px;height:22px;flex:none}
 form[data-col=docs][data-cat=res] label:has(#fe-date){display:none}
 form[data-col=docs]:not([data-cat=res]) .f-urlfile .filepick{display:none}
+/* массовое создание аккаунтов */
+.bu-bar{display:flex;justify-content:flex-end;margin:-4px 0 14px}
+.bu-btn{cursor:pointer;gap:6px}.bu-btn svg{width:16px;height:16px}
+.bu-prev{display:flex;flex-direction:column;gap:2px;max-height:220px;overflow:auto;border:1px solid var(--line);border-radius:12px;padding:6px 10px;background:#f8fafc}
+.bu-prev>div{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:4px 0;border-top:1px solid #eef2f7}
+.bu-prev>div:first-child{border-top:0}
+.bu-prev span{color:var(--muted);overflow-wrap:anywhere;text-align:right}
+.bu-bad{background:#fff7ed;border-color:#fed7aa}
