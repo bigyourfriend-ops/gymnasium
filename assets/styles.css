@@ -1925,3 +1925,5 @@ a.dircard{text-decoration:none}
 form[data-col=food_menu] .f-pages{display:flex}
 .fm-fhint{text-align:left;margin:-4px 0 14px;padding:10px 12px;background:var(--b50);border-radius:10px;color:var(--b900)}
 form[data-col=food_menu] .f-pages .pdfauto svg{width:22px;height:22px;flex:none}
+form[data-col=food_orders] .f-pages{display:flex}
+form[data-col=food_orders] .f-pages .pdfauto svg{width:22px;height:22px;flex:none}

@@ -66,6 +66,7 @@ var T={
  fmXlsx:["Excel-ге жүктеп алу","Скачать в Excel","Download Excel"], fmImp:["Excel-ден жүктеу","Загрузить из Excel","Import from Excel"], fmImpOk:["Excel-ден {n} тағам жүктелді. «Жариялау» батырмасын басыңыз.","Из Excel загружено блюд: {n}. Нажмите «Опубликовать».","Imported {n} dishes. Press Publish."],
  fmImpBad:["Файлдан ас мәзірі табылмады. Excel-ге жүктеп алынған үлгіні толтырыңыз.","В файле не найдено меню. Заполните шаблон, скачанный кнопкой «Скачать в Excel».","No menu found in the file. Fill in the template from Download Excel."], fmImpAsk:["Осы аптаның тағамдары Excel-дегімен ауыстырылады. Жалғастырасыз ба?","Блюда этой недели заменятся данными из Excel. Продолжить?","This week's dishes will be replaced. Continue?"],
  fmFormHint:["Мұнда тек аптаның күні мен атауы. «Сақтау» басқаннан кейін тағамдарды кестеге енгізіңіз немесе «Excel-ден жүктеу» батырмасымен жүктеңіз.","Здесь только дата и название недели. После «Сохранить» блюда вводятся в колонках по дням или загружаются кнопкой «Загрузить из Excel».","Only the week date and title here. After saving, enter dishes in the day columns or import from Excel."], f_title_fm:["Атауы (міндетті емес), мысалы: 3 апта","Название (необязательно), например: 3 неделя","Title (optional)"],
+ f_ordPages:["Бұйрық (PDF)","Приказ (PDF)","Order (PDF)"], ordPdfHint:["Бұйрықты PDF күйінде таңдаңыз: әр бет сурет болып сақталып, газет сияқты парақталады. Атауы файл атынан толтырылады — тексеріңіз.","Выберите приказ в PDF: каждая страница сохранится картинкой и будет листаться, как газета. Название заполнится из имени файла — проверьте его.","Pick the order PDF; pages turn like the newspaper."],
  fmOrig:["Түпнұсқа (қол қойылған)","Оригинал с подписью","Signed original"], fmEditWeek:["Апта баптаулары","Настройки недели","Week settings"], fmSchool:["Мектептің ас мәзірі","Школьное меню","School menu"], fmLoading:["Жүктелуде…","Загрузка…","Loading…"],
  pd_news:["Гимназия өміріндегі оқиғалар, жетістіктер мен хабарландырулар.","События, достижения и объявления гимназии.","Events, achievements and announcements."],
  pd_docs:["Нормативтік құжаттар мен пайдалы электронды ресурстар.","Нормативные документы и полезные электронные ресурсы.","Regulations and useful online resources."],
@@ -818,14 +819,16 @@ function fmImport(inp){var file=inp.files&&inp.files[0];inp.value="";if(!file)re
   else if(fmDays(m).some(function(d){return d.length})&&!window.confirm(t("fmImpAsk")))return;
   m.days=days;dirty();render(true);toast(f(t("fmImpOk"),{n:n}))}).catch(function(){toast(t("fmImpBad"))})}
 function fdMenuHead(m){return '<b>'+esc(fmWeekName(m))+'</b><span>'+esc(m.date?f(t("fdWeek"),{d:fmtDate(m.date)}):"")+'</span>'}
-function pageFood(){var ord=DATA.food_orders.slice().sort(function(a,b){return String(b.year||"").localeCompare(String(a.year||""))}),ev=DATA.food_events.slice().sort(byDate);
+function pageFood(){var ord=DATA.food_orders.slice().sort(function(a,b){return String(b.date||b.year||"").localeCompare(String(a.date||a.year||""))}),ev=DATA.food_events.slice().sort(byDate);
  var menu=fmMenu(),arch="";
- var orders=ord.length?'<div class="links">'+ord.map(function(o){var inner=ed("food_orders",o.id)+'<span class="ico">'+ic("file")+'</span><div style="min-width:0"><b>'+esc(pick(o.title))+'</b><span>'+esc(o.year?f(t("fdYear"),{y:o.year}):"")+'</span></div><span class="arr">'+ic("arrow").replace('<svg','<svg width="18" height="18"')+'</span>';
-   return o.url&&!st.editing?'<a class="lnk" href="'+esc(o.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="lnk">'+inner+'</div>'}).join("")+'</div>':empty("emptyOrd");
+ var orders=ord.length?'<div class="pitems issues">'+ord.map(function(o){var pg=Array.isArray(o.pages)?o.pages:[],cov=pg[0],fl=' data-flip="'+esc("food_orders|"+o.id)+'"',title=esc(pick(o.title)),
+   cover=pg.length?'<button class="cover"'+fl+' aria-label="'+title+'"><img src="'+esc(cov)+'" alt="" loading="lazy"><span class="pgn">'+esc(f(t("nPages"),{n:pg.length}))+'</span></button>':o.url?'<a class="cover" href="'+esc(o.url)+'" target="_blank" rel="noopener"><img src="assets/logo.png" alt="" class="fallback"></a>':'<div class="cover"><img src="assets/logo.png" alt="" class="fallback"></div>';
+   var when=o.date?fmtDate(o.date):o.year?f(t("fdYear"),{y:o.year}):"";
+   return '<article class="pitem issue">'+ed("food_orders",o.id)+cover+'<div class="pib">'+(when?'<span class="pdate">'+esc(when)+'</span>':'')+'<h4>'+title+'</h4>'+(pg.length?'<button class="btn btn-soft pbtn"'+fl+'>'+ic("book")+esc(t("readIssue"))+'</button>':o.url?'<a class="btn btn-soft pbtn" href="'+esc(o.url)+'" target="_blank" rel="noopener">'+ic("book")+esc(t("readIssue"))+'</a>':'')+'</div></article>'}).join("")+'</div>':empty("emptyOrd");
  var evs=ev.length?'<div class="grid3">'+ev.map(function(x){return '<article class="box fd-ev">'+ed("food_events",x.id)+(x.img?'<div class="fd-img"><img src="'+esc(x.img)+'" alt="" loading="lazy"></div>':'')+'<span class="fd-date">'+esc(fmtDate(x.date))+'</span><h4>'+esc(pick(x.title))+'</h4>'+(pick(x.text)?'<p>'+esc(pick(x.text))+'</p>':'')+'</article>'}).join("")+'</div>':empty("emptyFdEv");
  return banner("navFood","pd_food")+'<div class="container page">'+
   '<section id="menu"><h2 class="h2">'+esc(t("fdMenuT"))+' '+addBtn("food_menu",{date:mondayISO()})+'</h2>'+menu+arch+'</section>'+
-  '<section id="orders"><h2 class="h2">'+esc(t("fdOrdT"))+' '+addBtn("food_orders",{year:acYear(todayISO())})+'</h2>'+orders+'</section>'+
+  '<section id="orders"><h2 class="h2">'+esc(t("fdOrdT"))+' '+addBtn("food_orders",{date:todayISO()})+'</h2>'+orders+'</section>'+
   '<section id="events"><h2 class="h2">'+esc(t("fdEvT"))+' '+addBtn("food_events",{date:todayISO()})+'</h2>'+evs+'</section></div>'}
 
 function linkList(items,icon,col){return '<div class="links">'+items.map(function(d){var host="";try{host=new URL(d.url).hostname.replace(/^www\./,"")}catch(e){}
@@ -1167,8 +1170,8 @@ var SCHEMA={
  docs:[["cat","select",["docs","res"],"k_"],["title","ml"],["url","url"]],
  faq:[["q","ml"],["a","mlarea"]],
  albums:[["year","text"],["title","ml"]],
- food_menu:[["date","date"],["title","ml"],["pages","pages","f_menuPages","menuPdfHint"]],
- food_orders:[["year","text"],["title","ml"],["url","urlfile"]],
+ food_menu:[["date","date"],["title","ml"],["pages","pages","f_menuPages","menuPdfHint"],["url","hiddenurl"]],
+ food_orders:[["date","date"],["title","ml"],["pages","pages","f_ordPages","ordPdfHint"],["url","hiddenurl"]],
  food_events:[["date","date"],["title","ml"],["text","mlarea"],["img","image"]],
  partners:[["title","ml"],["url","url"],["img","logo"]],
  projects:[["title","ml"],["desc","mlarea"],["kind","select",["video","news","paper","blog","articles","tests","mixed"],"pt_"],["curator","text"],["url","url"],["img","logo"]],
@@ -1183,6 +1186,7 @@ function field(name,type,val,opts,pref){var id="fe-"+name,lab=esc(t(name==="titl
  if(type==="image"||type==="logo")return '<label>'+(type==="logo"?esc(t("f_logo")):lab)+'<input id="'+id+'" type="file" accept="image/*" data-edimg="'+(type==="logo"?"logo":"1")+'"></label>'+(type==="logo"?'<small class="hint" style="text-align:left;margin:-6px 0 0">'+esc(t("logoHint"))+'</small>':'')+'<div id="edprev">'+(val?'<img class="prev" src="'+val+'" alt=""> <button type="button" class="copy" data-clearimg="1">'+esc(t("del"))+'</button>':'')+'</div>';
  if(type==="pages")return '<div class="f-pages"><span class="flabel">'+esc(t(opts||"f_pages"))+'</span><label class="filepick pdfauto">'+ic("file")+'<span>'+esc(t("pdfAuto"))+'</span><input type="file" accept="application/pdf,.pdf" data-edpdf="1"></label><small class="hint" style="text-align:left;margin:0">'+esc(t(pref||"pdfAutoHint"))+'</small>'+
   '<details class="imgpages"><summary>'+esc(t("orImgs"))+'</summary><label class="filepick">'+esc(t("addPages"))+'<input type="file" accept="image/*" multiple data-edpages="1"></label><small class="hint" style="text-align:left;margin:0">'+esc(t("pagesHint"))+'</small></details><small class="hint" id="edpagesst" style="text-align:left;margin:0"></small><div id="edpages" class="edpages">'+pagesThumbs()+'</div></div>';
+ if(type==="hiddenurl")return '<input id="'+id+'" type="hidden" value="'+esc(val||"")+'">';
  if(type==="urlfile"){if(ytId(val)&&edItem&&edItem.kind==="video")val="";return '<div class="f-urlfile"><label>'+esc(t("f_urlL"))+'<input id="'+id+'" type="url" placeholder="https://" value="'+esc(val||"")+'"></label><label class="filepick">'+esc(t("uploadPdf"))+'<input type="file" accept="application/pdf,.pdf" data-edfile="'+id+'"><small class="hint" style="text-align:left;margin:4px 0 0"></small></label></div>'}
  if(type==="media"){var yv=edItem&&edItem[opts]||"";if(!ytId(yv))yv="";
   return '<div class="media"><span class="flabel">'+esc(t("f_media"))+'</span><div class="mtabs"><button type="button" data-mtab="img">'+ic("image")+esc(t("f_img"))+'</button><button type="button" data-mtab="yt">'+ic("play")+'YouTube</button></div>'+
