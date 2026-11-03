@@ -65,6 +65,7 @@ var T={
  fmDish:["Тағамның атауы","Наименование блюда","Dish"], fmAddDish:["+ тағам","+ блюдо","+ dish"], fmNoDish:["Тағам жоқ","Блюд нет","No dishes"], fmNewWeek:["Жаңа апта","Новая неделя","New week"],
  fmXlsx:["Excel-ге жүктеп алу","Скачать в Excel","Download Excel"], fmImp:["Excel-ден жүктеу","Загрузить из Excel","Import from Excel"], fmImpOk:["Excel-ден {n} тағам жүктелді. «Жариялау» батырмасын басыңыз.","Из Excel загружено блюд: {n}. Нажмите «Опубликовать».","Imported {n} dishes. Press Publish."],
  fmImpBad:["Файлдан ас мәзірі табылмады. Excel-ге жүктеп алынған үлгіні толтырыңыз.","В файле не найдено меню. Заполните шаблон, скачанный кнопкой «Скачать в Excel».","No menu found in the file. Fill in the template from Download Excel."], fmImpAsk:["Осы аптаның тағамдары Excel-дегімен ауыстырылады. Жалғастырасыз ба?","Блюда этой недели заменятся данными из Excel. Продолжить?","This week's dishes will be replaced. Continue?"],
+ fmFormHint:["Мұнда тек аптаның күні мен атауы. «Сақтау» басқаннан кейін тағамдарды кестеге енгізіңіз немесе «Excel-ден жүктеу» батырмасымен жүктеңіз.","Здесь только дата и название недели. После «Сохранить» блюда вводятся в колонках по дням или загружаются кнопкой «Загрузить из Excel».","Only the week date and title here. After saving, enter dishes in the day columns or import from Excel."], f_title_fm:["Атауы (міндетті емес), мысалы: 3 апта","Название (необязательно), например: 3 неделя","Title (optional)"],
  fmOrig:["Түпнұсқа (қол қойылған)","Оригинал с подписью","Signed original"], fmEditWeek:["Апта баптаулары","Настройки недели","Week settings"], fmSchool:["Мектептің ас мәзірі","Школьное меню","School menu"], fmLoading:["Жүктелуде…","Загрузка…","Loading…"],
  pd_news:["Гимназия өміріндегі оқиғалар, жетістіктер мен хабарландырулар.","События, достижения и объявления гимназии.","Events, achievements and announcements."],
  pd_docs:["Нормативтік құжаттар мен пайдалы электронды ресурстар.","Нормативные документы и полезные электронные ресурсы.","Regulations and useful online resources."],
@@ -1166,7 +1167,7 @@ var SCHEMA={
  docs:[["cat","select",["docs","res"],"k_"],["title","ml"],["url","url"]],
  faq:[["q","ml"],["a","mlarea"]],
  albums:[["year","text"],["title","ml"]],
- food_menu:[["date","date"],["title","ml"],["pages","pages","f_menuPages","menuPdfHint"],["url","urlfile"]],
+ food_menu:[["date","date"],["title","ml"],["pages","pages","f_menuPages","menuPdfHint"]],
  food_orders:[["year","text"],["title","ml"],["url","urlfile"]],
  food_events:[["date","date"],["title","ml"],["text","mlarea"],["img","image"]],
  partners:[["title","ml"],["url","url"],["img","logo"]],
@@ -1176,7 +1177,7 @@ var LBL={kind:"f_kind",curator:"f_curator",cat:"f_cat",date:"f_date",title:"f_ti
 var edImg=null,edPages=[];
 function pagesThumbs(){return edPages.map(function(u,i){return '<span class="pg"><img src="'+esc(u)+'" alt=""><span class="pgb"><button type="button" data-pgmv="'+i+':-1" aria-label="‹"'+(i?'':' disabled')+'>‹</button><b>'+(i+1)+'</b><button type="button" data-pgmv="'+i+':1" aria-label="›"'+(i<edPages.length-1?'':' disabled')+'>›</button><button type="button" class="del" data-pgdel="'+i+'" aria-label="'+esc(t("del"))+'">×</button></span></span>'}).join("")}
 function drawPages(){var b=document.getElementById("edpages");if(b)b.innerHTML=pagesThumbs()}
-function field(name,type,val,opts,pref){var id="fe-"+name,lab=esc(t(LBL[name]||name));
+function field(name,type,val,opts,pref){var id="fe-"+name,lab=esc(t(name==="title"&&edCol==="food_menu"?"f_title_fm":LBL[name]||name));
  if(type==="ml"||type==="mlarea")return '<label>'+lab+'<div class="ml">'+LANGS.map(function(l){var v=val&&val[l]||"";return type==="ml"?'<input id="'+id+'-'+l+'" placeholder="'+["KZ","RU","EN"][LI[l]]+'" value="'+esc(v)+'">':'<textarea id="'+id+'-'+l+'" placeholder="'+["KZ","RU","EN"][LI[l]]+'">'+esc(v)+'</textarea>'}).join("")+'</div></label>';
  if(type==="select")return '<label>'+lab+'<select id="'+id+'">'+opts.map(function(o){return '<option value="'+o+'"'+(o===val?" selected":"")+'>'+esc(t(pref+o))+'</option>'}).join("")+'</select></label>';
  if(type==="image"||type==="logo")return '<label>'+(type==="logo"?esc(t("f_logo")):lab)+'<input id="'+id+'" type="file" accept="image/*" data-edimg="'+(type==="logo"?"logo":"1")+'"></label>'+(type==="logo"?'<small class="hint" style="text-align:left;margin:-6px 0 0">'+esc(t("logoHint"))+'</small>':'')+'<div id="edprev">'+(val?'<img class="prev" src="'+val+'" alt=""> <button type="button" class="copy" data-clearimg="1">'+esc(t("del"))+'</button>':'')+'</div>';
@@ -1198,10 +1199,10 @@ function ytInput(inp){var y=ytId(inp.value),box=document.getElementById("ytprev"
  fetch("https://www.youtube.com/oembed?format=json&url="+encodeURIComponent(url)).then(function(r){if(!r.ok)throw 0;return r.json()})
   .catch(function(){return fetch("https://noembed.com/embed?url="+encodeURIComponent(url)).then(function(r){return r.json()})})
   .then(function(j){if(!j||!j.title||ytLast!==y)return;LANGS.forEach(function(l){var el=document.getElementById("fe-title-"+l);if(el&&!el.value.trim())el.value=j.title})}).catch(function(){})}
-var edItem=null;
-function openEditor(col,id,preset){ytLast="";var item=id?DATA[col].filter(function(x){return x.id===id})[0]:(preset||{});edImg=item&&item.img||null;edItem=item;edPages=(item&&Array.isArray(item.pages)?item.pages:[]).slice();
+var edItem=null,edCol="";
+function openEditor(col,id,preset){edCol=col;ytLast="";var item=id?DATA[col].filter(function(x){return x.id===id})[0]:(preset||{});edImg=item&&item.img||null;edItem=item;edPages=(item&&Array.isArray(item.pages)?item.pages:[]).slice();
  var mf=SCHEMA[col].filter(function(x){return x[1]==="media"})[0],mode=mf&&(ytId(item[mf[2]])||item.kind==="video")?"yt":"img";
- openLayer('<h3>'+esc(t(id?"edit":"add"))+'</h3><form class="form" id="edform" data-col="'+col+'" data-id="'+esc(id||"")+'"'+(mf?' data-media="'+mode+'"':'')+(item.kind?' data-k="'+esc(item.kind)+'"':'')+'>'+SCHEMA[col].map(function(s){return field(s[0],s[1],item[s[0]],s[2],s[3])}).join("")+
+ openLayer('<h3>'+esc(t(id?"edit":"add"))+'</h3>'+(col==="food_menu"?'<p class="hint fm-fhint">'+esc(t("fmFormHint"))+'</p>':'')+'<form class="form" id="edform" data-col="'+col+'" data-id="'+esc(id||"")+'"'+(mf?' data-media="'+mode+'"':'')+(item.kind?' data-k="'+esc(item.kind)+'"':'')+'>'+SCHEMA[col].map(function(s){return field(s[0],s[1],item[s[0]],s[2],s[3])}).join("")+
  '<div class="acts"><button type="button" class="btn btn-soft" data-close="1">'+esc(t("cancel"))+'</button><button class="btn btn-primary" type="submit">'+esc(t("ok"))+'</button></div></form>')}
 function saveEditor(form){var col=form.dataset.col,id=form.dataset.id,obj={},hasText=false;
  SCHEMA[col].forEach(function(s){var n=s[0],tp=s[1];
