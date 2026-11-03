@@ -60,7 +60,12 @@ var T={
  fdWeek:["{d} бастап апта","Неделя с {d}","Week of {d}"], fdArch:["Алдыңғы апталар","Предыдущие недели","Previous weeks"], fdRead:["Ашып қарау","Открыть","Open"], fdPdf:["PDF жүктеп алу","Скачать PDF","Download PDF"],
  fdOpen:["Ашу","Открыть","Open"], fdYear:["{y} оқу жылы","{y} учебный год","School year {y}"],
  emptyMenu:["Апталық ас мәзірі жақында жарияланады","Меню на неделю скоро появится","The weekly menu is coming soon"], emptyOrd:["Бұйрықтар жақында жарияланады","Приказы скоро появятся","Orders are coming soon"], emptyFdEv:["Іс-шаралар жақында жарияланады","Мероприятия скоро появятся","Events are coming soon"],
- f_menuPages:["Ас мәзірі (фото немесе PDF)","Меню (фото или PDF)","Menu (photos or PDF)"], menuPdfHint:["Аптаның ас мәзірін PDF күйінде таңдаңыз — әр бет сурет болып сақталады. Немесе төменде фотоларды қосыңыз.","Выберите меню недели в PDF — каждая страница сохранится картинкой. Или добавьте фото ниже.","Pick the weekly menu PDF — every page is saved as an image. Or add photos below."],
+ f_menuPages:["Қол қойылған мәзірдің сканы (міндетті емес)","Скан подписанного меню (необязательно)","Signed menu scan (optional)"], menuPdfHint:["Бекітілген (қол қойылған, мөрі бар) мәзірдің PDF-ін немесе фотосын қосуға болады — сайтта «Түпнұсқа» батырмасы пайда болады. Тағамдардың өзі кестеде толтырылады.","Можно приложить PDF или фото утверждённого меню с подписью и печатью — на сайте появится кнопка «Оригинал». Сами блюда заполняются в таблице.","Optionally attach the signed menu as PDF or photos."],
+ fmAges:["Тағамның шығымы граммен, жас бойынша: 7–10, 11–14, 15–18 жас","Выход блюд в граммах по возрастам: 7–10, 11–14, 15–18 лет","Portions in grams by age: 7–10, 11–14, 15–18"], fmA:["7–10 жас","7–10 лет","7–10 y"], fmB:["11–14 жас","11–14 лет","11–14 y"], fmC:["15–18 жас","15–18 лет","15–18 y"], fmPrice:["Бағасы","Цена","Price"],
+ fmDish:["Тағамның атауы","Наименование блюда","Dish"], fmAddDish:["+ тағам","+ блюдо","+ dish"], fmNoDish:["Тағам жоқ","Блюд нет","No dishes"], fmNewWeek:["Жаңа апта","Новая неделя","New week"],
+ fmXlsx:["Excel-ге жүктеп алу","Скачать в Excel","Download Excel"], fmImp:["Excel-ден жүктеу","Загрузить из Excel","Import from Excel"], fmImpOk:["Excel-ден {n} тағам жүктелді. «Жариялау» батырмасын басыңыз.","Из Excel загружено блюд: {n}. Нажмите «Опубликовать».","Imported {n} dishes. Press Publish."],
+ fmImpBad:["Файлдан ас мәзірі табылмады. Excel-ге жүктеп алынған үлгіні толтырыңыз.","В файле не найдено меню. Заполните шаблон, скачанный кнопкой «Скачать в Excel».","No menu found in the file. Fill in the template from Download Excel."], fmImpAsk:["Осы аптаның тағамдары Excel-дегімен ауыстырылады. Жалғастырасыз ба?","Блюда этой недели заменятся данными из Excel. Продолжить?","This week's dishes will be replaced. Continue?"],
+ fmOrig:["Түпнұсқа (қол қойылған)","Оригинал с подписью","Signed original"], fmEditWeek:["Апта баптаулары","Настройки недели","Week settings"], fmSchool:["Мектептің ас мәзірі","Школьное меню","School menu"], fmLoading:["Жүктелуде…","Загрузка…","Loading…"],
  pd_news:["Гимназия өміріндегі оқиғалар, жетістіктер мен хабарландырулар.","События, достижения и объявления гимназии.","Events, achievements and announcements."],
  pd_docs:["Нормативтік құжаттар мен пайдалы электронды ресурстар.","Нормативные документы и полезные электронные ресурсы.","Regulations and useful online resources."],
  pd_contacts:["Мекенжай, телефон, жұмыс уақыты және жиі қойылатын сұрақтар.","Адрес, телефон, часы работы и частые вопросы.","Address, phone, office hours and common questions."],
@@ -154,7 +159,7 @@ var IC={play:'<path d="M8 5.5v13l10.5-6.5z"/>',pin:'<path d="M12 21s-7-6.2-7-11a
  trophy:'<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H4a3 3 0 0 0 4 4M16 6h4a3 3 0 0 1-4 4M12 13v4M8 21h8M9 17h6"/>',
  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2 20a7 7 0 0 1 14 0M16 4.5a3.5 3.5 0 0 1 0 7M18 13.5a7 7 0 0 1 4 6.5"/>',
  image:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/>',
- food:'<path d="M7 3v8M4.5 3v5a2.5 2.5 0 0 0 5 0V3M7 11v10"/><path d="M17 21V3c-2.2 1.2-3.5 3.6-3.5 7v3H17"/>', file:'<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/>',
+ down:'<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>', up:'<path d="M12 15V4M7 9l5-5 5 5M5 20h14"/>', food:'<path d="M7 3v8M4.5 3v5a2.5 2.5 0 0 0 5 0V3M7 11v10"/><path d="M17 21V3c-2.2 1.2-3.5 3.6-3.5 7v3H17"/>', file:'<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/>',
  link:'<path d="M10 14a4 4 0 0 0 6 0l3-3a4 4 0 0 0-6-6l-1 1"/><path d="M14 10a4 4 0 0 0-6 0l-3 3a4 4 0 0 0 6 6l1-1"/>',
  arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>', search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/>', menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
  build:'<path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/>', medal:'<circle cx="12" cy="15" r="6"/><path d="M8.5 10.2L6 3h4l2 5 2-5h4l-2.5 7.2"/><path d="M12 12.5l.9 1.8 2 .3-1.45 1.4.35 2-1.8-.95-1.8.95.35-2L9.1 14.6l2-.3z"/>', cap:'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/><path d="M22 9v6"/>', brief:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2M3 13h18"/>', user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4.5-6.5 8-6.5s7 2 8 6.5"/>', star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
@@ -762,20 +767,63 @@ function pageAlbum(){var a=DATA.albums.filter(function(x){return x.id===st.route
   '<p><a class="more" href="#gallery">← '+esc(t("toGallery"))+'</a></p></section></div>'}
 
 function byDate(a,b){return String(b.date||"").localeCompare(String(a.date||""))}
-function fdMenuHead(m){return '<b>'+esc(pick(m.title)||f(t("fdWeek"),{d:fmtDate(m.date)}))+'</b><span>'+esc(m.date?f(t("fdWeek"),{d:fmtDate(m.date)}):"")+'</span>'}
-function pageFood(){var wk=DATA.food_menu.slice().sort(byDate),cur=wk[0],rest=wk.slice(1),
-  ord=DATA.food_orders.slice().sort(function(a,b){return String(b.year||"").localeCompare(String(a.year||""))}),ev=DATA.food_events.slice().sort(byDate);
- var menu=cur?(function(m){var pg=Array.isArray(m.pages)?m.pages:[],fl=' data-flip="'+esc("food_menu|"+m.id)+'"';
-   return '<div class="box fm-cur">'+ed("food_menu",m.id)+'<div class="fm-head"><span class="ico">'+ic("food")+'</span><div style="min-width:0">'+fdMenuHead(m)+'</div></div>'+
-    (pg.length?'<div class="fm-pages">'+pg.map(function(u,k){return '<button class="fm-pg"'+fl+' aria-label="'+esc(t("fdRead"))+' '+(k+1)+'"><img src="'+esc(u)+'" alt="" loading="lazy"></button>'}).join("")+'</div>':'')+
-    '<div class="fm-acts">'+(pg.length?'<button class="btn btn-soft"'+fl+'>'+ic("book")+esc(t("fdRead"))+'</button>':'')+(m.url?'<a class="btn btn-soft" href="'+esc(m.url)+'" target="_blank" rel="noopener">'+ic("file")+esc(t("fdPdf"))+'</a>':'')+'</div></div>'})(cur):empty("emptyMenu");
- var arch=rest.length?'<h3 class="fm-sub">'+esc(t("fdArch"))+'</h3><div class="links">'+rest.map(function(m){var pg=(m.pages||[]).length,inner=ed("food_menu",m.id)+'<span class="ico">'+ic("food")+'</span><div style="min-width:0">'+fdMenuHead(m)+'</div><span class="arr">'+ic("arrow").replace('<svg','<svg width="18" height="18"')+'</span>';
-   if(st.editing)return '<div class="lnk">'+inner+'</div>';return pg?'<button class="lnk fm-row" data-flip="'+esc("food_menu|"+m.id)+'">'+inner+'</button>':m.url?'<a class="lnk" href="'+esc(m.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="lnk">'+inner+'</div>'}).join("")+'</div>':'';
+function isoAdd(iso,n){var d=new Date(iso+"T00:00:00Z");d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10)}
+function isoDiff(a,b){return Math.round((Date.parse(a+"T00:00:00Z")-Date.parse(b+"T00:00:00Z"))/864e5)}
+function mondayISO(){var t0=todayISO(),wd=new Date(t0+"T00:00:00Z").getUTCDay();return isoAdd(t0,wd===0?1:wd===6?2:1-wd)}
+function ddmm(iso){return iso?iso.slice(8,10)+"."+iso.slice(5,7):""}
+function fmDays(m){if(!Array.isArray(m.days))m.days=[];while(m.days.length<5)m.days.push([]);return m.days}
+function fmWeekName(m){return pick(m.title)||f(t("fdWeek"),{d:fmtDate(m.date)})}
+function fmCur(){var wk=DATA.food_menu.slice().sort(byDate);if(!wk.length)return null;var w=wk.filter(function(x){return x.id===st.fmW})[0];if(w)return w;
+ var td=todayISO();w=wk.filter(function(x){var k=x.date?isoDiff(td,x.date):-1;return k>=0&&k<7})[0]||wk.filter(function(x){return x.date&&x.date<=td})[0]||wk[0];return w}
+function fmMenu(){var wk=DATA.food_menu.slice().sort(byDate),m=fmCur(),ed=st.editing&&can("food"),L=LI[st.lang];
+ if(!m)return (ed?'':'')+empty("emptyMenu");
+ var days=fmDays(m),k=m.date?isoDiff(todayISO(),m.date):-1,ti=k>=0&&k<5?k:-1,pg=(m.pages||[]).length;
+ var pick_='<div class="ttpick fm-pick"><div class="grades">'+wk.map(function(x){return '<button data-fmw="'+esc(x.id)+'" aria-pressed="'+(x.id===m.id)+'" title="'+esc(fmWeekName(x))+'">'+esc(x.date?ddmm(x.date)+"–"+ddmm(isoAdd(x.date,4)):fmWeekName(x))+'</button>'}).join("")+'</div></div>';
+ var head='<div class="tthead fm-thead"><div style="min-width:0"><h3 class="fm-title">'+esc(fmWeekName(m))+'</h3><span class="fm-dates">'+esc(m.date?fmtDate(m.date)+" – "+fmtDate(isoAdd(m.date,4)):"")+'</span><span class="fm-dates fm-note">'+esc(t("fmAges"))+'</span></div><div class="fm-tools">'+
+  (pg?'<button class="btn btn-soft" data-flip="'+esc("food_menu|"+m.id)+'">'+ic("file")+esc(t("fmOrig"))+'</button>':m.url?'<a class="btn btn-soft" href="'+esc(m.url)+'" target="_blank" rel="noopener">'+ic("file")+esc(t("fmOrig"))+'</a>':'')+
+  '<button class="btn btn-soft" data-fmxls="1">'+ic("down")+esc(t("fmXlsx"))+'</button>'+
+  (ed?'<label class="btn btn-soft fm-imp">'+ic("up")+esc(t("fmImp"))+'<input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-fmimp="1" hidden></label><button class="btn btn-soft" data-edit="food_menu" data-id="'+esc(m.id)+'">'+ic("edit")+esc(t("fmEditWeek"))+'</button><button class="btn btn-danger" data-del="food_menu" data-id="'+esc(m.id)+'">'+(st.sureId==="food_menu"+m.id?esc(t("sure")):ic("trash"))+'</button>':'')+'</div></div>';
+ var grid='<div class="days fm-days">'+days.map(function(ls,di){var isT=di===ti;
+  return '<div class="day'+(isT?" today":"")+'"><h4>'+esc(T.days[L][di])+(isT?'<span class="chip">'+esc(t("today"))+'</span>':'')+'</h4>'+
+   (ls.length||ed?'<div class="fm-ages"><span></span><span>7–10</span><span>11–14</span><span>15–18</span></div>':'')+
+   (ls.length?'<ol>'+ls.map(function(x,i){var q=di+':'+i;
+    if(ed)return '<li class="tted fm-li"><span class="n">'+(i+1)+'</span><span><span class="ttr2"><input value="'+esc(x.n||"")+'" placeholder="'+esc(t("fmDish"))+'" data-fm="'+q+':n"><button class="copy" data-fmdel="'+q+'" aria-label="'+esc(t("del"))+'">×</button></span><span class="fm-g fm-gi">'+["a","b","c"].map(function(c){return '<input value="'+esc(x[c]||"")+'" placeholder="—" data-fm="'+q+':'+c+'">'}).join("")+'</span></span></li>';
+    return '<li><span class="n">'+(i+1)+'</span><span><span class="s">'+esc(x.n||"")+'</span><span class="fm-g">'+["a","b","c"].map(function(c){return '<span class="tnum">'+esc(String(x[c]||"—").replace(/\s*гр\.?$/i,""))+'</span>'}).join("")+'</span>'+(x.p?'<span class="rm">'+esc(t("fmPrice"))+': '+esc(x.p)+'</span>':'')+'</span></li>'}).join("")+'</ol>':'<p class="hint" style="text-align:left">'+esc(t("fmNoDish"))+'</p>')+
+   (ed?'<button class="copy" data-fmadd="'+di+'" style="margin-top:8px">'+esc(t("fmAddDish"))+'</button>':'')+'</div>'}).join("")+'</div>';
+ return pick_+head+grid}
+/* Excel: экспорт в формате бумажного меню, импорт того же формата */
+function fmLib(){return loadJs("assets/vendor/exceljs.min.js","ExcelJS")}
+function fmExport(){var m=fmCur();if(!m)return;toast(t("fmLoading"));fmLib().then(function(){var wb=new ExcelJS.Workbook(),ws=wb.addWorksheet("Меню");
+ ws.columns=[{width:40},{width:15},{width:15},{width:15},{width:12}];
+ var thin={style:"thin",color:{argb:"FF94A3B8"}},bd={top:thin,left:thin,bottom:thin,right:thin},g="FFDCFCE7";
+ function row(vals,o){var r=ws.addRow(vals);o=o||{};r.eachCell({includeEmpty:true},function(c,ci){if(ci>5)return;c.border=bd;c.alignment={vertical:"middle",horizontal:ci===1&&!o.center?"left":"center",wrapText:true};if(o.bold)c.font={bold:true};if(o.fill)c.fill={type:"pattern",pattern:"solid",fgColor:{argb:o.fill}}});if(o.merge)ws.mergeCells(r.number,1,r.number,5);return r}
+ var t1=ws.addRow([T.fmSchool[0]+" / "+T.fmSchool[1]]);ws.mergeCells(1,1,1,5);t1.font={bold:true,size:13};t1.alignment={horizontal:"center"};
+ var t2=ws.addRow([[(m.title&&m.title.kk)||"",(m.title&&m.title.ru)||""].filter(Boolean).join(" / ")+(m.date?"  ·  "+ddmm(m.date)+"."+m.date.slice(0,4)+" – "+ddmm(isoAdd(m.date,4))+"."+m.date.slice(0,4):"")]);ws.mergeCells(2,1,2,5);t2.font={bold:true};t2.alignment={horizontal:"center"};
+ ws.addRow([]);
+ row([T.fmDish[0]+" / "+T.fmDish[1],"Шығымы / выход\n"+T.fmA[0],"Шығымы / выход\n"+T.fmB[0],"Шығымы / выход\n"+T.fmC[0],T.fmPrice[0]+" / "+T.fmPrice[1]],{bold:true,center:true,fill:"FFF1F5F9"}).height=34;
+ fmDays(m).forEach(function(ls,di){row([T.days[0][di]+" / "+T.days[1][di],"","","",""],{bold:true,center:true,fill:g,merge:true});
+  (ls.length?ls:[{},{},{},{},{}]).forEach(function(x){row([x.n||"",x.a||"",x.b||"",x.c||"",x.p||""])})});
+ return wb.xlsx.writeBuffer()}).then(function(buf){if(!buf)return;var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([buf],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}));a.download="menu-"+(m.date||todayISO())+".xlsx";document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},2000)}).catch(function(){toast(t("e_generic"))})}
+function fmDayIdx(txt){var s0=String(txt||"").toLowerCase().replace(/ё/g,"е");for(var i=0;i<5;i++){if(s0.indexOf(T.days[0][i].toLowerCase())>=0||s0.indexOf(T.days[1][i].toLowerCase().replace(/ё/g,"е"))>=0)return i}return -1}
+function fmImport(inp){var file=inp.files&&inp.files[0];inp.value="";if(!file)return;
+ fmLib().then(function(){return file.arrayBuffer()}).then(function(b){var wb=new ExcelJS.Workbook();return wb.xlsx.load(b).then(function(){return wb})}).then(function(wb){
+  var ws=wb.worksheets[0],days=[[],[],[],[],[]],cur=-1,n=0;if(!ws)throw 0;
+  ws.eachRow({includeEmpty:false},function(r){var v=[1,2,3,4,5].map(function(ci){var c=r.getCell(ci);return String(c.text==null?"":c.text).replace(/\s+/g," ").trim()});
+   var same=[1,2,3].every(function(k){return !v[k]||v[k]===v[0]}),di=fmDayIdx(v[0]);if(di>=0&&same&&v[0].length<40){cur=di;return}if(same&&v[1])return;
+   if(cur<0||!v[0]||/атауы|наименован|шығымы|выход/i.test(v[0]))return;
+   days[cur].push({n:v[0],a:v[1],b:v[2],c:v[3],p:v[4]});n++});
+  if(!n){toast(t("fmImpBad"));return}
+  var m=fmCur();if(!m){m={id:uid("food_menu"[0]),date:mondayISO(),title:{},pages:[],url:""};DATA.food_menu.push(m);st.fmW=m.id}
+  else if(fmDays(m).some(function(d){return d.length})&&!window.confirm(t("fmImpAsk")))return;
+  m.days=days;dirty();render(true);toast(f(t("fmImpOk"),{n:n}))}).catch(function(){toast(t("fmImpBad"))})}
+function fdMenuHead(m){return '<b>'+esc(fmWeekName(m))+'</b><span>'+esc(m.date?f(t("fdWeek"),{d:fmtDate(m.date)}):"")+'</span>'}
+function pageFood(){var ord=DATA.food_orders.slice().sort(function(a,b){return String(b.year||"").localeCompare(String(a.year||""))}),ev=DATA.food_events.slice().sort(byDate);
+ var menu=fmMenu(),arch="";
  var orders=ord.length?'<div class="links">'+ord.map(function(o){var inner=ed("food_orders",o.id)+'<span class="ico">'+ic("file")+'</span><div style="min-width:0"><b>'+esc(pick(o.title))+'</b><span>'+esc(o.year?f(t("fdYear"),{y:o.year}):"")+'</span></div><span class="arr">'+ic("arrow").replace('<svg','<svg width="18" height="18"')+'</span>';
    return o.url&&!st.editing?'<a class="lnk" href="'+esc(o.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="lnk">'+inner+'</div>'}).join("")+'</div>':empty("emptyOrd");
  var evs=ev.length?'<div class="grid3">'+ev.map(function(x){return '<article class="box fd-ev">'+ed("food_events",x.id)+(x.img?'<div class="fd-img"><img src="'+esc(x.img)+'" alt="" loading="lazy"></div>':'')+'<span class="fd-date">'+esc(fmtDate(x.date))+'</span><h4>'+esc(pick(x.title))+'</h4>'+(pick(x.text)?'<p>'+esc(pick(x.text))+'</p>':'')+'</article>'}).join("")+'</div>':empty("emptyFdEv");
  return banner("navFood","pd_food")+'<div class="container page">'+
-  '<section id="menu"><h2 class="h2">'+esc(t("fdMenuT"))+' '+addBtn("food_menu",{date:todayISO()})+'</h2>'+menu+arch+'</section>'+
+  '<section id="menu"><h2 class="h2">'+esc(t("fdMenuT"))+' '+addBtn("food_menu",{date:mondayISO()})+'</h2>'+menu+arch+'</section>'+
   '<section id="orders"><h2 class="h2">'+esc(t("fdOrdT"))+' '+addBtn("food_orders",{year:acYear(todayISO())})+'</h2>'+orders+'</section>'+
   '<section id="events"><h2 class="h2">'+esc(t("fdEvT"))+' '+addBtn("food_events",{date:todayISO()})+'</h2>'+evs+'</section></div>'}
 
@@ -1159,7 +1207,7 @@ function saveEditor(form){var col=form.dataset.col,id=form.dataset.id,obj={},has
  SCHEMA[col].forEach(function(s){var n=s[0],tp=s[1];
   if(tp==="ml"||tp==="mlarea"){var o={};LANGS.forEach(function(l){var v=document.getElementById("fe-"+n+"-"+l).value.trim();if(v)o[l]=v});obj[n]=o;if((n==="title"||n==="q")&&Object.keys(o).length)hasText=true}
   else if(tp==="image"||tp==="logo"||tp==="media")obj[n]=edImg||"";else if(tp==="pages")obj[n]=edPages.slice();else obj[n]=document.getElementById("fe-"+n).value.trim()});
- var needs=SCHEMA[col].some(function(s){return s[0]==="title"||s[0]==="q"});if(col==="staff")needs=false,hasText=!!obj.name;
+ var needs=SCHEMA[col].some(function(s){return s[0]==="title"||s[0]==="q"});if(col==="staff")needs=false,hasText=!!obj.name;if(col==="food_menu")needs=false;
  var mf=SCHEMA[col].filter(function(x){return x[1]==="media"})[0];
  if(mf){var yk=mf[2],yv=(document.getElementById("fe-yt")||{value:""}).value.trim(),useYt=form.dataset.media==="yt"&&obj.kind!=="issue"&&obj.kind!=="link";
   if(useYt){if(!ytId(yv)){toast(t("ytBad"));return}obj[yk]=yv;obj[mf[0]]="";if("kind" in obj)obj.kind="video"}
@@ -1167,7 +1215,7 @@ function saveEditor(form){var col=form.dataset.col,id=form.dataset.id,obj={},has
  if("pages" in obj&&"kind" in obj&&obj.kind!=="issue")obj.pages=[];
  if((needs||col==="staff")&&!hasText){toast(t("needTitle"));return}
  if(id){var it=DATA[col].filter(function(x){return x.id===id})[0];Object.keys(obj).forEach(function(k){it[k]=obj[k]});delete it.sample}
- else{obj.id=uid(col[0]);if(col==="albums")obj.photos=[];DATA[col].push(obj)}
+ else{obj.id=uid(col[0]);if(col==="albums")obj.photos=[];if(col==="food_menu"){obj.days=[[],[],[],[],[]];st.fmW=obj.id}DATA[col].push(obj)}
  if(col==="projects")DATA.projects.forEach(function(p){regProj(p.id)});
  dirty();closeLayer();
  if(form.dataset.qp){render(true);publish();return}
@@ -1195,7 +1243,7 @@ function shrink(file,M){return new Promise(function(res){var r=new FileReader();
 
 /* ------------------------------------------------------------ events */
 document.addEventListener("click",function(e){
- var el=e.target.closest("[data-tvgo],[data-tvfs],[data-bkpdo],[data-rsgo],[data-dir],[data-flip],[data-bk],[data-bkgo],[data-pgmv],[data-pgdel],[data-mtab],[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
+ var el=e.target.closest("[data-fmw],[data-fmxls],[data-fmadd],[data-fmdel],[data-tvgo],[data-tvfs],[data-bkpdo],[data-rsgo],[data-dir],[data-flip],[data-bk],[data-bkgo],[data-pgmv],[data-pgdel],[data-mtab],[data-yt],[data-pread],[data-pkind],[data-close],[data-lang],[data-open],[data-act],[data-ncat],[data-nmon],[data-npage],[data-progf],[data-prog],[data-grade],[data-calm],[data-day],[data-year],[data-copy],[data-lb],[data-edit],[data-del],[data-add],[data-ttgrade],[data-ttcls],[data-ttadd],[data-ttdel],[data-ttdelcls],[data-unsample],[data-delph],[data-clearimg],[data-auth],[data-ptab],[data-qa],[data-b2add],[data-b2rm],[data-atab],[data-goedit],[data-roledel],[data-fbkind],[data-fbmore],[data-rate],[data-fbstatus],[data-fbset],[data-fbdel],[data-urole],a[href^='#']");
  if(!el)return;var d=el.dataset;
   if(d.tvgo){tvFull();location.hash="tv."+d.tvgo;return}
  if(d.tvfs){tvFull();return}
@@ -1241,6 +1289,10 @@ document.addEventListener("click",function(e){
  if(d.prog){openProg(d.prog);return}
  if(d.ttgrade){var nm=Object.keys(DATA.classes).sort(clsSort).filter(function(n){return parseInt(n,10)===+d.ttgrade});if(nm.length){st.cls=nm[0];store("gm-cls",st.cls)}render(true);return}
  if(d.ttcls){st.cls=d.ttcls;store("gm-cls",st.cls);render(true);return}
+ if(d.fmw){st.fmW=d.fmw;render(true);return}
+ if(d.fmxls){fmExport();return}
+ if(d.fmadd!==undefined){var fw=fmCur();if(fw){fmDays(fw)[+d.fmadd].push({n:"",a:"",b:"",c:""});dirty();render(true);var ins=document.querySelectorAll('[data-fm^="'+d.fmadd+':"][data-fm$=":n"]');if(ins.length)ins[ins.length-1].focus()}return}
+ if(d.fmdel){var fq=d.fmdel.split(":"),fw2=fmCur();if(fw2){fmDays(fw2)[+fq[0]].splice(+fq[1],1);dirty();render(true)}return}
  if(d.ttadd!==undefined){var dd=DATA.classes[st.cls].days[+d.ttadd],mx=dd.reduce(function(m,l){return Math.max(m,l.n)},-1),first=bellLabel((DATA.classes[st.cls].shift===2?DATA.bells2:DATA.bells)[0]||[0,0,1],0);dd.push({n:mx<0?first:mx+1,s:"",r:""});dirty();render(true);return}
  if(d.ttdel){var pq=d.ttdel.split(":");DATA.classes[st.cls].days[+pq[0]].splice(+pq[1],1);dirty();render(true);return}
  if(d.ttdelcls){if(st.sureId!=="cls"+st.cls){st.sureId="cls"+st.cls;render(true);return}st.sureId=null;delete DATA.classes[st.cls];st.cls="";dirty();render(true);return}
@@ -1265,6 +1317,8 @@ document.addEventListener("input",function(e){if(e.target.dataset&&e.target.data
 document.addEventListener("change",function(e){var d=e.target.dataset;
  if(e.target.id==="fe-kind"&&e.target.form&&e.target.form.dataset.media){var fk=e.target.form;fk.dataset.k=e.target.value;fk.dataset.media=e.target.value==="video"?"yt":"img";return}
  
+ if(d.fm){var fp=d.fm.split(":"),fw3=fmCur(),it=fw3&&fmDays(fw3)[+fp[0]][+fp[1]];if(it){it[fp[2]]=e.target.value.trim();dirty();refreshBar()}return}
+ if(d.fmimp){fmImport(e.target);return}
  if(d.ttsel){var px=d.ttsel.split(":"),lx=DATA.classes[st.cls].days[+px[0]][+px[1]];if(e.target.value==="__new__"){st.ttCustom=st.ttCustom||{};st.ttCustom[d.ttsel]=1;render(true);var inp=document.querySelector('[data-tts="'+d.ttsel+'"]');if(inp)inp.focus();return}lx.s=e.target.value;dirty();refreshBar();return}
  if(d.tts){var pp=d.tts.split(":"),ll=DATA.classes[st.cls].days[+pp[0]][+pp[1]],v=e.target.value.trim();if(v){ll.s=v;st.ttExtra=st.ttExtra||[];if(st.ttExtra.indexOf(v)<0)st.ttExtra.push(v)}if(st.ttCustom)delete st.ttCustom[d.tts];dirty();render(true);return}
  if(d.ttshift){DATA.classes[st.cls].shift=+e.target.value;dirty();render(true);return}
