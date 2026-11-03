@@ -1927,3 +1927,8 @@ form[data-col=food_menu] .f-pages{display:flex}
 form[data-col=food_menu] .f-pages .pdfauto svg{width:22px;height:22px;flex:none}
 form[data-col=food_orders] .f-pages{display:flex}
 form[data-col=food_orders] .f-pages .pdfauto svg{width:22px;height:22px;flex:none}
+/* Документы (#documents) */
+form[data-col=docs]:not([data-cat=res]) .f-pages{display:flex}
+form[data-col=docs] .f-pages .pdfauto svg{width:22px;height:22px;flex:none}
+form[data-col=docs][data-cat=res] label:has(#fe-date){display:none}
+form[data-col=docs]:not([data-cat=res]) .f-urlfile .filepick{display:none}
