@@ -14,7 +14,7 @@ var T={
  navProg:["Оқу бағдарламалары","Учебные программы","Programmes"], navSched:["Сабақ кестесі","Расписание уроков","Timetable"],
  navOlymp:["Олимпиадалар мен жетістіктер","Олимпиады и достижения","Olympiads & achievements"], navRes:["Электронды ресурстар","Электронные ресурсы","Online resources"],
  navEvents:["Іс-шаралар күнтізбесі","Календарь мероприятий","Events calendar"],
- navGallery:["Фотогалерея","Фотогалерея","Photo gallery"], navAlumni:["Түлектер","Выпускники","Alumni"],
+ navGallery:["Фотогалерея","Фотогалерея","Photo gallery"], navFood:["Тамақтану","Питание","School meals"],
  home:["Басты бет","Главная","Home"], login:["Кіру","Войти","Sign in"], menu:["Мәзір","Меню","Menu"],
  name:["Ғани Мұратбаев атындағы гимназия","Гимназия имени Гани Муратбаева","Gani Muratbayev Gymnasium"],
  region:["Жамбыл облысы, Сарыкемер","Жамбылская область, Сарыкемер","Zhambyl region, Sarykemer"],
@@ -37,7 +37,7 @@ var T={
  d3:["Жалпы орта білім","Общее среднее образование","Upper secondary"], d3d:["Бейіндік пәндер және ҰБТ-ға дайындық.","Профильные предметы и подготовка к ЕНТ.","Specialised subjects and national exam (UNT) preparation."],
  d4:["Цифрлық жобалар","Цифровые проекты","Digital projects"], d4d:["Оқушылар газеті, бейнелер және шығармашылық жобалар.","Газета, видео и творческие проекты учеников.","Sports, chess, robotics, dombra and more."],
  d5:["Олимпиадалар","Олимпиады","Olympiads"], d5d:["Пәндік олимпиадалар мен байқаулардағы жетістіктер.","Достижения в предметных олимпиадах и конкурсах.","Results in subject olympiads and competitions."],
- d6:["Түлектер","Выпускники","Alumni"], d6d:["Гимназия түлектерінің жолы мен жетістіктері.","Путь и успехи выпускников гимназии.","Where our graduates go and what they achieve."],
+ d6:["Тамақтану","Питание","School meals"], d6d:["Апталық ас мәзірі, бұйрықтар және асхана іс-шаралары.","Меню на неделю, приказы и мероприятия столовой.","Weekly menu, orders and canteen events."],
  grades14:["1–4 сынып","1–4 классы","Grades 1–4"], grades59:["5–9 сынып","5–9 классы","Grades 5–9"], grades1011:["10–11 сынып","10–11 классы","Grades 10–11"], allGrades:["Барлық сыныптар","Все классы","All grades"],
  open:["Ашу","Открыть","Open"],
  statsT:["Гимназия сандарда","Гимназия в цифрах","The gymnasium in numbers"],
@@ -55,7 +55,12 @@ var T={
  pd_events:["Гимназияның алдағы және өткен іс-шаралары.","Предстоящие и прошедшие мероприятия гимназии.","Upcoming and past school events."],
 
  pd_gallery:["Оқу жылдары бойынша фотоальбомдар.","Фотоальбомы по учебным годам.","Photo albums by academic year."],
- pd_alumni:["Гимназия түлектері: қайда оқиды, қандай жетістікке жетті.","Выпускники гимназии: где учатся и чего достигли.","Our graduates: where they study and what they've achieved."],
+ pd_food:["Оқушылардың ыстық тамағы: апталық ас мәзірі, бұйрықтар және асхана іс-шаралары.","Горячее питание учащихся: меню на неделю, приказы и мероприятия столовой.","Hot meals for students: weekly menu, orders and canteen events."],
+ fdMenuT:["Апталық ас мәзірі (бракераж)","Меню на неделю (бракераж)","Weekly menu"], fdOrdT:["Бұйрықтар","Приказы","Orders"], fdEvT:["Асхана іс-шаралары","Мероприятия столовой","Canteen events"],
+ fdWeek:["{d} бастап апта","Неделя с {d}","Week of {d}"], fdArch:["Алдыңғы апталар","Предыдущие недели","Previous weeks"], fdRead:["Ашып қарау","Открыть","Open"], fdPdf:["PDF жүктеп алу","Скачать PDF","Download PDF"],
+ fdOpen:["Ашу","Открыть","Open"], fdYear:["{y} оқу жылы","{y} учебный год","School year {y}"],
+ emptyMenu:["Апталық ас мәзірі жақында жарияланады","Меню на неделю скоро появится","The weekly menu is coming soon"], emptyOrd:["Бұйрықтар жақында жарияланады","Приказы скоро появятся","Orders are coming soon"], emptyFdEv:["Іс-шаралар жақында жарияланады","Мероприятия скоро появятся","Events are coming soon"],
+ f_menuPages:["Ас мәзірі (фото немесе PDF)","Меню (фото или PDF)","Menu (photos or PDF)"], menuPdfHint:["Аптаның ас мәзірін PDF күйінде таңдаңыз — әр бет сурет болып сақталады. Немесе төменде фотоларды қосыңыз.","Выберите меню недели в PDF — каждая страница сохранится картинкой. Или добавьте фото ниже.","Pick the weekly menu PDF — every page is saved as an image. Or add photos below."],
  pd_news:["Гимназия өміріндегі оқиғалар, жетістіктер мен хабарландырулар.","События, достижения и объявления гимназии.","Events, achievements and announcements."],
  pd_docs:["Нормативтік құжаттар мен пайдалы электронды ресурстар.","Нормативные документы и полезные электронные ресурсы.","Regulations and useful online resources."],
  pd_contacts:["Мекенжай, телефон, жұмыс уақыты және жиі қойылатын сұрақтар.","Адрес, телефон, часы работы и частые вопросы.","Address, phone, office hours and common questions."],
@@ -83,7 +88,7 @@ var T={
  eventsOn:["{d} іс-шаралары","Мероприятия {d}","Events on {d}"], upcomingAll:["Алдағы іс-шаралар","Предстоящие мероприятия","Upcoming events"], past:["Өткен іс-шаралар","Прошедшие мероприятия","Past events"],
  gradesL:["Сыныптар","Классы","Grades"],
  photosN:["{n} фото","{n} фото","{n} photos"], noPhotos:["Фото жақында қосылады","Фото скоро появятся","Photos coming soon"], toGallery:["Галереяға оралу","Назад в галерею","Back to gallery"], allYears:["Барлық жылдар","Все годы","All years"],
- emptyAlumni:["Түлектер туралы әңгімелер жақында жарияланады","Истории выпускников скоро появятся","Alumni stories are coming soon"], gradYear:["Бітірген жылы","Год выпуска","Class of"],
+ gradYear:["Бітірген жылы","Год выпуска","Class of"],
  docsT:["Нормативтік құжаттар","Нормативные документы","Regulations"], resT:["Электронды ресурстар","Электронные ресурсы","Online resources"],
  addr:["Жамбыл облысы, Байзақ ауданы, Сарыкемер ауылы, Қосы батыр көшесі, 47","Жамбылская обл., Байзакский р-н, с. Сарыкемер, ул. Косы батыра, 47","47 Kosy Batyr St, Sarykemer, Baizak district, Zhambyl region"],
  phoneL:["Қабылдау бөлмесі","Приёмная","School office"], emailL:["Email","Email","Email"], hoursL:["Жұмыс уақыты","Часы работы","Office hours"], postL:["Пошта индексі","Почтовый индекс","Postcode"], dirL:["Директор","Директор","Principal"],
@@ -149,7 +154,7 @@ var IC={play:'<path d="M8 5.5v13l10.5-6.5z"/>',pin:'<path d="M12 21s-7-6.2-7-11a
  trophy:'<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H4a3 3 0 0 0 4 4M16 6h4a3 3 0 0 1-4 4M12 13v4M8 21h8M9 17h6"/>',
  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2 20a7 7 0 0 1 14 0M16 4.5a3.5 3.5 0 0 1 0 7M18 13.5a7 7 0 0 1 4 6.5"/>',
  image:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/>',
- file:'<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/>',
+ food:'<path d="M7 3v8M4.5 3v5a2.5 2.5 0 0 0 5 0V3M7 11v10"/><path d="M17 21V3c-2.2 1.2-3.5 3.6-3.5 7v3H17"/>', file:'<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/>',
  link:'<path d="M10 14a4 4 0 0 0 6 0l3-3a4 4 0 0 0-6-6l-1 1"/><path d="M14 10a4 4 0 0 0-6 0l-3 3a4 4 0 0 0 6 6l1-1"/>',
  arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>', search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/>', menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
  build:'<path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/>', medal:'<circle cx="12" cy="15" r="6"/><path d="M8.5 10.2L6 3h4l2 5 2-5h4l-2.5 7.2"/><path d="M12 12.5l.9 1.8 2 .3-1.45 1.4.35 2-1.8-.95-1.8.95.35-2L9.1 14.6l2-.3z"/>', cap:'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/><path d="M22 9v6"/>', brief:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2M3 13h18"/>', user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4.5-6.5 8-6.5s7 2 8 6.5"/>', star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
@@ -252,17 +257,17 @@ var T6={
  perm_gallery:["Фотогалерея","Фотогалерея","Photo gallery"],
  perm_schedule:["Сабақ және қоңырау кестесі","Расписание уроков и звонков","Lesson and bell timetable"],
  perm_about:["Гимназия туралы: педагогтар, база, серіктестер, сұрақтар","О гимназии: педагоги, база, партнёры, вопросы","About: staff, facilities, partners, FAQ"],
- perm_life:["Жетістіктер, түлектер","Достижения, выпускники","Achievements, alumni"],
+ perm_life:["Олимпиадалар мен жетістіктер","Олимпиады и достижения","Achievements"], perm_food:["Тамақтану (ас мәзірі)","Питание (меню)","School meals"],
  perm_docs:["Электронды ресурстар мен құжаттар","Электронные ресурсы и документы","Online resources and documents"],
  perm_settings:["Байланыс деректері және баптаулар","Контакты и настройки сайта","Contacts and site settings"],
  perm_feedback:["Пікірлерді модерациялау","Модерация отзывов","Feedback moderation"],
  perm_users:["Пайдаланушылар мен рөлдер (толық әкімші)","Пользователи и роли (полный администратор)","Users and roles (full admin)"]
 };
 for(var _k6 in T6)T[_k6]=T6[_k6];
-var PERMS=["news","gallery","schedule","about","life","docs","settings","feedback","users"];
-var COLPERM={posts:"news",events:"events",albums:"gallery",docs:"docs",staff:"about",facilities:"about",partners:"about",faq:"about",achievements:"life",alumni:"life"};
-var SECS={settings:["settings"],posts:["posts"],events:["events"],albums:["albums"],schedule:["classes","bells","bells2"],docs:["docs"],staff:["staff"],facilities:["facilities"],partners:["partners"],faq:["faq"],achievements:["achievements"],alumni:["alumni"]};
-var SECPERM={settings:"settings",posts:"news",events:"events",albums:"gallery",schedule:"schedule",docs:"docs",staff:"about",facilities:"about",partners:"about",faq:"about",achievements:"life",alumni:"life"};
+var PERMS=["news","gallery","schedule","about","life","food","docs","settings","feedback","users"];
+var COLPERM={posts:"news",events:"events",albums:"gallery",docs:"docs",staff:"about",facilities:"about",partners:"about",faq:"about",achievements:"life",food_menu:"food",food_orders:"food",food_events:"food"};
+var SECS={settings:["settings"],posts:["posts"],events:["events"],albums:["albums"],schedule:["classes","bells","bells2"],docs:["docs"],staff:["staff"],facilities:["facilities"],partners:["partners"],faq:["faq"],achievements:["achievements"],food:["food_menu","food_orders","food_events"]};
+var SECPERM={settings:"settings",posts:"news",events:"events",albums:"gallery",schedule:"schedule",docs:"docs",staff:"about",facilities:"about",partners:"about",faq:"about",achievements:"life",food:"food"};
 PERMS.splice(PERMS.indexOf("docs")+1,0,"projects");
 SECS.projects=["projects"];SECPERM.projects="projects";COLPERM.projects="projects";
 function regProj(id){var c="pi_"+id;SECS[c]=[c];SECPERM[c]="p_"+id;COLPERM[c]="p_"+id;if(typeof SCHEMA!=="undefined")SCHEMA[c]=SCHEMA.pitem;if(!Array.isArray(DATA[c]))DATA[c]=[]}
@@ -370,11 +375,11 @@ function nowHTML(){var s=lessonState(),n=s.n,b=s.b,head,sub="",bar="";
 
 /* ------------------------------------------------------------ chrome */
 var NAV=[
- {k:"navSchool",items:[["about","navAbout"],["alumni","navAlumni"],["docs","navRes"]]},
+ {k:"navSchool",items:[["about","navAbout"],["food","navFood"],["docs","navRes"]]},
  {k:"navEdu",items:[["schedule","navSched"],["olympiad","navOlymp"]]},
  {k:"navProj",href:"projects"},{k:"navNews",href:"news"},{k:"navContacts",href:"contacts"}];
 function syncNav(){NAV.forEach(function(g){if(g.proj)g.items=[["projects","allProj"]].concat((DATA.projects||[]).map(function(p){return["project."+p.id,"",pick(p.title)]}))})}
-var PARENT={projects:null,project:null,admin:null,profile:null,feedback:null,about:"navSchool",docs:"navSchool",programs:"navEdu",schedule:"navEdu",olympiad:"navEdu",events:null,gallery:null,album:null,alumni:"navSchool",news:null,post:null,contacts:null};
+var PARENT={projects:null,project:null,admin:null,profile:null,feedback:null,about:"navSchool",docs:"navSchool",programs:"navEdu",schedule:"navEdu",olympiad:"navEdu",events:null,gallery:null,album:null,food:"navSchool",news:null,post:null,contacts:null};
 function isOn(route){var p=route.split(".")[0];return st.route.page===p||(p==="gallery"&&st.route.page==="album")||(p==="news"&&st.route.page==="post")||(p==="projects"&&st.route.page==="project")}
 function topbar(){var s=DATA.settings;return '<div class="topbar"><div class="container"><div class="info"><span>'+ic("pin")+esc(t("region"))+'</span><span>'+ic("phone")+'<span class="tnum">'+esc(s.phone)+'</span></span><span class="opt">'+ic("mail")+esc(s.email)+'</span></div>'+
  '<div class="lang" role="group" aria-label="Language">'+LANGS.map(function(l){return '<button data-lang="'+l+'" aria-pressed="'+(st.lang===l)+'">'+["Қаз","Рус","Eng"][LI[l]]+'</button>'}).join("")+'</div></div></div>'}
@@ -461,7 +466,7 @@ function pageHome(){var s=DATA.settings;
   [["schedule","cal","q1","q1d"],["https://bilimclass.kz","book","kundelik","q2d"],["contacts.faq","cap","q3","q3d"],["news.ann","mega","q4","q4d"]].map(function(q){var ext=q[0].indexOf("http")===0;
    return '<a class="qcard" href="'+(ext?q[0]:"#"+q[0])+'"'+(ext?' target="_blank" rel="noopener"':'')+'><div class="ico">'+ic(q[1])+'</div><h4>'+esc(t(q[2]))+'</h4><p>'+esc(q[3]==="q2d"?"BilimClass · "+t(q[3]):t(q[3]))+'</p></a>'}).join("")+'</div></div></section>';
  var motto='<section class="section"><div class="container"><div class="quote">'+emblem()+'<div><blockquote>«'+esc(pick(s.motto))+'»</blockquote><cite>'+esc(t("name"))+'</cite></div></div></div></section>';
- var dirs=[["programs.primary","g1","grades14","d1","d1d"],["programs.basic","g2","grades59","d2","d2d"],["programs.senior","g3","grades1011","d3","d3d"],["projects","g4","allGrades","d4","d4d"],["olympiad","g5","allGrades","d5","d5d"],["alumni","g6","navAlumni","d6","d6d"]];
+ var dirs=[["programs.primary","g1","grades14","d1","d1d"],["programs.basic","g2","grades59","d2","d2d"],["programs.senior","g3","grades1011","d3","d3d"],["projects","g4","allGrades","d4","d4d"],["olympiad","g5","allGrades","d5","d5d"],["food","g6","navFood","d6","d6d"]];
  var dirsH='<section class="section alt"><div class="container"><div class="sec-head"><div><span class="eyebrow">'+esc(t("dirE"))+'</span><h2>'+esc(t("dirT"))+'</h2></div></div><div class="dirs">'+
   dirs.map(function(d){return '<a class="dir '+d[1]+'" href="#'+d[0]+'"><div><span class="tag">'+esc(t(d[2]))+'</span><h3>'+esc(t(d[3]))+'</h3><p>'+esc(t(d[4]))+'</p></div><span class="go">'+esc(t("open"))+ic("arrow").replace('<svg','<svg width="15" height="15"')+'</span></a>'}).join("")+'</div></div></section>';
  var stats='<section class="stats"><div class="container"><div class="sec-head" style="margin-bottom:26px"><h2 style="color:#fff">'+esc(t("statsT"))+'</h2>'+(st.editing?'<button class="addbtn" data-open="settings">'+esc(t("settings"))+'</button>':'<span class="chip" style="background:rgba(255,255,255,.12);color:#bbf7d0">'+esc(s.year)+'</span>')+'</div><div class="grid">'+
@@ -756,8 +761,23 @@ function pageAlbum(){var a=DATA.albums.filter(function(x){return x.id===st.route
   (a.photos.length?'<div class="photos">'+a.photos.map(function(p,i){return '<figure class="photo"><img src="'+p.src+'" alt="'+esc(pick(p.cap))+'" data-lb="'+esc(a.id)+':'+i+'" loading="lazy">'+(pick(p.cap)?'<figcaption>'+esc(pick(p.cap))+'</figcaption>':'')+((st.editing&&can("gallery"))?'<button class="copy x" data-delph="'+esc(a.id)+':'+i+'">'+esc(t("del"))+'</button>':'')+'</figure>'}).join("")+'</div>':empty("noPhotos"))+
   '<p><a class="more" href="#gallery">← '+esc(t("toGallery"))+'</a></p></section></div>'}
 
-function pageAlumni(){return banner("navAlumni","pd_alumni")+'<div class="container page"><section><h2 class="h2">'+esc(t("navAlumni"))+' '+addBtn("alumni",{year:String(nowTZ().y)})+'</h2>'+
- (DATA.alumni.length?'<div class="grid3">'+DATA.alumni.map(function(a){return '<div class="box">'+ed("alumni",a.id)+'<div class="person" style="margin-bottom:10px"><div class="ava">'+esc((a.name||"?")[0])+'</div><div><b>'+esc(a.name)+'</b><span>'+esc(t("gradYear"))+' '+esc(a.year)+'</span></div></div><p>'+esc(pick(a.text))+'</p></div>'}).join("")+'</div>':empty("emptyAlumni"))+'</section></div>'}
+function byDate(a,b){return String(b.date||"").localeCompare(String(a.date||""))}
+function fdMenuHead(m){return '<b>'+esc(pick(m.title)||f(t("fdWeek"),{d:fmtDate(m.date)}))+'</b><span>'+esc(m.date?f(t("fdWeek"),{d:fmtDate(m.date)}):"")+'</span>'}
+function pageFood(){var wk=DATA.food_menu.slice().sort(byDate),cur=wk[0],rest=wk.slice(1),
+  ord=DATA.food_orders.slice().sort(function(a,b){return String(b.year||"").localeCompare(String(a.year||""))}),ev=DATA.food_events.slice().sort(byDate);
+ var menu=cur?(function(m){var pg=Array.isArray(m.pages)?m.pages:[],fl=' data-flip="'+esc("food_menu|"+m.id)+'"';
+   return '<div class="box fm-cur">'+ed("food_menu",m.id)+'<div class="fm-head"><span class="ico">'+ic("food")+'</span><div style="min-width:0">'+fdMenuHead(m)+'</div></div>'+
+    (pg.length?'<div class="fm-pages">'+pg.map(function(u,k){return '<button class="fm-pg"'+fl+' aria-label="'+esc(t("fdRead"))+' '+(k+1)+'"><img src="'+esc(u)+'" alt="" loading="lazy"></button>'}).join("")+'</div>':'')+
+    '<div class="fm-acts">'+(pg.length?'<button class="btn btn-soft"'+fl+'>'+ic("book")+esc(t("fdRead"))+'</button>':'')+(m.url?'<a class="btn btn-soft" href="'+esc(m.url)+'" target="_blank" rel="noopener">'+ic("file")+esc(t("fdPdf"))+'</a>':'')+'</div></div>'})(cur):empty("emptyMenu");
+ var arch=rest.length?'<h3 class="fm-sub">'+esc(t("fdArch"))+'</h3><div class="links">'+rest.map(function(m){var pg=(m.pages||[]).length,inner=ed("food_menu",m.id)+'<span class="ico">'+ic("food")+'</span><div style="min-width:0">'+fdMenuHead(m)+'</div><span class="arr">'+ic("arrow").replace('<svg','<svg width="18" height="18"')+'</span>';
+   if(st.editing)return '<div class="lnk">'+inner+'</div>';return pg?'<button class="lnk fm-row" data-flip="'+esc("food_menu|"+m.id)+'">'+inner+'</button>':m.url?'<a class="lnk" href="'+esc(m.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="lnk">'+inner+'</div>'}).join("")+'</div>':'';
+ var orders=ord.length?'<div class="links">'+ord.map(function(o){var inner=ed("food_orders",o.id)+'<span class="ico">'+ic("file")+'</span><div style="min-width:0"><b>'+esc(pick(o.title))+'</b><span>'+esc(o.year?f(t("fdYear"),{y:o.year}):"")+'</span></div><span class="arr">'+ic("arrow").replace('<svg','<svg width="18" height="18"')+'</span>';
+   return o.url&&!st.editing?'<a class="lnk" href="'+esc(o.url)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="lnk">'+inner+'</div>'}).join("")+'</div>':empty("emptyOrd");
+ var evs=ev.length?'<div class="grid3">'+ev.map(function(x){return '<article class="box fd-ev">'+ed("food_events",x.id)+(x.img?'<div class="fd-img"><img src="'+esc(x.img)+'" alt="" loading="lazy"></div>':'')+'<span class="fd-date">'+esc(fmtDate(x.date))+'</span><h4>'+esc(pick(x.title))+'</h4>'+(pick(x.text)?'<p>'+esc(pick(x.text))+'</p>':'')+'</article>'}).join("")+'</div>':empty("emptyFdEv");
+ return banner("navFood","pd_food")+'<div class="container page">'+
+  '<section id="menu"><h2 class="h2">'+esc(t("fdMenuT"))+' '+addBtn("food_menu",{date:todayISO()})+'</h2>'+menu+arch+'</section>'+
+  '<section id="orders"><h2 class="h2">'+esc(t("fdOrdT"))+' '+addBtn("food_orders",{year:acYear(todayISO())})+'</h2>'+orders+'</section>'+
+  '<section id="events"><h2 class="h2">'+esc(t("fdEvT"))+' '+addBtn("food_events",{date:todayISO()})+'</h2>'+evs+'</section></div>'}
 
 function linkList(items,icon,col){return '<div class="links">'+items.map(function(d){var host="";try{host=new URL(d.url).hostname.replace(/^www\./,"")}catch(e){}
  var inner=ed(col,d.id)+'<span class="ico">'+ic(icon)+'</span><div style="min-width:0"><b>'+esc(pick(d.title))+'</b><span>'+esc(host)+'</span></div><span class="arr">'+ic("arrow").replace('<svg','<svg width="18" height="18"')+'</span>';
@@ -934,7 +954,7 @@ function homeProjects(){var P=DATA.projects||[];if(!P.length)return"";var all=[]
  return '<section class="section"><div class="container"><div class="sec-head"><div><span class="eyebrow">'+esc(t("projE"))+'</span><h2>'+esc(t("navProj"))+'</h2></div><a class="btn btn-soft" href="#projects">'+esc(t("allProj"))+' →</a></div>'+projLogos()+
   (all.length?'<h3 class="psub">'+esc(t("projNew"))+'</h3><div class="pitems mix">'+all.slice(0,4).map(function(x){return itemCard(x.i,"pi_"+x.p.id,x.p,true)}).join("")+'</div>':'')+'</div></section>'}
 
-var PAGES={tv:pageTV,projects:pageProjects,project:pageProject,admin:pageAdmin,profile:pageProfile,home:pageHome,about:pageAbout,news:pageNews,post:pagePost,schedule:pageSchedule,olympiad:pageOlympiad,gallery:pageGallery,album:pageAlbum,alumni:pageAlumni,docs:pageDocs,contacts:pageContacts};
+var PAGES={tv:pageTV,projects:pageProjects,project:pageProject,admin:pageAdmin,profile:pageProfile,home:pageHome,about:pageAbout,news:pageNews,post:pagePost,schedule:pageSchedule,olympiad:pageOlympiad,gallery:pageGallery,album:pageAlbum,food:pageFood,docs:pageDocs,contacts:pageContacts};
 
 /* ------------------------------------------------------------ render */
 var app=document.getElementById("app"),layer=document.getElementById("layer");
@@ -945,7 +965,7 @@ function render(keepScroll){document.documentElement.lang=st.lang;syncNav();var 
  app.innerHTML=topbar()+header()+'<main id="main">'+fn()+'</main>'+footer()+editbar();
  document.title=(st.route.page==="home"?"":titleFor()+" · ")+t("name");
  if(keepScroll)window.scrollTo(0,y);aboutSlide();startMasters();startPartners();startProjRing();startHero();startStrip();startTicker()}
-function titleFor(){if(EXTRA_TITLES[st.route.page])return EXTRA_TITLES[st.route.page]();var m={projects:"navProj",admin:"adminPanel",feedback:"navFeedback",profile:"cabinet",about:"navAbout",news:"navNews",programs:"navProg",schedule:"navSched",olympiad:"navOlymp",events:"navEvents",gallery:"navGallery",alumni:"navAlumni",docs:"navRes",contacts:"navContacts"}[st.route.page];
+function titleFor(){if(EXTRA_TITLES[st.route.page])return EXTRA_TITLES[st.route.page]();var m={projects:"navProj",admin:"adminPanel",feedback:"navFeedback",profile:"cabinet",about:"navAbout",news:"navNews",programs:"navProg",schedule:"navSched",olympiad:"navOlymp",events:"navEvents",gallery:"navGallery",food:"navFood",docs:"navRes",contacts:"navContacts"}[st.route.page];
  if(m)return t(m);if(st.route.page==="project"){var pj=(DATA.projects||[]).filter(function(x){return x.id===st.route.arg})[0];return pj?pick(pj.title):""}if(st.route.page==="post"){var p=DATA.posts.filter(function(x){return x.id===st.route.arg})[0];return p?pick(p.title):""}
  if(st.route.page==="album"){var a=DATA.albums.filter(function(x){return x.id===st.route.arg})[0];return a?pick(a.title):""}return""}
 function editbar(){if(!st.canEdit||!st.editing)return"";
@@ -955,7 +975,7 @@ function toast(msg){var d=document.createElement("div");d.className="toast";d.se
 function dirty(){st.dirty++}
 
 /* routing: plain #token or #page.arg */
-function parseHash(){var h=(location.hash||"").replace(/^#/,""),parts=h.split("."),page=parts[0]||"home",arg=parts.slice(1).join(".");if(page==="feedback"){page="contacts";arg="feedback"}if(page==="clubs"||(page==="about"&&arg==="clubs")){page="about";arg="";try{history.replaceState(null,"","#about")}catch(e){}}
+function parseHash(){var h=(location.hash||"").replace(/^#/,""),parts=h.split("."),page=parts[0]||"home",arg=parts.slice(1).join(".");if(page==="feedback"){page="contacts";arg="feedback"}if(page==="alumni"){page="food";try{history.replaceState(null,"","#food")}catch(e){}}if(page==="clubs"||(page==="about"&&arg==="clubs")){page="about";arg="";try{history.replaceState(null,"","#about")}catch(e){}}
  if(!PAGES[page]){page="home";arg=""}
  if(page==="news"&&arg&&["events","achieve","life","ann"].indexOf(arg)>=0){st.newsCat=arg;st.newsPage=1;arg=""}
  if(page==="programs"&&PROG[arg]){st.progF=arg;arg=""}
@@ -1098,7 +1118,9 @@ var SCHEMA={
  docs:[["cat","select",["docs","res"],"k_"],["title","ml"],["url","url"]],
  faq:[["q","ml"],["a","mlarea"]],
  albums:[["year","text"],["title","ml"]],
- alumni:[["name","text"],["year","text"],["text","mlarea"]],
+ food_menu:[["date","date"],["title","ml"],["pages","pages","f_menuPages","menuPdfHint"],["url","urlfile"]],
+ food_orders:[["year","text"],["title","ml"],["url","urlfile"]],
+ food_events:[["date","date"],["title","ml"],["text","mlarea"],["img","image"]],
  partners:[["title","ml"],["url","url"],["img","logo"]],
  projects:[["title","ml"],["desc","mlarea"],["kind","select",["video","news","paper","blog","articles","tests","mixed"],"pt_"],["curator","text"],["url","url"],["img","logo"]],
  pitem:[["kind","select",["video","post","issue","link"],"pk_"],["date","date"],["title","ml"],["text","mlarea"],["img","media","url"],["url","urlfile"],["pages","pages"]]};
@@ -1110,7 +1132,7 @@ function field(name,type,val,opts,pref){var id="fe-"+name,lab=esc(t(LBL[name]||n
  if(type==="ml"||type==="mlarea")return '<label>'+lab+'<div class="ml">'+LANGS.map(function(l){var v=val&&val[l]||"";return type==="ml"?'<input id="'+id+'-'+l+'" placeholder="'+["KZ","RU","EN"][LI[l]]+'" value="'+esc(v)+'">':'<textarea id="'+id+'-'+l+'" placeholder="'+["KZ","RU","EN"][LI[l]]+'">'+esc(v)+'</textarea>'}).join("")+'</div></label>';
  if(type==="select")return '<label>'+lab+'<select id="'+id+'">'+opts.map(function(o){return '<option value="'+o+'"'+(o===val?" selected":"")+'>'+esc(t(pref+o))+'</option>'}).join("")+'</select></label>';
  if(type==="image"||type==="logo")return '<label>'+(type==="logo"?esc(t("f_logo")):lab)+'<input id="'+id+'" type="file" accept="image/*" data-edimg="'+(type==="logo"?"logo":"1")+'"></label>'+(type==="logo"?'<small class="hint" style="text-align:left;margin:-6px 0 0">'+esc(t("logoHint"))+'</small>':'')+'<div id="edprev">'+(val?'<img class="prev" src="'+val+'" alt=""> <button type="button" class="copy" data-clearimg="1">'+esc(t("del"))+'</button>':'')+'</div>';
- if(type==="pages")return '<div class="f-pages"><span class="flabel">'+esc(t("f_pages"))+'</span><label class="filepick pdfauto">'+ic("file")+'<span>'+esc(t("pdfAuto"))+'</span><input type="file" accept="application/pdf,.pdf" data-edpdf="1"></label><small class="hint" style="text-align:left;margin:0">'+esc(t("pdfAutoHint"))+'</small>'+
+ if(type==="pages")return '<div class="f-pages"><span class="flabel">'+esc(t(opts||"f_pages"))+'</span><label class="filepick pdfauto">'+ic("file")+'<span>'+esc(t("pdfAuto"))+'</span><input type="file" accept="application/pdf,.pdf" data-edpdf="1"></label><small class="hint" style="text-align:left;margin:0">'+esc(t(pref||"pdfAutoHint"))+'</small>'+
   '<details class="imgpages"><summary>'+esc(t("orImgs"))+'</summary><label class="filepick">'+esc(t("addPages"))+'<input type="file" accept="image/*" multiple data-edpages="1"></label><small class="hint" style="text-align:left;margin:0">'+esc(t("pagesHint"))+'</small></details><small class="hint" id="edpagesst" style="text-align:left;margin:0"></small><div id="edpages" class="edpages">'+pagesThumbs()+'</div></div>';
  if(type==="urlfile"){if(ytId(val)&&edItem&&edItem.kind==="video")val="";return '<div class="f-urlfile"><label>'+esc(t("f_urlL"))+'<input id="'+id+'" type="url" placeholder="https://" value="'+esc(val||"")+'"></label><label class="filepick">'+esc(t("uploadPdf"))+'<input type="file" accept="application/pdf,.pdf" data-edfile="'+id+'"><small class="hint" style="text-align:left;margin:4px 0 0"></small></label></div>'}
  if(type==="media"){var yv=edItem&&edItem[opts]||"";if(!ytId(yv))yv="";
@@ -1137,13 +1159,13 @@ function saveEditor(form){var col=form.dataset.col,id=form.dataset.id,obj={},has
  SCHEMA[col].forEach(function(s){var n=s[0],tp=s[1];
   if(tp==="ml"||tp==="mlarea"){var o={};LANGS.forEach(function(l){var v=document.getElementById("fe-"+n+"-"+l).value.trim();if(v)o[l]=v});obj[n]=o;if((n==="title"||n==="q")&&Object.keys(o).length)hasText=true}
   else if(tp==="image"||tp==="logo"||tp==="media")obj[n]=edImg||"";else if(tp==="pages")obj[n]=edPages.slice();else obj[n]=document.getElementById("fe-"+n).value.trim()});
- var needs=SCHEMA[col].some(function(s){return s[0]==="title"||s[0]==="q"});if(col==="staff"||col==="alumni")needs=false,hasText=!!obj.name;
+ var needs=SCHEMA[col].some(function(s){return s[0]==="title"||s[0]==="q"});if(col==="staff")needs=false,hasText=!!obj.name;
  var mf=SCHEMA[col].filter(function(x){return x[1]==="media"})[0];
  if(mf){var yk=mf[2],yv=(document.getElementById("fe-yt")||{value:""}).value.trim(),useYt=form.dataset.media==="yt"&&obj.kind!=="issue"&&obj.kind!=="link";
   if(useYt){if(!ytId(yv)){toast(t("ytBad"));return}obj[yk]=yv;obj[mf[0]]="";if("kind" in obj)obj.kind="video"}
   else{if(yk!=="url")obj[yk]="";if(obj.kind==="video")obj.kind="post"}}
- if("pages" in obj&&obj.kind!=="issue")obj.pages=[];
- if((needs||col==="staff"||col==="alumni")&&!hasText){toast(t("needTitle"));return}
+ if("pages" in obj&&"kind" in obj&&obj.kind!=="issue")obj.pages=[];
+ if((needs||col==="staff")&&!hasText){toast(t("needTitle"));return}
  if(id){var it=DATA[col].filter(function(x){return x.id===id})[0];Object.keys(obj).forEach(function(k){it[k]=obj[k]});delete it.sample}
  else{obj.id=uid(col[0]);if(col==="albums")obj.photos=[];DATA[col].push(obj)}
  if(col==="projects")DATA.projects.forEach(function(p){regProj(p.id)});
@@ -1612,7 +1634,7 @@ function pageAdmin(){
 function tabContent(){var photos=DATA.albums.reduce(function(s,a){return s+a.photos.length},0);
  var cards=[["news","mega","navNews","news",DATA.posts.length],["gallery","image","navGallery","gallery",photos],
   ["schedule","cal","navSched","schedule",f(t("nClasses"),{n:Object.keys(DATA.classes).length})],["about","build","navAbout","about",DATA.staff.length+DATA.facilities.length],["about","users","navTeachers","about.teachers",DATA.staff.filter(function(x){return x.group==="teacher"}).length],
-  ["life","trophy","navOlymp","olympiad",DATA.achievements.length],["life","cap","navAlumni","alumni",DATA.alumni.length],
+  ["life","trophy","navOlymp","olympiad",DATA.achievements.length],["food","food","navFood","food",DATA.food_menu.length+DATA.food_orders.length+DATA.food_events.length],
   ["docs","link","navRes","docs",DATA.docs.length],["about","msg","faqT","contacts.faq",DATA.faq.length],["about","build","partnersT","home",DATA.partners.length],["projects","star","navProj","projects",DATA.projects.length]].filter(function(c){return can(c[0])});
  if(!can("projects"))DATA.projects.forEach(function(p){if(can("p_"+p.id))cards.push(["p_"+p.id,"star","","project."+p.id,(DATA["pi_"+p.id]||[]).length,pick(p.title)])});
  return '<p class="hint" style="text-align:left;margin:0 0 16px">'+esc(t("a_contentHint"))+'</p><div class="acards">'+cards.map(function(c){
@@ -1686,7 +1708,7 @@ function publish(){if(!sb||!st.user||st.saving)return;
 
 /* ------------------------------------------------------------ boot */
 function normalize(){if(!DATA.settings.motto)DATA.settings.motto={kk:"Білімді ұрпақ — ауылдың ертеңі",ru:"Образованное поколение — будущее села",en:"An educated generation is the village's future"};
- ["posts","events","facilities","docs","faq","albums","partners","achievements","alumni","staff"].forEach(function(k){if(!Array.isArray(DATA[k]))DATA[k]=[]});if(!DATA.classes||typeof DATA.classes!=="object")DATA.classes={};if(!Array.isArray(DATA.projects))DATA.projects=[];DATA.projects.forEach(function(p){regProj(p.id)});if(!Array.isArray(DATA.bells2))DATA.bells2=[["15:00","15:45"],["15:50","16:35"],["16:45","17:30"],["17:35","18:20"],["18:25","19:10"],["19:15","20:00"]]}
+ ["posts","events","facilities","docs","faq","albums","partners","achievements","food_menu","food_orders","food_events","staff"].forEach(function(k){if(!Array.isArray(DATA[k]))DATA[k]=[]});if(!DATA.classes||typeof DATA.classes!=="object")DATA.classes={};if(!Array.isArray(DATA.projects))DATA.projects=[];DATA.projects.forEach(function(p){regProj(p.id)});if(!Array.isArray(DATA.bells2))DATA.bells2=[["15:00","15:45"],["15:50","16:35"],["16:45","17:30"],["17:35","18:20"],["18:25","19:10"],["19:15","20:00"]]}
 /* plugins (assets/gmtest.js etc.): they register pages, strings and permissions before the first render */
 var EXTRA_TITLES={},USER_HOOKS=[];
 var API={sb:sb,st:st,DATA:DATA,T:T,t:t,f:f,esc:esc,pick:pick,ic:ic,IC:IC,banner:banner,render:render,toast:toast,openLayer:openLayer,closeLayer:closeLayer,fmtDate:fmtDate,todayISO:todayISO,can:can,allSubjects:allSubjects,shrink:shrink,uploadImg:uploadImg,uid:uid,emblem:emblem,bilimBtn:bilimBtn,PAGES:PAGES,PARENT:PARENT,NAV:NAV,PERMS:PERMS,TITLES:EXTRA_TITLES,onUser:function(fn){USER_HOOKS.push(fn)}};

@@ -177,8 +177,8 @@ function schema_install(): void {
 function schema_seed(): void {
   $now = now_db();
   $roles = [
-    ['admin', 'Әкімші / Администратор', ['news', 'events', 'gallery', 'schedule', 'about', 'life', 'docs', 'settings', 'projects', 'feedback', 'users'], 1],
-    ['secretary', 'Хатшы / Секретарь', ['news', 'events', 'gallery', 'schedule', 'about', 'life', 'docs', 'settings', 'projects', 'feedback'], 0],
+    ['admin', 'Әкімші / Администратор', ['news', 'events', 'gallery', 'schedule', 'about', 'life', 'food', 'docs', 'settings', 'projects', 'feedback', 'users'], 1],
+    ['secretary', 'Хатшы / Секретарь', ['news', 'events', 'gallery', 'schedule', 'about', 'life', 'food', 'docs', 'settings', 'projects', 'feedback'], 0],
     ['teacher', 'Мұғалім / Учитель', ['news', 'events', 'gallery'], 0],
     ['director', 'Директор', ['feedback', 'help', 'director'], 0],
     ['psychologist', 'Психолог', ['help'], 0],

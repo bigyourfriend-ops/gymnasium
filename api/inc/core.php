@@ -199,7 +199,7 @@ function is_staff(): bool { return count(my_perms()) > 0; }
 function perm_strict(string $p): bool { return in_array($p, my_perms(), true); }   // письма директору и буллинг: только явное право
 function section_perm(string $s): string {
   $map = ['posts' => 'news', 'events' => 'events', 'albums' => 'gallery', 'schedule' => 'schedule', 'docs' => 'docs', 'settings' => 'settings',
-    'staff' => 'about', 'facilities' => 'about', 'partners' => 'about', 'faq' => 'about', 'clubs' => 'life', 'achievements' => 'life', 'alumni' => 'life', 'projects' => 'projects'];
+    'staff' => 'about', 'facilities' => 'about', 'partners' => 'about', 'faq' => 'about', 'clubs' => 'life', 'achievements' => 'life', 'alumni' => 'life', 'food' => 'food', 'projects' => 'projects'];
   if (isset($map[$s])) return $map[$s];
   if (strpos($s, 'pi_') === 0) return 'projects';
   return 'users';
