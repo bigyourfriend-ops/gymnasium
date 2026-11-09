@@ -76,6 +76,7 @@ var T={
  bu_exists:["бұл пошта бұрыннан бар","такая почта уже есть","already registered"], bu_bad_email:["пошта қате","неверная почта","bad email"], bu_bad_password:["құпиясөз 8 таңбадан қысқа","пароль короче 8 символов","password too short"], bu_no_name:["аты-жөні жоқ","нет ФИО","no name"], bu_err:["қате","ошибка","error"],
  buErrT:["Жасалмағандар:","Не созданы:","Not created:"],
  rpXls:["Excel","Excel","Excel"], rpXlsT:["Мұғалімдер","Учителя","Teachers"],
+ f_bannerImg:["Баннердегі мектеп суреті","Фото школы в баннере","Banner photo"],
  fmOrig:["Түпнұсқа (қол қойылған)","Оригинал с подписью","Signed original"], fmEditWeek:["Апта баптаулары","Настройки недели","Week settings"], fmSchool:["Мектептің ас мәзірі","Школьное меню","School menu"], fmLoading:["Жүктелуде…","Загрузка…","Loading…"],
  pd_news:["Гимназия өміріндегі оқиғалар, жетістіктер мен хабарландырулар.","События, достижения и объявления гимназии.","Events, achievements and announcements."],
  pd_docs:["Оқушылар мен ата-аналарға арналған пайдалы электронды ресурстар.","Полезные электронные ресурсы для учеников и родителей.","Useful online resources."],
@@ -573,8 +574,7 @@ function histItem(){return DATA.history[0]||null}
 function schoolImg(){var h=histItem();return (h&&h.img)||"assets/school.webp"}
 function historyPanel(){var h=histItem(),txt=h?pick(h.text):"",paras=txt?txt.split(/\n\s*\n|\n/).map(function(x){return x.trim()}).filter(Boolean):[t("about1"),t("about2")];
  var edb=st.editing&&canCol("history")?' <button class="btn btn-soft hist-ed" '+(h?'data-edit="history" data-id="'+esc(h.id)+'"':'data-add="history"')+'>'+ic("edit")+esc(t("edit"))+'</button>':'';
- return '<div class="twocol"><div class="prose"><h2 class="h2">'+esc(t("historyT"))+edb+'</h2>'+paras.map(function(p){return '<p>'+esc(p)+'</p>'}).join("")+'</div>'+
-  '<figure class="schoolpic"><img src="'+esc(schoolImg())+'" alt="'+esc(t("name"))+'" loading="lazy" width="1024" height="1024"></figure></div>'}
+ return '<div class="prose hist-prose"><h2 class="h2">'+esc(t("historyT"))+edb+'</h2>'+paras.map(function(p){return '<p>'+esc(p)+'</p>'}).join("")+'</div>'}
 function aboutHero(){var B="assets/brand/";
  return '<section class="ahero"><img class="ah-stripe" src="'+B+'pplain.webp" alt="" aria-hidden="true"><div class="ah-photo" aria-hidden="true"><img src="'+esc(schoolImg())+'" alt=""></div><img class="ah-bar" src="'+B+'phor.webp" alt="" aria-hidden="true">'+
   '<div class="container"><div class="ah-text"><nav class="crumbs" aria-label="breadcrumb">'+lnk("home",esc(t("home")))+'<span>/</span><span>'+esc(t("navSchool"))+'</span><span>/</span><span class="cur">'+esc(t("navAbout"))+'</span></nav>'+
@@ -1201,7 +1201,7 @@ var SCHEMA={
  docs:[["cat","select",["docs","res"],"k_"],["date","date"],["title","ml"],["pages","pages","f_docPages","docPdfHint"],["url","urlfile"]],
  faq:[["q","ml"],["a","mlarea"]],
  albums:[["year","text"],["title","ml"]],
- history:[["text","mlarea"],["img","image"]],
+ history:[["text","mlarea"],["img","image","f_bannerImg"]],
  food_menu:[["date","date"],["title","ml"],["pages","pages","f_menuPages","menuPdfHint"],["url","hiddenurl"]],
  food_orders:[["date","date"],["title","ml"],["pages","pages","f_ordPages","ordPdfHint"],["url","hiddenurl"]],
  food_events:[["date","date"],["title","ml"],["text","mlarea"],["img","image"]],
@@ -1212,7 +1212,7 @@ var LBL={kind:"f_kind",curator:"f_curator",cat:"f_cat",date:"f_date",title:"f_ti
 var edImg=null,edPages=[];
 function pagesThumbs(){return edPages.map(function(u,i){return '<span class="pg"><img src="'+esc(u)+'" alt=""><span class="pgb"><button type="button" data-pgmv="'+i+':-1" aria-label="‹"'+(i?'':' disabled')+'>‹</button><b>'+(i+1)+'</b><button type="button" data-pgmv="'+i+':1" aria-label="›"'+(i<edPages.length-1?'':' disabled')+'>›</button><button type="button" class="del" data-pgdel="'+i+'" aria-label="'+esc(t("del"))+'">×</button></span></span>'}).join("")}
 function drawPages(){var b=document.getElementById("edpages");if(b)b.innerHTML=pagesThumbs()}
-function field(name,type,val,opts,pref){var id="fe-"+name,lab=esc(t(name==="title"&&edCol==="food_menu"?"f_title_fm":LBL[name]||name));
+function field(name,type,val,opts,pref){var id="fe-"+name,lab=esc(t(type==="image"&&typeof opts==="string"?opts:name==="title"&&edCol==="food_menu"?"f_title_fm":LBL[name]||name));
  if(type==="ml"||type==="mlarea")return '<label>'+lab+'<div class="ml">'+LANGS.map(function(l){var v=val&&val[l]||"";return type==="ml"?'<input id="'+id+'-'+l+'" placeholder="'+["KZ","RU","EN"][LI[l]]+'" value="'+esc(v)+'">':'<textarea id="'+id+'-'+l+'" placeholder="'+["KZ","RU","EN"][LI[l]]+'">'+esc(v)+'</textarea>'}).join("")+'</div></label>';
  if(type==="select")return '<label>'+lab+'<select id="'+id+'">'+opts.map(function(o){return '<option value="'+o+'"'+(o===val?" selected":"")+'>'+esc(t(pref+o))+'</option>'}).join("")+'</select></label>';
  if(type==="image"||type==="logo")return '<label>'+(type==="logo"?esc(t("f_logo")):lab)+'<input id="'+id+'" type="file" accept="image/*" data-edimg="'+(type==="logo"?"logo":"1")+'"></label>'+(type==="logo"?'<small class="hint" style="text-align:left;margin:-6px 0 0">'+esc(t("logoHint"))+'</small>':'')+'<div id="edprev">'+(val?'<img class="prev" src="'+val+'" alt=""> <button type="button" class="copy" data-clearimg="1">'+esc(t("del"))+'</button>':'')+'</div>';
