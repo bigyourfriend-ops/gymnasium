@@ -281,9 +281,9 @@ var T6={
 };
 for(var _k6 in T6)T[_k6]=T6[_k6];
 var PERMS=["news","gallery","schedule","about","life","food","docs","settings","feedback","users"];
-var COLPERM={posts:"news",events:"events",albums:"gallery",docs:"docs",staff:"about",facilities:"about",partners:"about",faq:"about",achievements:"life",food_menu:"food",food_orders:"food",food_events:"food"};
-var SECS={settings:["settings"],posts:["posts"],events:["events"],albums:["albums"],schedule:["classes","bells","bells2"],docs:["docs"],staff:["staff"],facilities:["facilities"],partners:["partners"],faq:["faq"],achievements:["achievements"],food:["food_menu","food_orders","food_events"]};
-var SECPERM={settings:"settings",posts:"news",events:"events",albums:"gallery",schedule:"schedule",docs:"docs",staff:"about",facilities:"about",partners:"about",faq:"about",achievements:"life",food:"food"};
+var COLPERM={posts:"news",events:"events",albums:"gallery",docs:"docs",staff:"about",facilities:"about",partners:"about",faq:"about",achievements:"life",food_menu:"food",food_orders:"food",food_events:"food",history:"about"};
+var SECS={settings:["settings"],posts:["posts"],events:["events"],albums:["albums"],schedule:["classes","bells","bells2"],docs:["docs"],staff:["staff"],facilities:["facilities"],partners:["partners"],faq:["faq"],achievements:["achievements"],food:["food_menu","food_orders","food_events"],history:["history"]};
+var SECPERM={settings:"settings",posts:"news",events:"events",albums:"gallery",schedule:"schedule",docs:"docs",staff:"about",facilities:"about",partners:"about",faq:"about",achievements:"life",food:"food",history:"about"};
 PERMS.splice(PERMS.indexOf("docs")+1,0,"projects");
 SECS.projects=["projects"];SECPERM.projects="projects";COLPERM.projects="projects";
 function regProj(id){var c="pi_"+id;SECS[c]=[c];SECPERM[c]="p_"+id;COLPERM[c]="p_"+id;if(typeof SCHEMA!=="undefined")SCHEMA[c]=SCHEMA.pitem;if(!Array.isArray(DATA[c]))DATA[c]=[]}
@@ -502,8 +502,7 @@ function pageAbout(){var s=DATA.settings,admin=DATA.staff.filter(function(x){ret
  var tabs=[["history","historyT"],["admin","adminT"],["teachers","teachersT"],["base","baseT"]],cur=ABOUT_TABS.indexOf(st.route.arg);if(cur<0)cur=0;
  var shown=st.aboutAnim?st.aboutIdx:cur;
  var panels=[
-  '<div class="twocol"><div class="prose"><h2 class="h2">'+esc(t("historyT"))+'</h2><p>'+esc(t("about1"))+'</p><p>'+esc(t("about2"))+'</p></div>'+
-   '<figure class="schoolpic"><img src="assets/school.webp" alt="'+esc(t("name"))+'" loading="lazy" width="1024" height="1024"></figure></div>',
+  historyPanel(),
   '<h2 class="h2">'+esc(t("adminT"))+' '+addBtn("staff",{group:"admin"})+'</h2><div class="grid3">'+admin.map(person).join("")+'</div>',
   masterBanner()+(tea.length>6?teaSearch():'')+'<h2 class="h2">'+esc(t("teachersT"))+' '+addBtn("staff",{group:"teacher"})+'</h2>'+(tea.length?'<p class="tsnone" id="tsnone" hidden>'+esc(t("tsNone"))+'</p><div class="grid3" id="teagrid">'+tea.map(person).join("")+'</div>':empty("emptyTeachers")),
   '<h2 class="h2">'+esc(t("baseT"))+' '+addBtn("facilities")+'</h2><div class="grid3">'+DATA.facilities.map(function(x,i){return '<div class="box">'+ed("facilities",x.id)+'<div class="ico">'+ic(["flask","gear","ball","book","star","users"][i%6])+'</div><h4>'+esc(pick(x.title))+' '+chipSample(x)+'</h4><p>'+esc(pick(x.desc))+'</p></div>'}).join("")+'</div>'];
@@ -570,8 +569,14 @@ function aboutSlide(){var tr=document.getElementById("abtrack"),vw=document.getE
 /* "About" banner built from the gymnasium's brand elements (assets/brand) */
 var T17={ahE:["Ғани Мұратбаев атындағы","Имени Гани Муратбаева","Gani Muratbayev"],ahF1:["1–11 сынып","1–11 классы","Grades 1–11"],ahF2:["2 ауысым","2 смены","2 shifts"]};
 for(var _k17 in T17)T[_k17]=T17[_k17];
+function histItem(){return DATA.history[0]||null}
+function schoolImg(){var h=histItem();return (h&&h.img)||"assets/school.webp"}
+function historyPanel(){var h=histItem(),txt=h?pick(h.text):"",paras=txt?txt.split(/\n\s*\n|\n/).map(function(x){return x.trim()}).filter(Boolean):[t("about1"),t("about2")];
+ var edb=st.editing&&canCol("history")?' <button class="btn btn-soft hist-ed" '+(h?'data-edit="history" data-id="'+esc(h.id)+'"':'data-add="history"')+'>'+ic("edit")+esc(t("edit"))+'</button>':'';
+ return '<div class="twocol"><div class="prose"><h2 class="h2">'+esc(t("historyT"))+edb+'</h2>'+paras.map(function(p){return '<p>'+esc(p)+'</p>'}).join("")+'</div>'+
+  '<figure class="schoolpic"><img src="'+esc(schoolImg())+'" alt="'+esc(t("name"))+'" loading="lazy" width="1024" height="1024"></figure></div>'}
 function aboutHero(){var B="assets/brand/";
- return '<section class="ahero"><img class="ah-stripe" src="'+B+'pplain.webp" alt="" aria-hidden="true"><img class="ah-bar" src="'+B+'phor.webp" alt="" aria-hidden="true">'+
+ return '<section class="ahero"><img class="ah-stripe" src="'+B+'pplain.webp" alt="" aria-hidden="true"><div class="ah-photo" aria-hidden="true"><img src="'+esc(schoolImg())+'" alt=""></div><img class="ah-bar" src="'+B+'phor.webp" alt="" aria-hidden="true">'+
   '<div class="container"><div class="ah-text"><nav class="crumbs" aria-label="breadcrumb">'+lnk("home",esc(t("home")))+'<span>/</span><span>'+esc(t("navSchool"))+'</span><span>/</span><span class="cur">'+esc(t("navAbout"))+'</span></nav>'+
   '<span class="ah-eyebrow">'+esc(t("ahE"))+'</span><h1>'+esc(t("navAbout"))+'</h1><img class="ah-div" src="'+B+'divider.webp" alt="" aria-hidden="true"><p>'+esc(t("pd_about"))+'</p>'+
   '<ul class="ah-facts"><li>'+ic("cap")+esc(t("ahF1"))+'</li><li>'+ic("clock")+esc(t("ahF2"))+'</li></ul></div>'+
@@ -1196,6 +1201,7 @@ var SCHEMA={
  docs:[["cat","select",["docs","res"],"k_"],["date","date"],["title","ml"],["pages","pages","f_docPages","docPdfHint"],["url","urlfile"]],
  faq:[["q","ml"],["a","mlarea"]],
  albums:[["year","text"],["title","ml"]],
+ history:[["text","mlarea"],["img","image"]],
  food_menu:[["date","date"],["title","ml"],["pages","pages","f_menuPages","menuPdfHint"],["url","hiddenurl"]],
  food_orders:[["date","date"],["title","ml"],["pages","pages","f_ordPages","ordPdfHint"],["url","hiddenurl"]],
  food_events:[["date","date"],["title","ml"],["text","mlarea"],["img","image"]],
@@ -1817,7 +1823,7 @@ function publish(){if(!sb||!st.user||st.saving)return;
 
 /* ------------------------------------------------------------ boot */
 function normalize(){if(!DATA.settings.motto)DATA.settings.motto={kk:"Білімді ұрпақ — ауылдың ертеңі",ru:"Образованное поколение — будущее села",en:"An educated generation is the village's future"};
- ["posts","events","facilities","docs","faq","albums","partners","achievements","food_menu","food_orders","food_events","staff"].forEach(function(k){if(!Array.isArray(DATA[k]))DATA[k]=[]});if(!DATA.classes||typeof DATA.classes!=="object")DATA.classes={};if(!Array.isArray(DATA.projects))DATA.projects=[];DATA.projects.forEach(function(p){regProj(p.id)});if(!Array.isArray(DATA.bells2))DATA.bells2=[["15:00","15:45"],["15:50","16:35"],["16:45","17:30"],["17:35","18:20"],["18:25","19:10"],["19:15","20:00"]]}
+ ["posts","events","facilities","docs","faq","albums","partners","achievements","food_menu","food_orders","food_events","history","staff"].forEach(function(k){if(!Array.isArray(DATA[k]))DATA[k]=[]});if(!DATA.classes||typeof DATA.classes!=="object")DATA.classes={};if(!Array.isArray(DATA.projects))DATA.projects=[];DATA.projects.forEach(function(p){regProj(p.id)});if(!Array.isArray(DATA.bells2))DATA.bells2=[["15:00","15:45"],["15:50","16:35"],["16:45","17:30"],["17:35","18:20"],["18:25","19:10"],["19:15","20:00"]]}
 /* plugins (assets/gmtest.js etc.): they register pages, strings and permissions before the first render */
 var EXTRA_TITLES={},USER_HOOKS=[];
 var API={sb:sb,st:st,DATA:DATA,T:T,t:t,f:f,esc:esc,pick:pick,ic:ic,IC:IC,banner:banner,render:render,toast:toast,openLayer:openLayer,closeLayer:closeLayer,fmtDate:fmtDate,todayISO:todayISO,can:can,allSubjects:allSubjects,shrink:shrink,uploadImg:uploadImg,uid:uid,emblem:emblem,bilimBtn:bilimBtn,PAGES:PAGES,PARENT:PARENT,NAV:NAV,PERMS:PERMS,TITLES:EXTRA_TITLES,onUser:function(fn){USER_HOOKS.push(fn)}};
