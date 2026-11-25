@@ -123,7 +123,7 @@ function handle_upload(): void {
   elseif (!is_staff()) fail('new row violates row-level security policy', 403, '42501');
   $f = $_FILES['file'] ?? null;
   if (!$f || $f['error'] !== UPLOAD_ERR_OK) fail('upload failed (' . ($f['error'] ?? 'no file') . '): файл слишком большой или не дошёл', 400);
-  if ($f['size'] > 20 * 1048576) fail('The object exceeded the maximum allowed size', 413);
+  if ($f['size'] > 50 * 1048576) fail('The object exceeded the maximum allowed size', 413);
   $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
   $mime = (new finfo(FILEINFO_MIME_TYPE))->file($f['tmp_name']);
   $okExt = ['jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png', 'webp' => 'image/webp', 'pdf' => 'application/pdf'];

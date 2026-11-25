@@ -349,8 +349,8 @@ var T12={navProj:["Жобалар","Проекты","Projects"],
  perm_projects:["Жобалар (барлығы)","Проекты (все)","Projects (all)"],
  projCurators:["Жеке жобалар — тек өз жобасын өңдейді:","Отдельные проекты — редактирует только свой проект:","Individual projects — can edit only their own project:"],
  f_kind:["Түрі","Тип","Type"], f_curator:["Жетекші","Руководитель","Curator"], f_urlP:["Сілтеме (YouTube, PDF немесе сайт)","Ссылка (YouTube, PDF или сайт)","Link (YouTube, PDF or website)"],
- uploadPdf:["Немесе PDF файлын жүктеңіз (20 МБ дейін)","Или загрузите PDF-файл (до 20 МБ)","Or upload a PDF file (up to 20 MB)"],
- pdfBig:["Файл тым үлкен (20 МБ-тан артық)","Файл слишком большой (больше 20 МБ)","The file is too large (over 20 MB)"]};
+ uploadPdf:["Немесе PDF файлын жүктеңіз (50 МБ дейін)","Или загрузите PDF-файл (до 50 МБ)","Or upload a PDF file (up to 50 MB)"],
+ pdfBig:["Файл тым үлкен (50 МБ-тан артық)","Файл слишком большой (больше 50 МБ)","The file is too large (over 50 MB)"]};
 for(var _k12 in T12)T[_k12]=T12[_k12];
 /* ------------------------------------------------------------ helpers */
 function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
@@ -1367,7 +1367,7 @@ document.addEventListener("change",function(e){var d=e.target.dataset;
  if(d.ttshift){DATA.classes[st.cls].shift=+e.target.value;dirty();render(true);return}
  if(d.bell){if(!/^[0-2]\d:[0-5]\d$/.test(e.target.value))return;var q=d.bell.split(":");DATA.bells[+q[0]][+q[1]]=e.target.value;dirty();refreshBar();return}
  if(d.bell2){if(!/^[0-2]\d:[0-5]\d$/.test(e.target.value))return;var q2=d.bell2.split(":");DATA.bells2[+q2[0]][+q2[1]]=e.target.value;dirty();refreshBar();return}
- if(d.edfile){var fl2=e.target.files[0];if(!fl2)return;var ui=document.getElementById(d.edfile),pv2=e.target.nextElementSibling;if(fl2.size>20*1048576){toast(t("pdfBig"));e.target.value="";return}if(!sb){pv2.textContent=t("upErr");return}
+ if(d.edfile){var fl2=e.target.files[0];if(!fl2)return;var ui=document.getElementById(d.edfile),pv2=e.target.nextElementSibling;if(fl2.size>50*1048576){toast(t("pdfBig"));e.target.value="";return}if(!sb){pv2.textContent=t("upErr");return}
   pv2.textContent=t("uploading");var fpath="files/"+new Date().getFullYear()+"/"+uid("doc")+".pdf",sub2=e.target.form&&e.target.form.querySelector('button[type=submit]');if(sub2)sub2.disabled=true;
   sb.storage.from("media").upload(fpath,fl2,{contentType:"application/pdf",cacheControl:"31536000",upsert:false}).then(function(r){if(r.error)throw r.error;ui.value=sb.storage.from("media").getPublicUrl(fpath).data.publicUrl;pv2.textContent="✓ "+fl2.name}).catch(function(){pv2.textContent=t("upErr")}).then(function(){if(sub2)sub2.disabled=false});return}
  if(d.rpup){rpUpload(d.rpup,e.target.files);return}
